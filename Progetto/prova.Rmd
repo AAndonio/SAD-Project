@@ -1,0 +1,342 @@
+---
+title: "Progetto di SAD"
+output:
+  pdf_document: default
+  html_notebook: default
+---
+
+---
+ fontsize: 12pt
+---
+
+# Introduzione
+Mai come al giorno d'oggi il tema immigrazione risulta essere attuale, trattato spesso dai media e discusso dai politici. 
+L'immigrazione è anche il tema alla base di questo progetto il quale scopo è quello di analizzare i dati forniti da un'indagine effettuata dall'ISTAT. Il titolo della tavola utilizzata è *Cittadini non comunitari regolarmente presenti per motivo della presenza* e, come si evince da questo, il progetto si focalizza sul motivo della presenza di questi cittadini. 
+
+Per definizione, i cittadini comunitari sono tutti coloro che risultano essere in possesso della cittadinanza di uno degli stati membri della Comunità Europea. È bene ricordare che gli stati facenti parte dell'Unione Europea ad oggi sono: Austria, Belgio, Bulgaria, Cipro, Croazia, Danimarca, Estonia, Finlandia, Francia, Germania, Grecia, Irlanda, Italia, Lettona, Lituania, Lussemburgo, Malta, Paesi Bassi, Polonia, Portogallo, Regno Unito, Repubblica Ceca, Romania, Slovacchia, Slovenia, Spagna, Svezia, Ungheria.
+Lo studio è stato effettuato su cittadini non comunitari, quindi aventi cittadinanza di altri paesi.
+
+I dati risultano essere aggiornati al 1 gennaio 2018. 
+La tabella utilizzata è composta da 20 righe rappresentanti le regioni italiane e 5 colonne rappresentanti le maggiori motivazioni, in particolare: lavoro, famiglia, studio, asilo e altro. I dati sono sottoforma di percentuale.
+Utilizzando metodi statistici, il progetto verterà sul raggiungere diversi obiettivi:
+
+* Individuare i legami fra le diverse modalità assunte.
+* Individuare valori *outlaw*, ovvero anomali perchè fuori dal range
+* Definire cluster per raggruppare regioni ritenute simili
+
+Il linguaggio di programmazione utilizzato all'interno del progetto per eseguire l'analisi dei dati è R.
+
+La prima cosa da fare è costruire la tabella all'interno del workspace di R. Iniziamo quindi a definire per ogni modalità un vettore e inserire i rispettivi valori della colonna.
+
+```{r}
+lavoro <- c(28.3, 26.1, 30.9, 38.8, 22.1, 35.2, 23.5, 31.4, 39.3, 30.5,
+            31.4, 34.1, 28.0, 10.9, 41.6, 21.6, 21.6, 23.6, 28.0, 28.2)
+famiglia <- c(46.6, 53.2, 44.8, 47.3, 50.9, 48.6, 44.5, 50.7, 39.8, 48.6, 
+              45.0, 37.1, 45.7, 18.6, 29.1, 29.3, 25.9, 29.2, 32.8, 34.4)
+studio <- c(4.8, 1.9, 2.8, 3.1, 2.6, 1.5, 2.8, 3.2, 3.2, 5.1, 3.1, 4.7, 
+            2.3, 0.7, 1.0, 1.6, 1.1, 1.8, 0.7, 2.1)
+asilo <- c(18.1, 16.6, 17.7, 9.4, 22.4, 13.2, 26.6, 12.7, 14.5, 12.5, 18.1,
+           14.3, 20.3, 67.1, 23.5, 43.0, 46.0, 42.8, 32.6, 31.0)
+altro <- c(2.16, 2.20, 3.86, 1.57, 1.90, 1.54, 2.58, 2.04, 3.23, 3.29, 2.46,
+           9.79, 3.70, 2.75, 4.83, 4.40, 5.46, 2.55, 5.87, 4.33)
+```
+
+Utilizzando il comando *cbind* è possibile creare una matrice a partire da vettori della stessa lunghezza. Inoltre i dati verranno inseriti per colonne (per questo la c davanti bind). Per inserire i dati per riga, il comando da utilizzare è *rbind*
+
+```{r}
+tabella <- cbind(lavoro, famiglia, studio, asilo, altro)
+```
+
+A questo punto utilizziamo la funzione *rownames* a cui diamo in input la matrice creata in precedenza. Questa funzione ci permette di assegnare ad ogni riga un nome, che in questo caso è quello delle regioni italiane. Fatto questo stampiamo la matrice appena creata semplicemente scrivendone il nome.
+
+
+```{r}
+rownames(tabella) <- c("Piemonte", "Valle d'Aos", "Liguria",
+                       "Lombardia", "T-A Adige","Veneto", 
+                       "F-V Giulia", "Em-Romag", "Toscana", 
+                       "Umbria", "Marche", "Lazio", "Abruzzo", 
+                       "Molise", "Campania", "Puglia", 
+                       "Basilicata", "Calabria", "Sicilia", "Sardegna")
+tabella
+```
+\newpage
+
+# Distribuzioni di frequenza semplice
+
+Nella statistica descrittiva è possibile avere tre tipologie di variabili:
+
+1. **Variabili qualitative**, ovvero variabili il cui valore non è numerico. Ad esempio, il colore dei capelli
+
+2. **Variabili quantitative**, variabile il cui valore è di tipo numerico. Ad esempio, l'altezza.
+
+3. **Variabili ordinabili**, in grado di essere ordinate. I valori possono essere di tipo numerico o testuale.
+
+I dati a nostra dispozione all'interno della tabella sono di tipo numero e ricadono quindi nella seconda tipologia descritta.
+Utilizziamo le *distribuzioni di frequenza* per analizzare la distribuzione dei dati, andando a sintetizzare ciò che essi rappresentano.
+
+Siccome molto spesso è preferibile raggruppare le informazioni in classi quando si hanno variabili quantitative a disposizione, sono state definite 5 classi:
+
+```{r}
+classi <- c(0, 15, 20, 30, 50, 70)
+```
+
+Definite le classi andiamo ad utlizzare un altro comando, *cut()*, a cui diamo in input il vettore dei dati da classificare e il vettore delle classi andando così a inserire ogni valore nell'intervallo corrispondente.
+
+## Frequenza assoluta
+
+Per costruire una distribuzione di frequenza in R utilizziamo la funzione *table()* che ci aiuta a calcola le frequenze assolute dei dati a disposizione.
+
+```{r}
+table(cut(lavoro, classi))
+```
+
+Da questa suddivisione, possiamo notare due aspetti interessanti: 
+
+* In ben nove regioni almeno 1/3 dei cittadini non comunitari si trova lì per motivi di lavoro.
+
+* Solo in una regione, per la precisione nel Molise, il tasso dei cittadini non comunitari che giustifica la propria presenza per questioni di lavoro è estremamente basso rispetto alle altre regioni ed è del 10.9%.
+
+Applichiamo la stessa funzione anche agli altri vettori rappresentanti le restanti modalità ed effettuiamo un'analisi.
+
+
+```{r}
+table(cut(famiglia, classi))
+```
+
+Guardando questi dati notiamo che:
+
+* almeno il 50% dei cittadini non comunitari residenti in tre regioni giustifica la propria presenza per questioni legate alla famiglia. Queste regioni sono Valle d'Aosta, Trentino-Alto Adige e Emilia-Romagna.
+
+* solo in una regione il tasso è inferiore del 20%. Riferendoci alla tabella, scopriamo che è sempre il Molise con un tasso del 18.6%.
+
+
+```{r}
+table(cut(studio, classi))
+```
+
+Notiamo:
+
+* lo studio è motivo di presenza di una percentuale molto bassa di cittadini non comunitari. Di fatti, guardando alla tabella, è possibile notare che le percentuali sono quasi tutte inferiori al 5%.
+
+
+```{r}
+table(cut(asilo, classi))
+```
+
+Notiamo:
+
+* una sola regione il tasso dei cittadini non comunitari che si trovano lì per asilo è superiore al 50%. Questa regione è il Molise con una percentuale del 67.1%
+
+* in ben sei regioni, la presenza di cittadini non comunitari per asilo è inferiore al 15%, in particolare in Lombardia, Veneto, Emilia-Romagna, Toscana, Umbria e Lazio.
+
+```{r}
+table(cut(altro, classi))
+```
+
+Notiamo:
+
+* la percentuale di cittadini non comunitari la cui presenza è dovuta a motivi non ben specificati è in tutte le regioni al di sotto del 15%. In particolare, guardando la tabella i valori non superano neanche il 10%.
+
+## Frequenze relative
+
+Per calcolare la distribuzione delle **frequenze relative** basta dividere l'output della funzione *table()* per la lunghezza del vettore considerato, ottenuta con la funzione *length()*
+
+```{r}
+table(cut(lavoro, classi))/length(lavoro)
+```
+
+Notiamo:
+
+* solo il 5% delle regioni italiane ospita cittadini non comunitari la cui presenza è dovuta al lavoro per un tasso inferiore al 15%
+* il restante 95% delle regioni è abitato da cittadini non comunitari presenti a causa del lavoro per un tasso superiore al 20%
+
+Com'è possibile vedere, i risultati forniti dall'analisi delle frequenze relative corrispondono a quelli delle frequenze assolute.
+Completiamo calcolando le frequenze relative per le altre modalità.
+
+```{r}
+table(cut(famiglia, classi))/length(famiglia)
+```
+
+```{r}
+table(cut(studio, classi))/length(studio)
+```
+
+```{r}
+table(cut(asilo, classi))/length(asilo)
+```
+
+```{r}
+table(cut(altro, classi))/length(altro)
+```
+
+## Frequenze assolute cumulate
+
+In R è possibile cumulare le varie frequenze sfruttando la funzione *cumsum()*.
+Vediamo di seguito i valori calcolati
+
+```{r}
+cumsum(table(cut(lavoro, classi)))
+```
+
+```{r}
+cumsum(table(cut(famiglia, classi)))
+```
+
+```{r}
+cumsum(table(cut(studio, classi)))
+```
+
+```{r}
+cumsum(table(cut(asilo, classi)))
+```
+
+```{r}
+cumsum(table(cut(altro, classi)))
+```
+
+## Frequenze relative cumulate
+
+```{r}
+cumsum(table(cut(lavoro, classi))/length(lavoro))
+
+```
+
+```{r}
+cumsum(table(cut(famiglia, classi))/length(famiglia))
+
+```
+
+```{r}
+cumsum(table(cut(studio, classi))/length(studio))
+
+```
+
+```{r}
+cumsum(table(cut(asilo, classi))/length(asilo))
+
+```
+
+```{r}
+cumsum(table(cut(altro, classi))/length(altro))
+
+```
+
+\newpage
+
+# Le rappresentazioni grafiche
+
+Le rappresentazioni grafiche ci permettono di confrontare e analizzare i dati contenuti nella tabella iniziale in maniera decisamente più veloce.
+Esistono moltissime tipologie di grafici ma non sempre sono tutti adatti a raggiungere lo scopo o a visualizzare in maniera adatta i dati che si vogliono rappresentare.
+La creazione di grafici e la rappresentazione di dati sono attività che ricadono nella data visualization.
+
+Per i dati a nostra disposizione, si è scelto di utilizzare un grafico a barre in modo da rendere chiara la differenza e facilitare i confronto fra le varie regioni.
+In R è possibile creare un grafico a barre attraverso il comando *barplot()*.
+All'interno del comando *barplot* sono state specificate alcune opzioni, ovvero:
+
+* *col* ci colorare le barre del grafico
+
+* *ylim* per indicare il punto dove far iniziare e far finire l'asse delle ordinate
+
+* *las* per stampare le label dell'asse delle ascisse in verticale
+
+\newpage
+
+In questo primo *barplot* sull'asse delle ascisse sono state inserite le venti regioni italiane, mentre sull'asse delle ordinate i valori della tabella corrispondenti alla colonna "lavoro".
+
+```{r}
+barplot(tabella[,1], col=1:20, ylim = c(0, 50), las=2, 
+        main = "Cittadini non comunitari residenti per motivi di lavoro")
+```
+
+Come visto in precedenza con l'analisi delle frequenze relative, anche qui notiamo che:
+
+* il Molise è la regione con il tasso più basso di cittadini non comunitari la cui presenza è dovuta a ragioni di lavoro.
+
+* la Campania, la Toscana e la Lombardia sono le tre regioni con il tasso più alto.
+
+\newpage
+
+Passiamo adesso all'analisi della modalità "famiglia"
+
+```{r}
+barplot(tabella[,2], col=1:20, ylim = c(0,60), las=2, 
+        main = "Cittadini non comunitari residenti per motivi di famiglia")
+```
+
+Possiamo anche qui vedere che, per quanto riguarda i motivi di famiglia:
+
+* il Molise ha il tasso più basso fra tutte le regioni
+
+* il tasso è più alto del 50% in Valle d'Aosta, Emilia-Romagna e Trentino-Alto Adige
+
+\newpage
+Per quanto riguarda lo studio invece:
+
+```{r}
+barplot(tabella[,3], col=1:20, ylim = c(0,6), las=2, 
+        main = "Cittadini non comunitari residenti per motivi di studio")
+```
+
+Quello che si nota è che in generale i cittadini non comunitari non vengono in Italia per studiare in quanto i tassi
+risultano estremamente bassi in tutte le regioni con i più bassi in Molise e Sicilia.
+
+\newpage
+
+La situazione di asilo politico è la seguente:
+
+```{r}
+barplot(tabella[,4], col=1:20, ylim = c(0,70), las=2, 
+        main = "Cittadini non comunitari residenti per asilo")
+```
+
+
+Fra le osservazioni interessanti di questa situzione abbiamo:
+
+* il Molise risulta avere il tasso più alto di cittadini non comunitari rifugiati.
+
+* la Lombardia, insieme a qualche altra regione del nord Italia, presenta il tasso più basso
+
+\newpage
+
+Per quanto riguarda le motivazioni non specificate:
+
+```{r}
+barplot(tabella[,5], col=1:20, ylim = c(0,10), las=2, 
+        main = "Cittadini non comunitari residenti per altri motivi")
+```
+È possibile notare che i dati raccolti per motivi non ben specificati sono decisamente bassi.
+Si differenzia solo la situazione del Lazio, che presente un tasso decisamente elevato rispetto alle altre.
+
+\newpage
+
+La tabella fornita dall'ISTAT comprende anche una riga riguardante tutta l'Italia. Procediamo quindi alla creazione di un grafico a barre dove sull'asse
+orizzontale disponiamo le modalità che possono essere assunte dal campione e sull'asse verticale il valore della corrispondente modalità
+Visto che utilizzeremo questi dati solo per la creazione di alcuni grafici, non aggiungiamo la riga alla matrice precedente ma ne creiamo una nuova. 
+
+```{r}
+italia <- rbind(c(33.6, 42.6, 3.0, 17.1, 3.63))
+colnames(italia) <- c("Lavoro", "Famiglia", "Studio", "Asilo", "Altro") 
+barplot(italia[1,], col = 1:5)
+```
+
+Come detto prima, R fornisce anche la possibilità di utilizzare altre tipi di diagrammi, come quelli a torta, che suddividono un cerchio in diversi settori tanti quante sono le modalità che può assumere il campione.
+Per creare un diagramma a torta in R è possibile utilizzare la funzione *pie()* 
+```{r}
+pie(italia[1,], col=1:5)
+```
+
+È possibile applicare diversi tipi di tratteggio al diagramma a torta, utilizzando linee al posto della tinta unita. Aggiungengo le opzione
+*density* e *angle* è possibile impostare la densità delle linee del tratteggio e l'angolo che esse devono assumere.
+
+```{r}
+pie(italia[1,], density = 18, angle= 15+10*(1:5), col = 1:5)
+```
+
+Queste sono solo due delle diverse tipologie di grafico messe a disposizione da R. È possibile notare che la percezione della distribuzione dataci dal grafico a barre è la stessa di quella del grafico a torta, cambia solo la modalità di visualizzazione dei dati. 
+
+Consideriamo sempre il vettore quantitativo *lavoro*. Attraverso l'utilizzo della funzione *plot()* è possibile visualizzare su un piano cartesiano il valore assunto da ogni regione italiana. Nella seguente riga di codice sono state utilizzate due opzioni, *xlab* e *ylab*, che ci permettono di impostare manualmente il valore dell'etichetta degli assi.
+
+```{r}
+plot(lavoro, col="blue", ylim = c(8,50), xlab = "Regioni", ylab="Tasso per lavoro")
+```
+
