@@ -577,7 +577,7 @@ Per i fenomeni quantitativi è utile definire la funzione di distribuzione empir
 Una funzione di distribuzione empirica discreta è una funzione utilizzata quando la nostra variabile assume valori discreti. Il fatto che i valori della variabile siano discreti, porta la funzione ad assumere una forma a gradini. Utilizzando le frequenze relative $f_{i}$ = $\frac{n_{i}}{n}$ con i = 1, 2, ..., k  e le frequenze relative cumulate $F_{i}$ =  $f_{1}$ + $f_{2}$ + ... +$f_{k}$ dove k è il numero discreto di valori che il nostro campione di dati può assumere.
 La funzione di distribuzione empirica discreta è così definita:
 
-$F(x) = \frac{\#\{x_{i} \leq x = 1,2,...,n\}}{n} = \begin{array} 0, x \lt z_{1} \end{array}$
+
 
 dove:
 * *#* è la cardinalità dell'insieme
@@ -600,3 +600,134 @@ plot(ecdf(round(studio, digits = 0)), main="Funzione di distribuzione empirica d
 ```
 
 La funzione *round()* serve ad arrotondare un numero alla cifra specificata con il parametro *digits*.
+
+### Funzione di distribuzione empirica continua
+
+Per fenomeni quantitativi continui, la funzione di distribuzione empirica è una funzione **continua**, necessaria se i dati vengono raccolti in classi. Se i dati vengono quindi raccoli in k distinte classi $C_{1}$ = [$z_{1}$, $z_{2}$), $C_{2}$ = [$z_{3}$, $z_{4}$), ..., $C_{k}$ = [$z_{k}$, $z_{k+1}$]
+La funzione di distribuzione empirica è così definita: 
+
+Si noti che F(x) = 0 per x < $z_{1}$ , F(x) = 1 per x $\let$ $z_{k+1}$ mentre se $z_{i}$ < x < $z_{i+1}$ la funzione empirica coincide con il segmento che passa per i punti ($z_{i}$, $F_{i}$) e ($z_{i+1}$,$F_{i+1}$)
+
+La suddivisione in classi adottata è la seguente: [0, 15), [15, 20), [20, 25)
+
+```{r}
+fempcont_classi <- c(0,15,25,30,35,40,45,50,55,60,70)
+
+Fi <- cumsum(table(cut(famiglia, breaks=fempcont_classi, right =FALSE)))/length(famiglia)
+Fi
+```
+
+Il vettore Fi contiene le frequenze relative cumulate dei tassi delle varie regioni associati alle varie classi.
+
+```{r}
+Fi <- c(0, Fi)
+plot(fempcont_classi, Fi, type = "b", axes = FALSE, main = "Funzione di distribuzione empirica continua", ylab ="Funzione", xlab = "Classi", col = "red")
+axis(1, fempcont_classi)
+axis(2, format(Fi, digits=2))
+box()
+```
+
+Utilizziamo c(0, Fi) per aggiungere uno zero all'inizio del vettore delle frequenze relative cumulate. Nella funzione *plot()* abbiamo utilizzato l'opzione *type = b* che ci consente di congiungere i punti successivi del grafico mediante delle linee continue ai cui estremi troviamo dei piccoli cerchi. L'opzione *axes = FALSE* consente di non tracciare gli assi. Mediante l'opzione *axis(1, classi)* si disegna l'asse orizzontale in basso e con *axis(2, format(Fi, digits=2))* si ottiene l'asse verticale di sinistra con una formattazione opportuna dei numeri. Con *box()* racchiudiamo tutto in un rettangolo. 
+
+Utilizzando la stessa suddivisione in classi, creiamo il grafico per i vettori asilo e lavoro:
+
+```{r}
+Fi <- cumsum(table(cut(lavoro, breaks=fempcont_classi, right =FALSE)))/length(lavoro)
+Fi <- c(0, Fi)
+plot(fempcont_classi, Fi, type = "b", axes = FALSE, main = "Funzione di distribuzione empirica continua", ylab ="Funzione", xlab = "Classi", col = "red")
+axis(1, fempcont_classi)
+axis(2, format(Fi, digits=2))
+box()
+```
+
+```{r}
+Fi <- cumsum(table(cut(asilo, breaks=fempcont_classi, right =FALSE)))/length(asilo)
+Fi <- c(0, Fi)
+plot(fempcont_classi, Fi, type = "b", axes = FALSE, main = "Funzione di distribuzione empirica continua", ylab ="Funzione", xlab = "Classi", col = "red")
+axis(1, fempcont_classi)
+axis(2, format(Fi, digits=2))
+box()
+```
+
+Siccome i vettori studio e altro risultano contenere valori decisamente piccoli, utilizziamo una suddivisione in classi diversa:
+
+```{r}
+fempcont_classi <- c(0,2,4,6,8,10)
+Fi <- cumsum(table(cut(studio, breaks=fempcont_classi, right =FALSE)))/length(studio)
+Fi <- c(0, Fi)
+plot(fempcont_classi, Fi, type = "b", axes = FALSE, main = "Funzione di distribuzione empirica continua", ylab ="Funzione", xlab = "Classi", col = "red")
+axis(1, fempcont_classi)
+axis(2, format(Fi, digits=2))
+box()
+```
+
+```{r}
+Fi <- cumsum(table(cut(altro, breaks=fempcont_classi, right =FALSE)))/length(altro)
+Fi <- c(0, Fi)
+plot(fempcont_classi, Fi, type = "b", axes = FALSE, main = "Funzione di distribuzione empirica continua", ylab ="Funzione", xlab = "Classi", col = "red")
+axis(1, fempcont_classi)
+axis(2, format(Fi, digits=2))
+box()
+```
+
+### Indici di sintesi
+Come visto prima, attraverso i boxplot è possibile rappresentare in maniera semplice la distribuzione di frequenza di un campione di dati numerico. Quello che faremo adesso è introdurre degli indici che servono a misurare quantitativamente alcune delle caratteristiche osservate nei boxplot e nei grafici di distribuzioni di frequenza.
+Gli indici di **sintesi**, detti anche *statistiche*, sono utili nel descrivere dati numerici. In particolare questi indici sono: *media*, *moda*, *mediana*, *varianza*, *deviazione standard* e *coefficiente di variazione*. Le prime tre, media, mediana e moda, sono *misure di centralità* mentre le restanti tre misurano la *dispersione dei dati*. 
+
+### Media, mediana e moda
+
+#### Media
+
+Supponiamo di avere a disposizione un insieme $x_{1}, x_{2}, ... ,x_{n}$ di n valori, chiamato *campione di ampiezza n*. La **media campionaria** è la media aritmetica di questi valori.
+
+$\begin{equation}
+x = sx
+\end{equation}$
+
+```{r}
+mean(lavoro)
+```
+
+```{r}
+mean(famiglia)
+
+```
+
+```{r}
+mean(studio)
+```
+
+```{r}
+mean(asilo)
+```
+
+```{r}
+mean(altro)
+```
+
+#### Mediana
+
+Sia X una variabile quantitativa e siano $z_{1}$, $z_{2}$, ..., $z_{k}$ le modalità distinte da essa assunte con $z_{1}$ < $z_{2}$ < ... < $z_{k}$
+
+```{r}
+median(lavoro)
+```
+
+```{r}
+median(famiglia)
+```
+
+```{r}
+median(studio)
+```
+
+```{r}
+median(asilo)
+```
+
+```{r}
+median(altro)
+```
+
+
+
