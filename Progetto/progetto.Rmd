@@ -678,11 +678,26 @@ Gli indici di **sintesi**, detti anche *statistiche*, sono utili nel descrivere 
 
 #### Media
 
-Supponiamo di avere a disposizione un insieme $x_{1}, x_{2}, ... ,x_{n}$ di n valori, chiamato *campione di ampiezza n*. La **media campionaria** è la media aritmetica di questi valori.
+Supponiamo di avere a disposizione un insieme $x_{1}, x_{2}, ... ,x_{n}$ di n valori, chiamato *campione di ampiezza n*. La **media campionaria**, indicata con **$\bar{x}$** è la media aritmetica di questi valori.
 
-$\begin{equation}
-x = sx
-\end{equation}$
+**Inserire equazione**
+
+Questa misura gode della proprietà di linearità. Inoltre, è possibile vedere la media come una media pesata dei valori distinti assunti dai dati. Ogni valore distinto usa come peso la sua frequenza relativa, ovvero la frazione dei dati uguale al suo valore. 
+
+**Inserire equazione**
+
+Per ogni valore $x_{i}$ si definisce lo *scarto della media campionaria* la quantità 
+
+$s_{i} = x_{i}-\bar{x}$ con $(i = 1,2,...,n)$
+
+che indica il grado di scostamento del singolo valore $x_{i}$ dalla media campionaria $\bar{x}$.
+Si noti che la somma algebrica degli scarti della media campionaria è sempre *nulla*, risulta infatti che:
+
+**Inserire equazione**
+
+Va sottolineato che la media campionaria è sensibile ai valori anomali.
+
+Per il calcolo della media campionaria, R fornisce la funzione *mean()*
 
 ```{r}
 mean(lavoro)
