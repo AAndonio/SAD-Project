@@ -613,17 +613,17 @@ La suddivisione in classi adottata è la seguente: [0, 15), [15, 20), [20, 25)
 ```{r}
 fempcont_classi <- c(0,15,25,30,35,40,45,50,55,60,70)
 
-Fi <- cumsum(table(cut(famiglia, breaks=fempcont_classi, right =FALSE)))/length(famiglia)
-Fi
+Ffamiglia <- cumsum(table(cut(famiglia, breaks=fempcont_classi, right =FALSE)))/length(famiglia)
+Ffamiglia
 ```
 
 Il vettore Fi contiene le frequenze relative cumulate dei tassi delle varie regioni associati alle varie classi.
 
 ```{r}
-Fi <- c(0, Fi)
-plot(fempcont_classi, Fi, type = "b", axes = FALSE, main = "Funzione di distribuzione empirica continua", ylab ="Funzione", xlab = "Classi", col = "red")
+Ffamiglia <- c(0, Ffamiglia)
+plot(fempcont_classi, Ffamiglia, type = "b", axes = FALSE, main = "Funzione di distribuzione empirica continua", ylab ="Funzione", xlab = "Classi", col = "red")
 axis(1, fempcont_classi)
-axis(2, format(Fi, digits=2))
+axis(2, format(Ffamiglia, digits=2))
 box()
 ```
 
@@ -632,41 +632,41 @@ Utilizziamo c(0, Fi) per aggiungere uno zero all'inizio del vettore delle freque
 Utilizzando la stessa suddivisione in classi, creiamo il grafico per i vettori asilo e lavoro:
 
 ```{r}
-Fi <- cumsum(table(cut(lavoro, breaks=fempcont_classi, right =FALSE)))/length(lavoro)
-Fi <- c(0, Fi)
-plot(fempcont_classi, Fi, type = "b", axes = FALSE, main = "Funzione di distribuzione empirica continua", ylab ="Funzione", xlab = "Classi", col = "red")
+Flavoro <- cumsum(table(cut(lavoro, breaks=fempcont_classi, right =FALSE)))/length(lavoro)
+Flavoro <- c(0, Flavoro)
+plot(fempcont_classi, Flavoro, type = "b", axes = FALSE, main = "Funzione di distribuzione empirica continua", ylab ="Funzione", xlab = "Classi", col = "red")
 axis(1, fempcont_classi)
-axis(2, format(Fi, digits=2))
+axis(2, format(Flavoro, digits=2))
 box()
 ```
 
 ```{r}
-Fi <- cumsum(table(cut(asilo, breaks=fempcont_classi, right =FALSE)))/length(asilo)
-Fi <- c(0, Fi)
-plot(fempcont_classi, Fi, type = "b", axes = FALSE, main = "Funzione di distribuzione empirica continua", ylab ="Funzione", xlab = "Classi", col = "red")
+Fasilo <- cumsum(table(cut(asilo, breaks=fempcont_classi, right =FALSE)))/length(asilo)
+Fasilo <- c(0, Fasilo)
+plot(fempcont_classi, Fasilo, type = "b", axes = FALSE, main = "Funzione di distribuzione empirica continua", ylab ="Funzione", xlab = "Classi", col = "red")
 axis(1, fempcont_classi)
-axis(2, format(Fi, digits=2))
+axis(2, format(Fasilo, digits=2))
 box()
 ```
 
 Siccome i vettori studio e altro risultano contenere valori decisamente piccoli, utilizziamo una suddivisione in classi diversa:
 
 ```{r}
-fempcont_classi <- c(0,2,4,6,8,10)
-Fi <- cumsum(table(cut(studio, breaks=fempcont_classi, right =FALSE)))/length(studio)
-Fi <- c(0, Fi)
-plot(fempcont_classi, Fi, type = "b", axes = FALSE, main = "Funzione di distribuzione empirica continua", ylab ="Funzione", xlab = "Classi", col = "red")
-axis(1, fempcont_classi)
-axis(2, format(Fi, digits=2))
+fempcont_classi1 <- c(0,2,4,6,8,10)
+Fstudio <- cumsum(table(cut(studio, breaks=fempcont_classi1, right =FALSE)))/length(studio)
+Fstudio <- c(0, Fstudio)
+plot(fempcont_classi1, Fstudio, type = "b", axes = FALSE, main = "Funzione di distribuzione empirica continua", ylab ="Funzione", xlab = "Classi", col = "red")
+axis(1, fempcont_classi1)
+axis(2, format(Fstudio, digits=2))
 box()
 ```
 
 ```{r}
-Fi <- cumsum(table(cut(altro, breaks=fempcont_classi, right =FALSE)))/length(altro)
-Fi <- c(0, Fi)
-plot(fempcont_classi, Fi, type = "b", axes = FALSE, main = "Funzione di distribuzione empirica continua", ylab ="Funzione", xlab = "Classi", col = "red")
+Faltro <- cumsum(table(cut(altro, breaks=fempcont_classi1, right =FALSE)))/length(altro)
+Faltro <- c(0, Faltro)
+plot(fempcont_classi1, Faltro, type = "b", axes = FALSE, main = "Funzione di distribuzione empirica continua", ylab ="Funzione", xlab = "Classi", col = "red")
 axis(1, fempcont_classi)
-axis(2, format(Fi, digits=2))
+axis(2, format(Faltro, digits=2))
 box()
 ```
 
@@ -722,7 +722,9 @@ mean(altro)
 
 #### Mediana
 
-Sia X una variabile quantitativa e siano $z_{1}$, $z_{2}$, ..., $z_{k}$ le modalità distinte da essa assunte con $z_{1}$ < $z_{2}$ < ... < $z_{k}$
+Una seconda statistica che indica la centralità di un insieme di dati è la **mediana campionaria**. Assegnato un insieme di dati di ampiezza n, lo si ordini dal minore al maggiore. Se n è dispari, si definisce mediana campionaria il valore che è in posizione $\frac{(n+1)}{2}$, mentre se n risulta essere pari la mediana campionaria è definita come la media aritmetica dei valori che occupano le posizioni $\frac{n}{2}$ e $\frac{(n+1)}{2}$. Questa definizione di mediana campionaria bipartisce le osservazioni in due gruppi di uguale numerosità.
+Il linguaggio R ci mette a disposizione la funzione *median()* per calcolare la mediana di un vettore contenente delle osservazioni. 
+Di seguito, la funzione *median()* viene utilizzata per calcolare la mediana dei vettori a nostra disposizione:
 
 ```{r}
 median(lavoro)
@@ -744,5 +746,95 @@ median(asilo)
 median(altro)
 ```
 
+Sia la media campionaria che la mediana campionaria risultano essere statistiche utili per descrivere la centralità dei dati. A dispetto però della media campionaria, la mediana dipende solo da uno o due dei valori centrali dei dati e non risente dei valori estremi (estremamente bassi o alti). Lo svantaggio di utilizzare la mediana è che bisogna prima ordinare i dati a dispozione prima di poterla calcolare.
 
+### Moda
 
+La terza statistica utilizzata per descrivere la centralità dei dati è la **moda campionaria**. La moda campionaria di un insieme di dati, se esiste, è la modalità a cui è associata la frequenza (assoluta o relativa) più elevata. Se esistono più modalità con frequenza massima, ciascuna di esse è detta **valore modale**. La moda quindi nient'altro è che il valore che si presenta con frequenza maggiore nell'insieme dei dati. Per definizione, è possibile utilizzare la moda anche per dati di tipo qualitativo, cosa che non è possibile fare con media e mediana. La moda può non esistere oppure non essere unica: quando non è unica, la distribuzione è detta *unimodale* mentre quando ci sono due o più mode diverse è detta *bimodale* o *multimodale*.
+Non esiste in R una funzione per estrarre la moda da una distribuzione di dati poichè essa risulta facilmente estraibile osservando il grafico delle frequenze assolute. 
+Si è optato lo stesso per definire una funzione in grado di ricavarla:
+
+```{r}
+moda <- function(v){
+  y<-table(v)
+  z<-which(y==max(y))
+  return(c(z))
+}
+```
+
+Applichiamo poi la moda a ciascun vettore della matrice:
+
+```{r}
+moda(lavoro)
+```
+
+```{r}
+moda(famiglia)
+```
+
+```{r}
+moda(studio)
+```
+
+```{r}
+moda(asilo)
+```
+
+```{r}
+moda(altro)
+```
+
+In quasi tutti i vettori considerati, la moda è risultata essere una buona statistica per misurare la centralità tranne nell'ultimo caso, col vettore *altro*, dove i dati sono molto diversi fra loro.
+
+Dopo aver calcolato queste tre statistiche, è possibile descrivere la forma di una distribuzione confrontando la media campionaria e la mediana campionaria. Se queste due statistiche risultano essere uguali allora la distribuzione di frequenza tende ad essere simmetrica; se la media campionaria è maggiore della mediana campionaria allora la distribuzione sarà sbilanciata verso destra; se invece la media campionaria è sensibilimente minore della mediana campionaria allora la distribuzione di frequenza è più sbilanciata verso sinistra. 
+
+## Mediana per distribuzione di frequenza
+
+Un modo di procedere diverso per definire la mediana è quello di considerare le frequenze relative cumulate.
+Sia X una variabile quantitativa e siano $z_{1} < z_{2} < ... < z_{k}$.
+Considerato un campione ($x_{1}, x_{2}, ..., x_{n}$), siano $F_{i} = f_{1} + f_{2} + ... + f_{i}$ con $(i = 1, 2, ..., k)$ le frequenze relative cumulate.
+
+La **mediana per una distribuzione di frequenze** è definita come la modalità i-esima $(i = 1, 2, ..., k)$ che soddisfa la doppia disuguaglianza:
+$F_{i-1} < 0.5$, $F_{i} \geq 0.5$
+
+Come si evince dalla definzione, la mediana di una distribuzione di frequenza è un valore di sintesi che indica un punto centrale intorno al quale si dispone la distribuzione di frequenza.
+
+```{r}
+par(mfrow = c(2,2))
+plot(fempcont_classi, Flavoro, type="b", main="Funzione di distribuzione empirica discreta di lavoro", col="red")
+abline(h=0.5, lty=2, col="blue")
+plot(fempcont_classi, Ffamiglia, type="b", main="Funzione di distribuzione empirica discreta di famiglia", col="red")
+abline(h=0.5, lty=2, col="blue")
+plot(fempcont_classi, Fasilo, type="b", main="Funzione di distribuzione empirica discreta di asilo", col="red")
+abline(h=0.5, lty=2, col="blue")
+plot(fempcont_classi1, Fstudio, type="b", main="Funzione di distribuzione empirica discreta di studio", col="red")
+abline(h=0.5, lty=2, col="blue")
+plot(fempcont_classi1, Faltro, type="b", main="Funzione di distribuzione empirica discreta di altro", col="red")
+abline(h=0.5, lty=2, col="blue")
+```
+
+Per ottenere il valore della mediana per la distribuzione di frequenze utilizziamo la funzione *quantile()*.
+
+```{r}
+quantile(lavoro, 0.5, type=1)
+```
+```{r}
+quantile(famiglia, 0.5, type=1)
+```
+
+```{r}
+quantile(studio, 0.5, type=1)
+```
+
+```{r}
+quantile(asilo, 0.5, type=1)
+```
+
+```{r}
+quantile(altro, 0.5, type=1)
+```
+
+### Quantili, percentili, decili e quartili
+
+Oltre la mediana è possibile definire altri indici di posizione detti **quantili**, che dividono l'insieme dei dati ordinati in un numero di parti uguali. Supponiamo di avere a disposizione una variabile quantitativa con un certo numero di osservazioni disposte in ordine crescente. Possiamo dividere i dati in $\alpha$ gruppi, ognuno contenente circa lo stesso numero di elementi. Gli $\alpha-1$ numeri sono detti *quantili* di ordine $\alpha$. Solitamente possiamo dividere i dati in $\alpha = 4$ gruppi da 3 quantili detti *quartili*, oppure $\alpha = 10$ e 9 quantili detti *decili* o ancora $\alpha = 100$ e 99 quantili detti *percentili*. I quantili (percentili) sono indici di posizione non centrali utilizzati per insiemi numerosi di dati. 
+Per il calcolo dei quantili R ha a disposizione la funzione *quantile(v, probs = , type = )*. Oltre al vettore, la funzione prende in input anche due ulteriori parametri *probs* che rappresenta il vettore delle probabilità e *type* a cui è possibile assegnare valori da 1 a 9 e indica l'algoritmo da utilzzare per il calcolo dei quantili. Infatti, R possiede per 9 algoritmi per il calcolo dei quantili e quello di default è il 7, basato su tecniche di interpolazione tra i punti. 
