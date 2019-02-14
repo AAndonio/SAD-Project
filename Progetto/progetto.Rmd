@@ -611,9 +611,9 @@ Si noti che F(x) = 0 per x < $z_{1}$ , F(x) = 1 per x $\let$ $z_{k+1}$ mentre se
 La suddivisione in classi adottata è la seguente: [0, 15), [15, 20), [20, 25)
 
 ```{r}
-fempcont_classi <- c(0,15,25,30,35,40,45,50,55,60,70)
+classi_empiriche <- c(0,15,25,30,35,40,45,50,55,60,70)
 
-Ffamiglia <- cumsum(table(cut(famiglia, breaks=fempcont_classi, right =FALSE)))/length(famiglia)
+Ffamiglia <- cumsum(table(cut(famiglia, breaks=classi_empiriche, right =FALSE)))/length(famiglia)
 Ffamiglia
 ```
 
@@ -621,8 +621,8 @@ Il vettore Fi contiene le frequenze relative cumulate dei tassi delle varie regi
 
 ```{r}
 Ffamiglia <- c(0, Ffamiglia)
-plot(fempcont_classi, Ffamiglia, type = "b", axes = FALSE, main = "Funzione di distribuzione empirica continua", ylab ="Funzione", xlab = "Classi", col = "red")
-axis(1, fempcont_classi)
+plot(classi_empiriche, Ffamiglia, type = "b", axes = FALSE, main = "Funzione di distribuzione empirica continua", ylab ="Funzione", xlab = "Classi", col = "red")
+axis(1, classi_empiriche)
 axis(2, format(Ffamiglia, digits=2))
 box()
 ```
@@ -632,19 +632,19 @@ Utilizziamo c(0, Fi) per aggiungere uno zero all'inizio del vettore delle freque
 Utilizzando la stessa suddivisione in classi, creiamo il grafico per i vettori asilo e lavoro:
 
 ```{r}
-Flavoro <- cumsum(table(cut(lavoro, breaks=fempcont_classi, right =FALSE)))/length(lavoro)
+Flavoro <- cumsum(table(cut(lavoro, breaks=classi_empiriche, right =FALSE)))/length(lavoro)
 Flavoro <- c(0, Flavoro)
-plot(fempcont_classi, Flavoro, type = "b", axes = FALSE, main = "Funzione di distribuzione empirica continua", ylab ="Funzione", xlab = "Classi", col = "red")
-axis(1, fempcont_classi)
+plot(classi_empiriche, Flavoro, type = "b", axes = FALSE, main = "Funzione di distribuzione empirica continua", ylab ="Funzione", xlab = "Classi", col = "red")
+axis(1, classi_empiriche)
 axis(2, format(Flavoro, digits=2))
 box()
 ```
 
 ```{r}
-Fasilo <- cumsum(table(cut(asilo, breaks=fempcont_classi, right =FALSE)))/length(asilo)
+Fasilo <- cumsum(table(cut(asilo, breaks=classi_empiriche, right =FALSE)))/length(asilo)
 Fasilo <- c(0, Fasilo)
-plot(fempcont_classi, Fasilo, type = "b", axes = FALSE, main = "Funzione di distribuzione empirica continua", ylab ="Funzione", xlab = "Classi", col = "red")
-axis(1, fempcont_classi)
+plot(classi_empiriche, Fasilo, type = "b", axes = FALSE, main = "Funzione di distribuzione empirica continua", ylab ="Funzione", xlab = "Classi", col = "red")
+axis(1, classi_empiriche)
 axis(2, format(Fasilo, digits=2))
 box()
 ```
@@ -652,20 +652,20 @@ box()
 Siccome i vettori studio e altro risultano contenere valori decisamente piccoli, utilizziamo una suddivisione in classi diversa:
 
 ```{r}
-fempcont_classi1 <- c(0,2,4,6,8,10)
-Fstudio <- cumsum(table(cut(studio, breaks=fempcont_classi1, right =FALSE)))/length(studio)
+classi_empiriche1 <- c(0,2,4,6,8,10)
+Fstudio <- cumsum(table(cut(studio, breaks=classi_empiriche1, right =FALSE)))/length(studio)
 Fstudio <- c(0, Fstudio)
-plot(fempcont_classi1, Fstudio, type = "b", axes = FALSE, main = "Funzione di distribuzione empirica continua", ylab ="Funzione", xlab = "Classi", col = "red")
-axis(1, fempcont_classi1)
+plot(classi_empiriche1, Fstudio, type = "b", axes = FALSE, main = "Funzione di distribuzione empirica continua", ylab ="Funzione", xlab = "Classi", col = "red")
+axis(1, classi_empiriche1)
 axis(2, format(Fstudio, digits=2))
 box()
 ```
 
 ```{r}
-Faltro <- cumsum(table(cut(altro, breaks=fempcont_classi1, right =FALSE)))/length(altro)
+Faltro <- cumsum(table(cut(altro, breaks=classi_empiriche1, right =FALSE)))/length(altro)
 Faltro <- c(0, Faltro)
-plot(fempcont_classi1, Faltro, type = "b", axes = FALSE, main = "Funzione di distribuzione empirica continua", ylab ="Funzione", xlab = "Classi", col = "red")
-axis(1, fempcont_classi)
+plot(classi_empiriche1, Faltro, type = "b", axes = FALSE, main = "Funzione di distribuzione empirica continua", ylab ="Funzione", xlab = "Classi", col = "red")
+axis(1, classi_empiriche1)
 axis(2, format(Faltro, digits=2))
 box()
 ```
@@ -801,15 +801,15 @@ Come si evince dalla definzione, la mediana di una distribuzione di frequenza è
 
 ```{r}
 par(mfrow = c(2,2))
-plot(fempcont_classi, Flavoro, type="b", main="Funzione di distribuzione empirica discreta di lavoro", col="red")
+plot(classi_empiriche, Flavoro, type="b", main="Funzione di distribuzione empirica discreta di lavoro", col="red")
 abline(h=0.5, lty=2, col="blue")
-plot(fempcont_classi, Ffamiglia, type="b", main="Funzione di distribuzione empirica discreta di famiglia", col="red")
+plot(classi_empiriche, Ffamiglia, type="b", main="Funzione di distribuzione empirica discreta di famiglia", col="red")
 abline(h=0.5, lty=2, col="blue")
-plot(fempcont_classi, Fasilo, type="b", main="Funzione di distribuzione empirica discreta di asilo", col="red")
+plot(classi_empiriche, Fasilo, type="b", main="Funzione di distribuzione empirica discreta di asilo", col="red")
 abline(h=0.5, lty=2, col="blue")
-plot(fempcont_classi1, Fstudio, type="b", main="Funzione di distribuzione empirica discreta di studio", col="red")
+plot(classi_empiriche1, Fstudio, type="b", main="Funzione di distribuzione empirica discreta di studio", col="red")
 abline(h=0.5, lty=2, col="blue")
-plot(fempcont_classi1, Faltro, type="b", main="Funzione di distribuzione empirica discreta di altro", col="red")
+plot(classi_empiriche1, Faltro, type="b", main="Funzione di distribuzione empirica discreta di altro", col="red")
 abline(h=0.5, lty=2, col="blue")
 ```
 
@@ -837,4 +837,57 @@ quantile(altro, 0.5, type=1)
 ### Quantili, percentili, decili e quartili
 
 Oltre la mediana è possibile definire altri indici di posizione detti **quantili**, che dividono l'insieme dei dati ordinati in un numero di parti uguali. Supponiamo di avere a disposizione una variabile quantitativa con un certo numero di osservazioni disposte in ordine crescente. Possiamo dividere i dati in $\alpha$ gruppi, ognuno contenente circa lo stesso numero di elementi. Gli $\alpha-1$ numeri sono detti *quantili* di ordine $\alpha$. Solitamente possiamo dividere i dati in $\alpha = 4$ gruppi da 3 quantili detti *quartili*, oppure $\alpha = 10$ e 9 quantili detti *decili* o ancora $\alpha = 100$ e 99 quantili detti *percentili*. I quantili (percentili) sono indici di posizione non centrali utilizzati per insiemi numerosi di dati. 
-Per il calcolo dei quantili R ha a disposizione la funzione *quantile(v, probs = , type = )*. Oltre al vettore, la funzione prende in input anche due ulteriori parametri *probs* che rappresenta il vettore delle probabilità e *type* a cui è possibile assegnare valori da 1 a 9 e indica l'algoritmo da utilzzare per il calcolo dei quantili. Infatti, R possiede per 9 algoritmi per il calcolo dei quantili e quello di default è il 7, basato su tecniche di interpolazione tra i punti. 
+Per il calcolo dei quantili R ha a disposizione la funzione *quantile(v, probs = , type = )*. Oltre al vettore, la funzione prende in input anche due ulteriori parametri:
+
+* *probs* che rappresenta il vettore delle probabilità
+* *type* a cui è possibile assegnare valori da 1 a 9 e indica l'algoritmo da utilzzare per il calcolo dei quantili. Infatti, R possiede per 9 algoritmi per il calcolo dei quantili e quello di default è il 7, basato su tecniche di interpolazione tra i punti. 
+
+```{r}
+quantile(lavoro)
+```
+
+```{r}
+quantile(famiglia)
+```
+
+```{r}
+quantile(studio)
+```
+
+```{r}
+quantile(asilo)
+```
+
+```{r}
+quantile(altro)
+```
+
+Abbiamo detto che R è in grado di utilizzare diversi algoritmi per il calcolo dei quantili. Mostriamo ora lavorando sul vettore famiglia, la differenza fra i vari algoritmi
+
+```{r}
+tipiquartili <- function(x){
+  y<-numeric(0)
+  for(i in 1:9){
+    y<-rbind(y, c(quantile(x, 0, type=i), quantile(x, 0.25, type=i), quantile(x, 0.5, type=i), quantile(x, 0.75, type=i), quantile(x, 1, type=i)))
+  }
+  rownames(y) <- paste("type", 1:9)
+  y
+}
+tipiquartili(famiglia)
+```
+
+Calcolando i quantili sul vettore famiglia con i differenti algoritmi è possibile notare che i risultati restituiti differiscono.
+
+### Varianza, deviazione standard e coefficiente di variazione
+Siccome gli indici di posizione non tengono conto della variabilità dei dati, abbiamo bisogno di introdurre due nuovi indici: *varianza campionaria* e *deviazione standard*. Questi due indici ci permettono di permettono di misurare la variabilità di una distribuzione di frequenza.
+Diamo le definizioni di queste due misure:
+
+Assegnato un insieme di dati numerici $x_{1}, x_{2}, ..., x_{n}$, si definisce **varianza campionaria**, indicata con $s^{2}$, la quantità:
+
+$$s^2 = \frac{1}{n-1} \sum_{i=1}^n (x_{i} - \bar{x})$$ con n=2,3,...
+
+dove $\bar{x}$ è la media campionaria. 
+
+Definiamo come **devianzione standard**, indicata con s, la radice quadrata della varianza campionaria
+
+
