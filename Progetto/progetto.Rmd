@@ -889,5 +889,192 @@ $$s^2 = \frac{1}{n-1} \sum_{i=1}^n (x_{i} - \bar{x})$$ con n=2,3,...
 dove $\bar{x}$ è la media campionaria. 
 
 Definiamo come **devianzione standard**, indicata con s, la radice quadrata della varianza campionaria
+$$s = \sqrt{\frac{1}{n-1} \sum_{i=1}^n (x_{i} - \bar{x})}$$ con n=2,3,...
 
+Questi due indici sono detti **indici di dispersione** in quanto più i dati risultanto discostarsi dalla media più essi risultano essere grandi.
 
+In R è possibile calcolare la varianza campionaria di un vettore numerico utilizzando la funzione *var()*:
+
+```{r}
+var(lavoro)
+```
+```{r}
+var(famiglia)
+```
+```{r}
+var(studio)
+```
+```{r}
+var(asilo)
+```
+```{r}
+var(altro)
+```
+
+È possibile ricavare la devizione standard campionaria utilizzando la funzione *sd()*:
+
+```{r}
+sd(lavoro)
+```
+```{r}
+sd(famiglia)
+```
+```{r}
+sd(studio)
+```
+```{r}
+sd(asilo)
+```
+```{r}
+sd(altro)
+```
+
+La media campionaria e la varianza campionaria sono, rispettivamente, gli indici di posizione e di dispersione più utilizzati.
+Per confrontare le variazioni esistenti tra i diversi campioni di dati è possibile utilizzare il **coefficiente di variazione**.
+
+Assegnato un insieme di dati numerici $x_{1}, x_{2}, ...,x_{n}$ si definisce *coefficiente di variazione* il rapporto tra la deviazione standard e il modulo della media campionaria:
+
+$$ CV = \frac{s}{|\bar{x}|}$$
+
+In R non è presente una funzione per calcolare il coefficiente di variazione, quindi la definiamo noi:
+
+```{r}
+cv <- function(x){
+  sd(x)/abs(mean(x))
+}
+```
+
+Applicandola ai vettori a nostra disposizione:
+
+```{r}
+cv(lavoro)
+```
+
+```{r}
+cv(famiglia)
+```
+
+```{r}
+cv(studio)
+```
+
+```{r}
+cv(asilo)
+```
+
+```{r}
+cv(altro)
+```
+
+Tra i coefficienti di variazione calcolati, gli ultimi tre risultano essere quelli con valore maggiore, fatto che indica che la dispersione dei dati è maggiore in questi vettori.
+
+### Forma di una distribuzione di frequenza
+
+Con gli indici descritti finora è possibile comprendere la forma delle distribuzioni di frequenza ed eventuali sbilanciamenti verso destra o sinistra. Esistono indici statistici che permettono di misurare quando una distribuzione di frequenza presenta simmetria o asimmetria oppure se è più o meno piccata. 
+Un indice che permette di misurare la simmetria di una distribuzione di frequenza è la **skewness campionaria**.
+
+Assegnato un insieme di dati numerici $x_{1}, x_{2}, ..., x_{n}$ si definisce *skewness campionaria* il valore: 
+
+$$ \gamma_{1} = \frac{m_{3}}{m_{2}^{3/2}}$$
+
+dove $m_{3}$ denota il momento centrato campionario di ordine 3. 
+In generale, il momento centrato campionario di ordine j è definito come segue:
+
+$$ m_{j} = \frac{1}{n} \sum_{i=1}^{n} (x_{i} - \bar{x})^{j}$$ con $j=1,2,...$
+
+Se $\gamma_{1}=0$ allora la distribuzione di frequenza è simmetrica;
+Se $\gamma_{1} \gt 0$ allora l'asimetria è positiva (la coda di destra è più allungata);
+Se $\gamma_{1} \lt 0$ l'asimmetria è negativa (la coda di sinistra è più allungata).
+
+Non è presente una funzione per il calcolo della skewness campionaria in R, quindi abbiamo provveduto ad implementarlo:
+
+```{r}
+skw <- function(x){
+  n <- length(x)
+  m2 <- (n-1)*var(x)/n
+  m3 <- (sum((x-mean(x))^3))/n
+  m3/(m2^1.5)
+}
+```
+
+Riferendoci ai dati dei vettori in analisi,
+
+```{r}
+skw(lavoro)
+```
+
+Qui abbiamo un'asimmetria negativa in quanto la skewness è minore di 0. 
+
+```{r}
+skw(famiglia)
+```
+
+Anche qui abbiamo un'asimmetria negativa in quanto la skewness è minore di 0. 
+
+```{r}
+skw(studio)
+```
+
+```{r}
+skw(asilo)
+```
+
+```{r}
+skw(altro)
+```
+
+Con questi ultimi tre vettori, l'asimmetria risulta essere positiva in quanto la skewness è maggiore di 0. 
+
+Un indice per misurare la densità dei dati intorno alla media è la **curtosi campionaria**
+
+Assegnato un insieme di dati numerici $x_{1, x_{2}, ...,x_{n}}$ si definisce *curtosi campionaria* il valore:
+
+$$\gamma_{2} = \beta_{2} - 3$$
+dove
+
+$$\beta_{2} = \frac{m_{4}}{m_{2}^{2}}$$
+
+dove $m_{4}$ rappresenta il momento campionario di ordine 4.
+
+Questi due indici $\beta_2$ e $\gamma_2$ permettono di confrontare la distribuzione di frequenza dei nostri dati con una densità di probabilità normale.
+
+Se $\beta_2 \lt 3$ e $\gamma_2 \lt 0$ la distribuzione di frequenza si dice *platicurtica*, ovvero risulta essere più piatta di una normale.
+Se $\beta_2 \gt 3$ e $\gamma_2 \gt 0$ la distribuzione di frequenza si dice *leptocurtica*, ovvero risulta essere più piccata di una normale.
+Se $\beta_2 = 3$ e $\gamma_2 = 0$ la distribuzione di frequenza si dice *normocurtica*, ovvero piatta come una normale.
+
+Implementiamo in R il calcolo della curtosi campionaria come segue
+
+```{r}
+curt <- function(x){
+  n<-length(x)
+  m2<-(n-1)*var(x)/n
+  m4<-(sum((x-mean(x))^4))/n
+  m4/(m2^2) - 3
+}
+```
+
+Riferendoci ai vettori in analisi
+
+```{r}
+curt(lavoro)
+```
+
+```{r}
+curt(famiglia)
+```
+
+```{r}
+curt(studio)
+```
+
+```{r}
+curt(asilo)
+```
+
+```{r}
+curt(altro)
+```
+
+Nei vettori *lavoro*, *asilo* e *altro* la curtosi è positiva indicando quindi che la distribuzione di frequenza è più piccata di una normale e si dice in questo caso leptocurtica. Per quanto riguarda i vettori *famiglia* e *studio* invece, la curtosi è negativa, ovvero la distribuzione è più piatta di una normale, quindi platicurtica.
+
+## Statistica descrittiva bivariata
