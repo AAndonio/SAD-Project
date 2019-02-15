@@ -1078,3 +1078,15 @@ curt(altro)
 Nei vettori *lavoro*, *asilo* e *altro* la curtosi è positiva indicando quindi che la distribuzione di frequenza è più piccata di una normale e si dice in questo caso leptocurtica. Per quanto riguarda i vettori *famiglia* e *studio* invece, la curtosi è negativa, ovvero la distribuzione è più piatta di una normale, quindi platicurtica.
 
 ## Statistica descrittiva bivariata
+
+La statistica descrittiva bivariata è la branca della statistica che si occupa di definire i metodi grafici e statistici per descrivere le relazioni fra due variabili. Le relazioni fra variabili quantitative possono essere rappresentate graficamente mediante scatterplot in cui, ogni coppia di osservazioni viene rappresentata con un punto o un cerchio sul piano euclideo. Quello che si fa è scegliere una variabile da porre sull'asse delle ascisse, che prende il nome di *variabili indipendente*, e una da porre sull'asse delle ordinate chiamata *variabile dipendente* e si disegnano i punti in corrispondenza delle coppie. Creando questo grafico vogliamo capire se le coppie di punti presentano una certa regolarità e se esiste una relazione fra le variabili.
+
+```{r}
+plot(famiglia, asilo, main="Asilo in funzione di famiglia", xlab="Famiglia", ylab = "Asilo")
+abline(v=median(famiglia), lty=1, col="magenta")
+abline(v=mean(famiglia), lty=2, col="blue")
+abline(h=median(asilo), lty=1, col="magenta")
+abline(h=mean(asilo), lty=2, col="blue")
+```
+
+Dallo scatterplot prodotto, possiamo not
