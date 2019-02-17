@@ -1089,4 +1089,173 @@ abline(h=median(asilo), lty=1, col="magenta")
 abline(h=mean(asilo), lty=2, col="blue")
 ```
 
-Dallo scatterplot prodotto, possiamo not
+Dallo scatterplot prodotto possiamo notare che i dati sembrano essere sparsi intorno ad una retta discendente, mostrando così una correlazione lineare negativa fra le variabili.
+
+### Covarianza e correlazione campionaria
+
+È possibile misurare la correlazione tra le variabili utilizzando la **covarianza campionaria**.
+
+Assegnato un campione bivariato ($x_1, y_1$), ($x_2, y_2$), ..., ($x_n, y_n$) di una variabile quantitativa bidimensionale (X,Y), siano $\bar x$ e $\bar y$ le medie campionarie di $x_1, x_2, ..., x_n$ e di $y_1, y_2, ..., y_n$ . La covarianza campionaria tra le due variabili X e T è definita come segue:
+
+$$ C_{xy} = \frac{1}{n-1}\sum_{i=1}^n(x_i-\bar x)(y_i - \bar y)$$
+
+Quando $C_{xy} \gt 0$ si dice che le variabili sono *correlate positivamente*.
+Quando $C_{xy} \lt 0$ si dice che le variabili sono *correlate negativamente*.
+Quando $C_{xy} = 0$ si dice che le variabili sono *non  correlate*.
+
+Inoltre dividiamo per $n-1$ perchè in caso x e y siano uguali la covarianza campionaria è uguale alla varianza campionaria.
+
+È possibile calcolare la covarianza campionaria in R utilizzando la funzione *cov()*
+
+```{r}
+cov(famiglia, asilo)
+```
+
+Com'è possibile vedere, la covarianza campionaria fra le due variabili considerate è negativa, fatto che ci dice che le due variabili sono correlate negativamente.
+
+È possibile ottenere una misura quantitativa della correlazione fra le variabili introducendo il **coefficiente di correlazione campionaria**
+
+$$r_{xy} = \frac{C_{xy}}{s_x s_y}$$
+dove $s_x$ e $s_y$ corrisponde rispettivamente alla deviazione standard di x e di y.
+
+Questo coefficiente di correlazione ha lo stesso segno della covarianza e, in base al suo valore, diciamo che le variabili sono correlate positivamente, negativamente o non correlate.
+Il coefficiente di correlazione gode di diverse proprietà:
+
+* $-1 \leq r_{xy} \leq 1$;
+* Se $r_{xy}=1$ allora abbiamo una correlazione perfetta positiva e tutti i punti sono allineati su una linea retta ascendente;
+* Se $0 \lt r_{xy} \lt 1$ allora i punti sono posizionati in una nuvola attorno ad una linea retta interpolante ascendente;
+* Se $r_{xy}=0$ allora i punti sono dispersi in una nuvola che non presenta alcuna evidente direzione di natura lineare;
+* Se $-1 \lt r_{xy} \lt 0$ allora i punti sono posizionati in una nuvola attorno ad una linea retta interpolante discendente;
+* Se $r_{xy} = -1$ abbiamo una correlazione perfetta negativa e tutti i punti sono allineati su una retta discendente.
+
+In R per calcolare il coefficiente di correlazione si utilizza la funzione *cor()*
+
+```{r}
+cor(famiglia, asilo)
+```
+
+Misurando la correlazione fra le due variabili che stiamo considerando otteniamo un valore negativo piuttosto vicino a -1, fatto che indica la correlazione negativa fra le due variabili.
+
+È possibile aggiungere allo scatterplot precedente la retta interpolante stimata.
+
+```{r}
+plot(famiglia, asilo, main = "Retta di regressione", xlab="Famiglia", ylab="Asilo", col="red")
+abline(lm(asilo~famiglia), col="blue")
+```
+
+La funzione *abline(lm(asilo~famiglia)* è quella che permette di aggiungere la retta allo scatterplot, dove *lm()* sta per linear model ed è utilizzata per eseguire le analisi di regressioni lineari.
+
+Il modello lineare viene utilizzato per spiegare o prevedere un andamento futuro sulla base della relazione si instaura tra una variabile Y dipendente e una o più variabili
+indipendenti $X_{1}, X_{2}, ..., X_{p}$. Nel caso in cui $p=1$, l'analisi prende il nome di **regressione semplice** mentre se $p\gt1$ allora prende il nome di **regressione multipla**.
+
+### Regressione lineare semplice 
+
+Questo modello di regressione è esprimibile attraverso l'equazione di una retta che interpola al meglio la nuvola di punti dello scatterplot. L'equazione è la seguente:
+
+$$Y=\alpha+\beta X$$
+
+dove:
+* $\alpha$ è l'intercetta;
+* $\beta$ il coefficiente angolare.
+
+Il coefficiente angolare indica la pendenza della retta mentre l'intercetta corrisponde all'ordinata del punto di intersezione della retta interpolante con l'asse delle ordinate.
+L'identificazione di questa retta viene ottenuta applicando il *metodo dei minimi quadrati*. I **coefficienti di regressione** sono i valori $\alpha$ e $\beta$ per i quali la somma $Q$ dei quadrati degli errori è **minima**:
+
+$$Q = \sum_{i=1}^n [y_{i} - (\alpha+\beta x_i)]^2$$
+
+dove:
+* $n$ è il numero di osservazioni;
+* $(x_1, x_2, ..., x_n)$ sono i valori osservati della variabile X;
+* $(y_1, y_2, ..., y_n)$ sono i valori osservati della variabile Y.
+
+Il metodo dei minimi quadrati conduce alla fine a:
+
+$$ \beta = \frac{s_y}{s_x} * r_{xy} \qquad \alpha = \bar{y}-\beta \bar{x}$$
+
+Riferendoci ai vettori da noi presi in considerazione abbiamo che:
+
+```{r}
+beta <- (sd(asilo)/sd(famiglia)) * cor(famiglia,asilo)
+alpha <- mean(asilo) - beta*mean(famiglia)
+
+c(alpha,beta)
+```
+
+Il fatto che $\beta$ risulta essere negativo, ci conferma che la retta è discendente.
+Per poter eseguire le analisi di regressione lineare utilizziamo la funzione *lm(y~x)* (l'argomento indica che y dipende da x).
+
+```{r}
+linearmodel <- lm(asilo~famiglia)
+linearmodel
+```
+
+Vediamo che i coefficienti coincidono con quelli calcolati precedentemente. 
+La retta di regressione con i vettori da noi presi in esame ha come equazione:
+
+$$ y = 76.016 - 1.269 * x$$
+
+### Residui
+
+Calcolati i coefficienti di regressione e con essi l'equazione della retta di regressione, è possibile osservare quanto questa retta si discosta dai valori osservati.
+Esistono quindi degli scostamenti, chiamati **residui**, tra le ordinate dei punti $y_i$ che sono i valori osservati e i corrispondenti valori stimati ottenuti mediante la retta di regressione.
+
+$$\hat{y} = \alpha + \beta x_{i} \qquad (i=1,2,...,n)$$
+
+I residui verranno quindi calcolati nel seguente modo:
+
+$$E_i = y_i - \hat{y_i} \qquad (i=1,2,...,n)$$
+
+È possibile calcolare i valori stimati utilizzando la funzione *fitted()* dandole in input *lm(y~x*)
+
+```{r}
+fitted(lm(asilo~famiglia))
+```
+
+Per calcolare i residui invece esiste la funzione *resid()* che prende in input sempre *lm(y~x)*
+
+```{r}
+resid(lm(asilo~famiglia))
+```
+
+I residui sono anche uno degli attributi fornitoci dalla funzione *lm()* ed è possibile accedervi nella seguente maniera:
+```{r}
+linearmodel$residuals
+```
+
+È inutile calcolare la media campionaria dei residui $\bar{E}$ in quanto essa è sempre nulla perchè gli scostamenti positivi e negativi si compensano a vicenda. Per quanto riguarda invece mediana, varianza campionaria e deviazione standard campionaria:
+
+```{r}
+median(linearmodel$residuals)
+```
+
+```{r}
+var(linearmodel$residuals)
+```
+
+```{r}
+sd(linearmodel$residuals)
+```
+
+
+Il coefficiente di variazione è impossibile da ottenere in quanto abbiamo detto che la media campionaria dei residui risulta essere nulla.
+È possibile visualizzare graficamente i residui attraverso diversi grafici:
+
+* Tracciando dei segmenti che congiungono i valori stimati e i valori osservati utilizzando la funzione *segments()*
+
+```{r}
+plot(famiglia, asilo, main = "Retta di regressione", xlab="Famiglia", ylab="Asilo", col="red")
+abline(lm(asilo~famiglia), col="blue")
+stime <- fitted(lm(asilo~famiglia))
+segments(famiglia, stime, famiglia, asilo, col="magenta")
+```
+
+* Rappresentando i valori dei residui rispetto alle osservazioni della variabile indipendente
+Il **diagramma dei residui** è un grafico in cui i valori dei residui sono posti sull'asse delle ordinate e quelli della variabile indipendente sull'asse delle ascisse.
+```{r}
+residui <- resid(lm(asilo~famiglia))
+plot(famiglia, residui, main = "Diagramma dei residui", xlab="Famiglia", ylab="Residui", pch=9, col="red" )
+abline(h=0, col="blue", lty=2)
+```
+
+
+
