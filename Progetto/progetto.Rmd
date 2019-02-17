@@ -1257,5 +1257,27 @@ plot(famiglia, residui, main = "Diagramma dei residui", xlab="Famiglia", ylab="R
 abline(h=0, col="blue", lty=2)
 ```
 
+Questo diagramma ci aiuta a capire come si adatta la retta di regressione rispetto ai dati.
+
+* Calcola i valori dei residui standardizzati rispetto ai valori stimati
+È possibile calcolare i *residui standardizzati* nella seguente maniera:
+
+$$ E_i^{(s)} = \frac{E_i - E}{s_E}$$
+
+che hanno media campionaria nulla e varianza unitaria.
+
+```{r}
+residuistandard <- residui/sd(residui)
+residuistandard
+```
+
+È possibile rappresentare questi residui standardizzati mediante un grafico:
+
+```{r}
+plot(stime, residuistandard, main = "Residui standard rispetto ai valori stimati", xlab="Valori stimati", ylab="Residui standard", pch=5, col="red")
+abline(h=0, col="blue", lty=2)
+```
+
+### Coefficiente di determinazione
 
 
