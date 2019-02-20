@@ -1280,4 +1280,190 @@ abline(h=0, col="blue", lty=2)
 
 ### Coefficiente di determinazione
 
+Quello che ci interessa capire è quanto la retta si adatti ai dati e questo lo possiamo fare attraverso il **coefficiente di determinazione** definito nella seguente maniera:
+
+$$D^2 = \frac{\sum_{i=1}^n (\hat{y_i} - \bar{y})²}{\sum_{i=1}^n (y_i - \bar{y})²}$$
+
+Il coefficiente di determinazione è il rapporto tra *la varianza dei valori stimati tramite la retta di regressione* e *la varianza dei valori osservati*.
+
+Nel caso di regressione lineare semplice esso è pari al quadrato del coefficiente di correlazione, ovvero:
+
+$$D^2 = r^2_{xy}$$
+
+Se il coefficiente di determinazione è vicino ad 1 allora fra le due variabili esiste una forte correlazione, se invece questo coefficiente risulta vicino allo 0 non esiste correlazione fra le due variabili.
+In questo caso, per calcolare il coefficiente di determinazione, possiamo utilizzare il coefficiente di correlazione ed elevarlo al quadrato:
+
+```{r}
+(cor(famiglia, asilo))^2
+```
+
+In alternativa possiamo utilizzare la funzione *summary(lm(y~x))$r.square*:
+
+```{r}
+summary(lm(asilo~famiglia))$r.square
+```
+
+Com'é possibile vedere, il coefficiente di determinazione fra le due variabili prese in esame risulta essere abbastanza vicino ad 1, indicando una correlazione fra le variabili.
+
+## Regressione lineare multipla
+
+Molte applicazioni affrontano situazioni nelle quali vi è più di una variabile indipendente. Il modello di regressione lineare multipla serve a spiegare la relazione fra una variabile quantitativa dipendente $Y$ e diverse variabili quantitative indipendenti $X_1, X_2, ..., X_p$. Come variabile dipendente scegliamo "Lavoro" e ne valutiamo la relazione con tutte le altre variabili a nostra disposizione. Iniziamo con l'applicare le funzioni *cov()* e *cor()* sul dataframe "motivi" definito in precedenza, nella parte riguardante gli scatterplot, per calcolare la covarianza e le correlazioni fra le coppie di variabili. Gli output delle funzioni saranno due matrici simmetriche.
+
+```{r}
+cov(motivi)
+```
+
+```{r}
+cor(motivi)
+```
+
+Dalle matrici restituiteci come risultato possiamo notare che vi è una correlazione negativa molto vicina ad 1 fra la variabile "Lavoro" e "Asilo" e, come visto prima, anche fra "Famiglia" e "Asilo" e "Studio" e "Asilo".
+
+Il modello di regressione lineare multipla con p variabili è esprimibile attraverso l'equazione: 
+
+$$ Y = \alpha + \beta_1 X_1 + \beta_2 X_2 +...+\beta_p X_p $$
+
+dove:
+* $\alpha$ rappresenta l'intercetta, ovvero il valore di Y quando $X_1=X_2=...=X_p=0$
+* $\beta_1 , \beta_2, ..., \beta_p$ sono i regressori. Abbiamo che $\beta_1$ rappresenta l'inclinazione di $Y$ rispetto alla variabile $X_1$ tenendo costanti le variabili $X_2, X_3, ..., X_p$ , $\beta_2$ rappresenta l'inclinazione... e così fino a $\beta_p$.
+
+Utilizziamo la funzione *lm(y~$x_1+x_2+...+x_p$)* per eseguire l'analisi di regressioni lineari multivariate:
+
+```{r}
+multiplelinearmodel <- lm(lavoro ~ famiglia + studio + asilo + altro) 
+multiplelinearmodel$coefficients
+```
+I segni di tutti i regressori sono negativi, questo vuol dire che i valori di "Famiglia", "Studio", "Asilo"" e "Altro" hanno un effetto negativo sul valore di "Lavoro", in altre parole al crescere dei valori "Famiglia", "Studio", "Asilo"" e "Altro" diminuisce quello di "Lavoro".
+
+###Residui
+
+Calcolati i coefficienti passiamo al calcolo dei residui. Prima di calcolare i residui bisogna calcolare i valori stimati che risultano essere uguali a:
+
+$$\hat{y_i} = \alpha + \beta_1 x_{i,1} + \beta_2 x_{i,2} +...+\beta_p x_{i,p} \qquad (i=1,2,...,n) $$
+Ricordiamo che la media campionaria dei residui $\bar{E}$ è sempre nulla. I residui li calcoliamo esattamente come prima:
+
+$$E_i = y_i - \hat{y_i}$$
+Utilizziamo anche qui la funzione *fitted()* per calcolare i valori stimati tramite regressione lineare multipla:
+
+```{r}
+stimemult <- fitted(lm(lavoro ~ famiglia + studio + asilo + altro))
+stimemult
+```
+
+```{r}
+residuimult <- resid(lm(lavoro ~ famiglia + studio + asilo + altro))
+residuimult
+```
+
+Per quanto riguarda mediana, varianza campionaria e deviazione standard dei residui abbiamo che:
+
+```{r}
+median(multiplelinearmodel$residuals)
+```
+
+```{r}
+var(multiplelinearmodel$residuals)
+```
+
+
+```{r}
+sd(multiplelinearmodel$residuals)
+```
+
+Anche nel caso multivariato è interessante calcolare i residui standardizzati e lo facciamo attraverso le seguenti linee di codice:
+
+```{r}
+residuimultstandard <- residuimult/sd(residuimult)
+residuimultstandard
+```
+
+Realizziamo quindi un grafico in cui i residui standardizzati vengono disegnati in funzione dei valori stimati
+```{r}
+plot(stimemult,residuimultstandard, main="Residui standard rispetto ai valori stimati", ylab="Residui standard", xlab="Valori Stimati", pch=5, col="red")
+abline(h=0, col="blue", lty=2)
+```
+
+I punti risultano essere disposti anche in questo caso in maniera del tutto casuale e non è possibile notare nessuna tendenza.
+
+### Coefficiente di determinazione
+
+Come in precedenza, il coefficiente di determinazione è uguale a:
+
+$$D^2 = \frac{\sum_{i=1}^n (\hat{y_i} - \bar{y})²}{\sum_{i=1}^n (y_i - \bar{y})²}$$
+
+Ed esattamente come prima, se $D^2 = 0$ allora il modello di regressione multipla usato non spiega per nulla i dati, se $D^2 = 1$ allora il modello approssima perfettamente i dati.
+
+Utilizziamo la funzione *summary(lm(y~$x_1+x_2+...+x_p$))$r.square* per calcolarlo. Utilizzando i dati a nostra disposizione otteniamo:
+
+```{r}
+summary(lm(lavoro ~ famiglia+studio+asilo+altro))$r.square
+```
+
+Essendo il valore del coefficiente decisamente vicino ad 1, il modello di regressione multipla utilizzato spiega in maniera ottima i dati.
+
+## Regressione non lineare
+
+Molto spesso la linearità non è un modello accettabile e lo notiamo quando il coefficiente di determinazione è prossimo allo 0.
+Il modello lineare più semplice è il **modello di regressione polinomiale** che calcoliamo nella seguente maniera:
+
+$$Y = \alpha + \beta X + \gamma X^2$$
+
+Degli scatterplot creati in precedenza, in gran parte sembra che la linearità non basti. Esaminiamo nel dettagli la coppia "Lavoro" e "Asilo"
+
+```{r}
+plot(lavoro, asilo, main="Scatterplot", xlab="Lavoro", ylab="Asilo")
+```
+
+Calcolando il coefficiente di determinazione esso risulta pari a:
+
+```{r}
+summary(lm(asilo ~ lavoro))$r.square
+```
+
+Un valore che si trova nel mezzo ma che, utilizzando un modello di regressione non lineare possiamo far aumentare e approssimare meglio. 
+
+Per la stima dei parametri $\alpha, \beta e \gamma$ è possibile ricorrere alla regressione multipla:
+
+$$Y = \alpha + \beta X_1 + \gamma X_2$$
+
+con regressori $X_1 = X$ e $X_2 = X^2$.
+
+Utilizzando R possiamo stimare $\alpha, \beta$ e $\gamma$ con la funzione *lm(y~x + I(x^2))* dove *I()* è un *identificatore di variabile* e viene inserito quando vi è la necessità di effettuare operazione matematiche nelle variabili della regressione, in questo caso, l'elevazione a potenza.
+
+Procediamo all'approssimazione polinomiale
+
+```{r}
+pol <- lm(asilo~lavoro+I(lavoro^2))
+pol
+```
+
+```{r}
+
+alphapol <- pol$coefficients[[1]]
+betapol <- pol$coefficients[[2]]
+gammapol <- pol$coefficients[[3]]
+
+c(alphapol, betapol, gammapol)
+
+```
+
+Il modello polinomiale costruito ha quindi come valori $\alpha = 124.3816$, $\beta = -5.7236$ e come $\gamma = 0.0745$.
+Procediamo col calcolo del coefficiente di determinazione attraverso la funzione *summary()*:
+
+```{r}
+summary(lm(asilo~lavoro+I(lavoro^2)))$r.square
+```
+
+Com'è possibile notare, il coefficiente di determinazione ottenuto col modello di regressione non lineare polinomia dal valore di 0.7709 è maggiore di quello di regressione lineare dal valore di 0.6252, risultando quindi più ottimale.
+
+Andiamo adesso ad aggiungere la curva appena descritta allo scatterplot: 
+
+```{r}
+plot(lavoro, asilo, main="Scatterplot con curva", xlab="Lavoro", ylab="Asilo", col = "red")
+curve(alphapol+betapol*x+gammapol*x^2, add = TRUE)
+```
+
+# Analisi dei cluster
+
+
 
