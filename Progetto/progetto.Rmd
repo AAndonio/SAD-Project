@@ -1,8 +1,8 @@
 ---
 title: "Progetto di SAD"
 output:
-  pdf_document: default
   html_notebook: default
+  pdf_document: default
 ---
 
 ---
@@ -1465,5 +1465,115 @@ curve(alphapol+betapol*x+gammapol*x^2, add = TRUE)
 
 # Analisi dei cluster
 
+L'analisi dei cluster è una metodologia che permette di raggruppare in sottoinsiemi entità appartenenti ad un insieme più ampio. Questi sottoinsiemi sono chiamati **cluster**. Le diverse tecniche per effettuare l'analisi dei cluster hanno come unico obiettivo quello di ottenere raggruppamenti in base alla somiglianza in modo che gli elementi di uno stesso gruppo siano tra loro più simili possibili e gli elementi appartenenti a gruppi diversi siano più diversi possibili. 
+Sia $n$ il numero di individui, il problema dell'analisi dei cluster sta nel determinare $m$ sottoinsiemi, i cluster, di individui in $I$, con $m$ minore intero di $n$, tali che $I_i$ appartenga soltanto ad un unico sottoinsieme.
+Gli individui assegnati allo stesso cluster sono detti **simili**, mentre quelli assegnati a cluster diversi vengono chiamati **dissimili**.
+Molte delle tecniche di analisi dei cluster prevedono la standardizzazione di ogni variabile usanto dal media campionaria e la deviazione standard campionaria, questo per far si che tutti i valori osservati siano privi di unità di misura. Questa operazione è detta *scalamento* e, oltre a rendere puri i valori osservati, ci permette di ridurne la grandezza. 
+Preso un elemento $x_{ij}$, il corrispondente valore scalato è pari a:
 
+$$ \frac{x_{ij} - \bar{x}}{s_j}$$
+R fornisce la funzione *scale()* che, data una matrice in input, permette di effettuare uno scalamento. Questa funzione prevede due attributi, *center* che di default è uguale a TRUE e indica se dagli elementi di ogni colonna della matrice si sottrae il valore medio della corrispondente colonna e *scale*, che di default è posto anch'esso a TRUE e indica se bisogna dividere gli elementi centrati di ogni colonna della matrice per la deviazione standard della rispettiva colonna.
 
+Andiamo quindi a scalare la nostra tabella:
+```{r}
+tabellaScalata <- scale(tabella)
+tabellaScalata
+```
+
+Una volta effettuato lo scalamento è possibile passare alla sezione riguardante la distanza e la similarità fra due regioni.
+
+##Distanza e similarità
+
+Le misure metriche di somiglianza sono basate soprattutto sulle *funzioni distanza* tra i vettori delle caratteristiche. La definizione di questa funzione è la seguente:
+
+1. $d(X_i, X_j) = 0$ se e solo se $ X_i = X_j$, con $X_i$ e $X_j$ in $E_p$;
+2. $d(X_i, X_j) \geq  0$ per ogni $X_i$ e $X_j$ in $E_p$;
+3. $d(X_i, X_j) = d(X_j, X_i) $ per ogni $X_i$ e $X_j$ in $E_p$;
+4. $d(X_i, X_j) \leq d(X_i, X_k) + d(X_k, X_j)$ per ogni $X_i$ ,$X_j$ e $X_k$ in $E_p$.
+
+Queste proprietà rappresentano le caratteristiche che deve possedere una funzione di distanza. Le distanze calcolate fra tutte le possibili coppie vengono inserite in una matrice simmetrica di cardinalità $n x n$, con ovviamente tutti 0 sulla diagonale, ed è quindi possibile considerare anche solo la matrice triangolare superiore.
+R ha a disposizione la funzione *dist(X, method=, diag=FALSE, upper=FALSE)* per calcolare la matrice delle distanze secondo un metodo impostato dall'utente attraverso l'attributo *method*.
+
+I possibili valori di method, rappresentano i metodi disponibili per il calcolo della matrice delle distanze e, in particolare abbiamo:
+
+1. metrica euclidea (**euclidean**)
+2. metrica del valore assoluto o metrica di Manhattan (**manhattan**)
+3. metrica del massimo o metrica di Chebycev (**maximum**)
+4. metrica di Minkowski (**minkowski**)
+5. distanza di Canberra (**canberra**)
+6. distanza di Jaccard (**binary**)
+
+### Metrica euclidea
+
+La metrica più diffusa e familiare e quella **euclidea**, definita come segue:
+
+$$ d_{2}(X_i,X_j) = \sum_{k=1}^p [(x_{ik} - x_{jk})^2]^\frac{1}{2}$$
+
+La metrica euclidea usata su tutti i dati, è fortemente influenzata dall'unità di misura base alla quale è valutata ciascuna delle p caratteristiche. 
+Per usare questa metrica in R basta settare *"euclidean"* come valore dell'attributo *method* della funzione *dist()*.
+
+Per i dati a nostra disposizione abbiamo che:
+
+```{r}
+dist(tabellaScalata, method="euclidean", diag=FALSE, upper=FALSE)
+```
+
+###Metrica di Manhattan
+
+La metrica di Manhattan è così definita:
+
+$$d_1(X_i, X_j) = \sum_{k=1}^p |x_{ik} - x_{jk}| $$
+
+Calcoleremo queste altre metriche utilizzate solo su una parte delle regioni, giusto per mostrare la differenza nei risultati.
+
+Per utilizzare questa metrica, bisogna dare *"manhattan"* come valore all'attributo *method* della funzione *dist()*.
+
+```{r}
+x <- tabellaScalata[1:5, 1:5]
+x
+```
+
+```{r}
+dist(x, method = "manhattan", diag = FALSE, upper=FALSE)
+```
+
+###Metrica di Chebycev o del massimo
+
+La metrica di Chebycev è definita nella seguente maniera:
+
+$$d_\infty (X_i, X_j) = max_{k=1,...,p}|X_{ik} - X_{jk}| $$
+
+Per utilizzare questa metrica, bisogna dare *"maximum"* come valore all'attributo *method* della funzione *dist()*. 
+
+```{r}
+dist(x, method = "maximum", diag = FALSE, upper=FALSE)
+```
+
+###Metrica di Minkowski
+
+La metrica di Minkowsi è definita come segue:
+
+$$d_r(X_i, X_j) = [\sum_{k=1}^p|x_{ik}-x_{jk}|^r]^\frac{1}{r}$$
+
+Per utilizzare questa metrica, bisogna dare *"minkowski"* come valore all'attributo *method* della funzione *dist()*. 
+
+```{r}
+dist(x, method = "minkowski", diag = FALSE, upper=FALSE)
+```
+
+### Metrica di Canberra
+
+La metrica di Canberra è definita come segue:
+
+$$d_c(X_i,X_j) = \sum_{k=1}^p\frac{|x_{ik} - x_{jk}|}{|x_{ik}+x_{jk}|}$$
+Per utilizzare questa metrica, bisogna dare *"canberra"* come valore all'attributo *method* della funzione *dist()*. 
+
+```{r}
+dist(x, method = "canberra", diag = FALSE, upper=FALSE)
+```
+
+### Metrica di Jaccard
+
+In R è disponibile la distanza di Jaccard solo per vettori binari, diversi da quelli a nostra disposizione. Non è quindi possibile calcolarla.
+
+## Misure di similarità 
