@@ -1555,10 +1555,12 @@ La metrica di Minkowsi è definita come segue:
 
 $$d_r(X_i, X_j) = [\sum_{k=1}^p|x_{ik}-x_{jk}|^r]^\frac{1}{r}$$
 
-Per utilizzare questa metrica, bisogna dare *"minkowski"* come valore all'attributo *method* della funzione *dist()*. 
+con $r \geq 1$. Se $r=2$ si ottiene la metrica euclidea, se invece $r=1$ allora si ottiene la metrica del valore assoluto mentre se $r=\infty$ si ottiene la metrica di Chebycev.
+Per utilizzare questa metrica, bisogna dare *"minkowski"* come valore all'attributo *method* della funzione *dist()* e bisogna fornire il parametro r.
+Nell'esempio seguente abbiamo posto $r=4$
 
 ```{r}
-dist(x, method = "minkowski", diag = FALSE, upper=FALSE)
+dist(x, method = "minkowski", 4, diag = FALSE, upper=FALSE)
 ```
 
 ### Metrica di Canberra
@@ -1577,3 +1579,177 @@ dist(x, method = "canberra", diag = FALSE, upper=FALSE)
 In R è disponibile la distanza di Jaccard solo per vettori binari, diversi da quelli a nostra disposizione. Non è quindi possibile calcolarla.
 
 ## Misure di similarità 
+In alternativa alla matrice delle distanze, è possibile utilizzare una matrice delle similarità.
+Una **misura di similarità** fornisce un valore numerico compreso tra 0 e 1 e permette di definire quantitativamente la somiglianza o differenza fra due individui.
+In generale, una funzione a valori reali $s_{ij} = s(X_i, X_j)$ è detta misura di similarità se e soltanto se essa sosddisfa le seguenti condizioni:
+
+1.  $s(X_i,X_i) = 1$;
+2.  $0\leq s(X_i,X_j) \leq 1$;
+3.  $s(X_i,X_j) = s(X_j,X_i)$ per ogni $X_i$ e $X_j$
+
+La quantità $s_{ij}$ è detta **coefficiente di similarità**. La principale differenza fra una misura di distanza e una di similarità è che la prima è sempre maggiore o uguale di 0 mentre la seconda risulta essere compresa fra -1 e 1. È sempre possibile trasformare una misura di distanza in una misura di similarità nella seguente maniera:
+
+$$s_{ij} = \frac{1}{1+d_{ij}} \qquad (i,j = 1, 2,..., n)$$
+
+## Misura di non omogeneità totale
+
+Consideriamo un insieme di n individui e supponiamo esista un insieme di p caratteristiche osservabili e possedute da ogni individuo. Alla matrice delle misure è possibile associare una matrice $W_x$ di cardinalità $p*p$ detta **matrice delle varianze e covarianze** dove il generico elemento $w_{rl}$ è definito nella seguente maniera:
+
+$$w_{rl} = \frac{1}{n-1}\sum_{i=1}^n (x_{ir} - \bar{x_{r}})(x_{il} - \bar{x_{l}}) \qquad (r,l= 1,2,...,p)$$
+
+Se $r=l$ allora l'elemento $w_{rl}$ sarà uguale alla varianza campionaria relativa alla caratteristica r-esima effettuata su tutti gli n individui, mentre se $r \neq l$ l'elemento $w_{rl}$ è uguale alla covarianza campionaria tra la caratteristica r-esima e la caratteristica l-esima effettuata su tutti gli n individui.
+
+Dalla matrice delle varianze e covarianze è possibile ricavare una matrice chiamata **matrice statistica di non omogeneità**, indicata con $H_I$, per l'insieme I di individui di cardinalità $p*p$ dove il generico elemento è definito nella seguente maniera:
+
+$$ h_{rl} = \sum_{i=1}^{n} (x_{ir} - \bar{x_r}) (x_{il} - \bar{x_l}) = (n-1)w_{rl} \qquad (r,l = 1,2,...,p)$$
+
+In questa matrice, quando $r=l$ l'elemento $h_{rr}$ corrisponde a n-1 volte la varianza campionaria della caratteristica r-esima su tutti gli individui.
+Una **misura di non omogeneità statistica ** dell'insieme I di individui corrisponde alla **traccia** delle matrice $H_I$ ed è definita come segue:
+
+$$ trH_I = \sum_{r=1}^{p}h_{rr} = (n-1)\sum_{r=1}^{p}s_r^2$$
+oppure in alternativa:
+
+$$trH_I = \sum_{i=1}^{n}d_2^2(X_i, \bar{X})$$
+
+dove $d_2$ indica la distanza euclidea e $\bar{X} = (\bar{x_1}, \bar{x_2}, ..., \bar{x_p})$ è un vettore dove il generico elemento $\bar{x_j}$ rappresenta la media campionaria della caratteristca j-esima sugli n individui.
+
+## Misure di non omogeneità tra cluster
+
+Oltre a misure di non omogeneità relative all'insieme totale, vanno definite anche misure di non omogeneità all'interno dei cluster e tra cluster distinti. Infatti, al termine della classificazione, gli individui che appartengono allo stesso cluster dovrebbero essere il più omogenei tra loro e il più differenti da quelli appartenenti a cluster diversi.
+
+È quindi possibile definire una **misura di non omogeneità totale** che tenga conto della non omogeneità interna ai cluster (*within*) e della non omogeneità fra cluster (*between*). Denotiamo questa misura di non omogeneità totale con T e la definiamo come:
+
+$$T = S + B$$
+
+dove *S* corrisponde alla somma delle matrici di non omogeneità statistica relative ai singoli cluster ed *B* la matrice di non omogeneità statistica tra i vari cluster considerati.
+Le matrici T, S e B risultano avere tutte e tre la stessa cardinalità. Per ogni fissata matrice di dati, anche la matrice T è fissata mentre invece, le matrici S e B dipendono strettamente dalla partizione in cluster considerata. 
+Per ogni partizione dell'insieme degli individui in un numero fissato di cluster, otteniamo che:
+
+$$trT = trS + trB$$
+
+o, in maniera equivalente:
+
+$$1 = \frac{trS}{trT} + \frac{trB}{trT}$$
+e siccome abbiamo detto che *trT* è fissata allora i cluster dovrebbero essere individuati in modo da **minimizzare*** la misura di non omogeneità statistica all'interno dei cluster* e **massimizzare** *la misura di non omogeneità statistica fra cluster*.
+
+## Metodi di ottimizzazione
+Scelta la misura di distanza (o la similarità in alternativa) bisogna scegliere un algoritmo di raggruppamento delle unità osservate. 
+I metodi di raggruppamento si suddividono in tre tipi:
+
+* **Metodo di enumerazione completa**;
+* **Metodi gerarchici**;
+* **Metodi non gerarchici**.
+
+Il primo metodo elencato, quello di enumerazione completa (di ottimizzazione), è computazionalmente oneroso da applicare in quanto bisogna calcolare la funzione obiettivo per ogni partizione dell'insieme totale e questo va bene solo quando abbiamo un insieme di dati piccolo. Vengono per questo adottati metodi di raggruppamento gerarchici e non gerarchici che operano su sottoclassi delle partizioni degli individui in cluster.
+
+### Metodi non gerarchici
+
+Si è scelto di effettuare prima la suddivisione in cluster utilizzando dei metodi non gerarchici in modo da stabilire il numero di partizioni ottimale, sfruttandolo successivamente nell'analisi mediante metodi gerarchici.
+I metodi non gerarchici consentono di riallocare gli individui già classificati precedentemente nell'analisi e l'obiettivo finale di queste tecniche è quello di ottenere un'unica partizione degli individui di partenza. Per quanto riguarda il numero di cluster da individuare, in molti metodi non gerarchici si assume che esso sia fissato da chi sta facendo l'analisi mentre in altri questo numero è determinato durante l'analisi stessa.
+Il metodo non gerarchico più utilizzato è quello del **k-means** (Hartigan e Wong, 1979) nel quale il numero di cluster è specificato a priori e fornisce in output un'unica partizione.
+I passi dell'algoritmo sono i seguenti:
+
+1.Fissare il numero *m* dei cluster specificando *m* punti iniziali (scegliendo alcuni individui o prendendo una configurazione determinata con una tecnica gerarchica) che inducono una prima partizione provvisoria;
+
+2. Considerare tutti gli individui e attribuire ciascuno di essi al cluster individuato dal punto di riferimento da cui ha distanza minore;
+
+3. Calcolare il baricentro (centroide) di ognuno degli m gruppi così ottenuti. Tali centroidi costituiscono i punti di riferimento per i nuovi cluster;
+
+4. Valutare ogni distanza di ogni unità dal centroide ottenuto al punto precedente;
+
+5. Ricalcolare i centroidi dei k gruppi così ottenuti;
+
+6. Ripeto il procedimento dal punto 4 fino ad ottenere una partzione che risulta essere stabile oppure dopo aver raggiunto un determinato numero di iterazioni.
+
+Per garantire la convergenza della procedura iterativa, viene utilizzata la distanza euclidea come misura di distanza fra i vettori delle caratteristiche e i centroidi e viene considerata *la matrice contenente i quadrati delle distanze euclidee*.
+Il metodo k-means risulta essere molto veloce nei calcoli e lascia estrema libertà agli individui di allontanarsi o raggrupparsi. Uno svantaggio riguarda il fatto che la classificazione finale può essere influenzata dalla scelta iniziale degli m vettori delle caratteristiche come punti di riferimento. Infatti vi è il rischio di cadere in un ottimo locale e non in uno globale.
+
+Per utilizzare il metodo k-means in R bisogna utilizzare la funzione *kmeans(X, centers, iter.max=N, nstart=M)*. Per la nostra analisi utilizzeremo un valore di centers pari a 4, un numero di iterazioni pari a 25 e un valore di nstart uguale a 10.
+
+```{r}
+km <- kmeans(tabella, centers = 4, iter.max = 25, nstart = 10)
+km
+```
+
+La suddivisione in cluster individuata è la seguente:
+- $C_1 = {Campania, Lazio, Toscana}$
+- $C_2 = {Puglia, Basilicata, Calabria, Sicilia, Sardegna}$
+- $C_3 = {Molise}$
+- $C_4 = {Piemonte, Valle d'Aosta, Liguria, Lombardia, Trentino-Alto Adige, Veneto, Friuli-Venezia Giulia, Emilia-Romagna, Umbria, Marche, Abruzzo}$
+
+```{r}
+km$totss
+```
+
+```{r}
+km$tot.withinss
+```
+
+```{r}
+km$betweenss
+```
+
+```{r}
+km$betweenss/km$totss
+```
+
+Possiamo notare che la misura di non omogeneità totale è pari a 7067.801, mentre la somma delle misure di non omogeneità totale interne è uguale a 1039.17, la misura di non omogeneità tra cluster diversi è 6028.62 e il rapporto fra $\frac{trB}{trT}$ risulta essere pari a 0.853, un valore decisamente ottimo considerando il numero di centri utilizzato.
+
+Nell'analisi che effettueremo con i metodi gerarchici utilizzeremo lo stesso numero di cluster.
+
+È possibile anche scegliere i centroidi come punti di riferimento:
+
+```{r}
+d<-dist(tabella, method="euclidean", diag = TRUE, upper = TRUE)
+d2 <- d^2
+tree <- hclust(d2, method = "centroid")
+taglio <- cutree(tree, k = 4, h = NULL)
+tagliolist <- list(taglio)
+centroidiIniziali <- aggregate(tabella, tagliolist, mean)[,-1]
+kmeans(tabella, centers = centroidiIniziali, iter.max = 25)
+```
+
+Com'è possibile vedere anche utilizzando i centroidi abbiamo esattamente la stessa suddivisione in cluster presentata precedentemente.
+
+### Metodi gerarchici
+
+I metodi gerarchici si suddividono in: **agglomerativi** e **divisivi**. In quelli di tipo agglomerativo si parte da una situazione in cui si hanno tanti cluster quanti gli individui per poi giungere ad un unico cluster dove sono riuniti tutti. Nei metodi gerarchici di tipo divisivo invece, si parte da una situazione in cui si ha un solo cluster con tutti gli individui per poi raggiungere, attraverso divisioni, una situazione in cui si hanno tanti cluster quanti sono gli individui.
+L'obiettivo finale dei metodi gerarchici è quello di ottenere una sequenza di partizioni che possono essere rappresentate graficamente mediante una struttura chiamata **dendrogramma**, sul quale asse delle ordinate sono riportati i livelli di distanza e su quello delle ascisse i singoli elementi. Ad ogni livello corrisponde una partizione.
+
+In molti metodi gerarchici di tipo agglomerativo l'algoritmo ha una struttura comune:
+
+1. A partire dalla matrice dei dati, dobbiamo costruire la matrice delle distanze D (oppure quella delle similiarità S) tra individui considerati come singoli cluster distinti.
+
+2. Individuare la coppia di cluster meno distanti (o più somiglianti) e raggruppare in un unico cluster i due cluster meno distanti (o più somiglianti); calcolare inoltre la distanza (o similarità) di questo cluster originato dall'agglomerazione da tutti gli altri gruppi già esistenti.
+
+3. Costruire una nuova matrice di distanza (o similarità) che risulterà ridotta di una riga e di una colonna rispetto a quella che la precede (questo perchè le due righe e le due colonne dei singoli cluster sono state agglomerate in una singola rigoa e una singola colonna con le nuove distanze).
+
+4. Operare sulla nuova matrice a partire dallo step 2 fino ad esaurire tutte le possibilità di raggruppamento (fino a quando non si ottiene una matrice 2x2).
+
+5. Rappresentare graficamente il processo di agglomerazione attraverso un dendrogramma.
+
+Quello che cambia nei diversi metodi è il passo 1 e il passo 2. Nel primo bisogna scegliere fra la similarità o la distanza mentre le tecniche adottate nel secondo passo sono quelle che differenzieranno di molto i vari metodi e da cui dipende il nome del metodo stesso.
+
+L'analisi gerarchica di tipo agglomerativo viene effettuata in R attraverso la funzione *hclust(d, method =)* dove:
+
+- **d** è rappresenta un oggetto creato tramite la funzione *dist()*;
+- **method** seleziona il metodo gerarchico agglomerativo. Il valore di default è *complete*.
+
+Abbiamo 5 diversi metodi fra cui scegliere:
+
+1. Metodo del legame singolo (*single*);
+
+2. Metodo del legame completo (*complete*);
+
+3. Metodo del legame medio (*average*);
+
+4. Metodo del centroide (*centroid*);
+
+5. Metodo della mediana (*median*)
+
+#### Metodo del legame singolo
+
+```{r}
+d <- 
+```
+
