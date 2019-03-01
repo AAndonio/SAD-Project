@@ -983,8 +983,8 @@ In generale, il momento centrato campionario di ordine j è definito come segue:
 $$ m_{j} = \frac{1}{n} \sum_{i=1}^{n} (x_{i} - \bar{x})^{j} \qquad j=1,2,...$$
 
 Se $\gamma_{1}=0$ allora la distribuzione di frequenza è simmetrica;
-Se $\gamma_{1}\gt0$ allora l'asimetria è positiva (la coda di destra è più allungata);
-Se $\gamma_{1}\lt0$ l'asimmetria è negativa (la coda di sinistra è più allungata).
+Se $\gamma_{1}>0$ allora l'asimmetria è positiva (la coda di destra è più allungata);
+Se $\gamma_{1}<0$ l'asimmetria è negativa (la coda di sinistra è più allungata).
 
 Non è presente una funzione per il calcolo della skewness campionaria in R, quindi abbiamo provveduto ad implementarlo:
 
@@ -1038,8 +1038,8 @@ dove $m_{4}$ rappresenta il momento campionario di ordine 4.
 
 Questi due indici $\beta_2$ e $\gamma_2$ permettono di confrontare la distribuzione di frequenza dei nostri dati con una densità di probabilità normale.
 
-Se $\beta_2 \lt 3$ e $\gamma_2 \lt 0$ la distribuzione di frequenza si dice *platicurtica*, ovvero risulta essere più piatta di una normale.
-Se $\beta_2 \gt 3$ e $\gamma_2 \gt 0$ la distribuzione di frequenza si dice *leptocurtica*, ovvero risulta essere più piccata di una normale.
+Se $\beta_2<3$ e $\gamma_2<0$ la distribuzione di frequenza si dice *platicurtica*, ovvero risulta essere più piatta di una normale.
+Se $\beta_2>3$ e $\gamma_2>0$ la distribuzione di frequenza si dice *leptocurtica*, ovvero risulta essere più piccata di una normale.
 Se $\beta_2 = 3$ e $\gamma_2 = 0$ la distribuzione di frequenza si dice *normocurtica*, ovvero piatta come una normale.
 
 Implementiamo in R il calcolo della curtosi campionaria come segue
@@ -1099,8 +1099,8 @@ Assegnato un campione bivariato ($x_1, y_1$), ($x_2, y_2$), ..., ($x_n, y_n$) di
 
 $$ C_{xy} = \frac{1}{n-1}\sum_{i=1}^n(x_i-\bar x)(y_i - \bar y)$$
 
-Quando $C_{xy} \gt 0$ si dice che le variabili sono *correlate positivamente*.
-Quando $C_{xy} \lt 0$ si dice che le variabili sono *correlate negativamente*.
+Quando $C_{xy} > 0$ si dice che le variabili sono *correlate positivamente*.
+Quando $C_{xy} < 0$ si dice che le variabili sono *correlate negativamente*.
 Quando $C_{xy} = 0$ si dice che le variabili sono *non  correlate*.
 
 Inoltre dividiamo per $n-1$ perchè in caso x e y siano uguali la covarianza campionaria è uguale alla varianza campionaria.
@@ -1123,9 +1123,9 @@ Il coefficiente di correlazione gode di diverse proprietà:
 
 * $-1 \leq r_{xy} \leq 1$;
 * Se $r_{xy}=1$ allora abbiamo una correlazione perfetta positiva e tutti i punti sono allineati su una linea retta ascendente;
-* Se $0 \lt r_{xy} \lt 1$ allora i punti sono posizionati in una nuvola attorno ad una linea retta interpolante ascendente;
+* Se $0 < r_{xy} < 1$ allora i punti sono posizionati in una nuvola attorno ad una linea retta interpolante ascendente;
 * Se $r_{xy}=0$ allora i punti sono dispersi in una nuvola che non presenta alcuna evidente direzione di natura lineare;
-* Se $-1 \lt r_{xy} \lt 0$ allora i punti sono posizionati in una nuvola attorno ad una linea retta interpolante discendente;
+* Se $-1 < r_{xy} < 0$ allora i punti sono posizionati in una nuvola attorno ad una linea retta interpolante discendente;
 * Se $r_{xy} = -1$ abbiamo una correlazione perfetta negativa e tutti i punti sono allineati su una retta discendente.
 
 In R per calcolare il coefficiente di correlazione si utilizza la funzione *cor()*
@@ -1146,7 +1146,7 @@ abline(lm(asilo~famiglia), col="blue")
 La funzione *abline(lm(asilo~famiglia)* è quella che permette di aggiungere la retta allo scatterplot, dove *lm()* sta per linear model ed è utilizzata per eseguire le analisi di regressioni lineari.
 
 Il modello lineare viene utilizzato per spiegare o prevedere un andamento futuro sulla base della relazione si instaura tra una variabile Y dipendente e una o più variabili
-indipendenti $X_{1}, X_{2}, ..., X_{p}$. Nel caso in cui $p=1$, l'analisi prende il nome di **regressione semplice** mentre se $p\gt1$ allora prende il nome di **regressione multipla**.
+indipendenti $X_{1}, X_{2}, ..., X_{p}$. Nel caso in cui $p=1$, l'analisi prende il nome di **regressione semplice** mentre se $p>1$ allora prende il nome di **regressione multipla**.
 
 ### Regressione lineare semplice 
 
