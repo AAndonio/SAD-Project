@@ -1,8 +1,8 @@
 ---
 title: "Progetto di SAD"
 output:
-  html_notebook: default
   pdf_document: default
+  html_notebook: default
 ---
 
 ---
@@ -606,7 +606,7 @@ La funzione *round()* serve ad arrotondare un numero alla cifra specificata con 
 Per fenomeni quantitativi continui, la funzione di distribuzione empirica è una funzione **continua**, necessaria se i dati vengono raccolti in classi. Se i dati vengono quindi raccoli in k distinte classi $C_{1}$ = [$z_{1}$, $z_{2}$), $C_{2}$ = [$z_{3}$, $z_{4}$), ..., $C_{k}$ = [$z_{k}$, $z_{k+1}$]
 La funzione di distribuzione empirica è così definita: 
 
-Si noti che F(x) = 0 per x < $z_{1}$ , F(x) = 1 per x $\let$ $z_{k+1}$ mentre se $z_{i}$ < x < $z_{i+1}$ la funzione empirica coincide con il segmento che passa per i punti ($z_{i}$, $F_{i}$) e ($z_{i+1}$,$F_{i+1}$)
+Si noti che F(x) = 0 per $x<z_{1}$ , F(x) = 1 per  $x\leq z_{k+1}$ mentre se $z_{i}< x <z_{i+1}$ la funzione empirica coincide con il segmento che passa per i punti ($z_{i}$, $F_{i}$) e ($z_{i+1}$,$F_{i+1}$)
 
 La suddivisione in classi adottata è la seguente: [0, 15), [15, 20), [20, 25)
 
@@ -980,11 +980,11 @@ $$ \gamma_{1} = \frac{m_{3}}{m_{2}^{3/2}}$$
 dove $m_{3}$ denota il momento centrato campionario di ordine 3. 
 In generale, il momento centrato campionario di ordine j è definito come segue:
 
-$$ m_{j} = \frac{1}{n} \sum_{i=1}^{n} (x_{i} - \bar{x})^{j}$$ con $j=1,2,...$
+$$ m_{j} = \frac{1}{n} \sum_{i=1}^{n} (x_{i} - \bar{x})^{j} \qquad j=1,2,...$$
 
 Se $\gamma_{1}=0$ allora la distribuzione di frequenza è simmetrica;
-Se $\gamma_{1} \gt 0$ allora l'asimetria è positiva (la coda di destra è più allungata);
-Se $\gamma_{1} \lt 0$ l'asimmetria è negativa (la coda di sinistra è più allungata).
+Se $\gamma_{1}\gt0$ allora l'asimetria è positiva (la coda di destra è più allungata);
+Se $\gamma_{1}\lt0$ l'asimmetria è negativa (la coda di sinistra è più allungata).
 
 Non è presente una funzione per il calcolo della skewness campionaria in R, quindi abbiamo provveduto ad implementarlo:
 
@@ -1472,15 +1472,17 @@ Molte delle tecniche di analisi dei cluster prevedono la standardizzazione di og
 Preso un elemento $x_{ij}$, il corrispondente valore scalato è pari a:
 
 $$ \frac{x_{ij} - \bar{x}}{s_j}$$
+Nel nostro caso, i valori risultano essere in percentuali, quindi non vi è bisogno di effettuare scalamento, di seguito mostreremo solo gli effetti dello scalamento sulla nostra tabella.
+
 R fornisce la funzione *scale()* che, data una matrice in input, permette di effettuare uno scalamento. Questa funzione prevede due attributi, *center* che di default è uguale a TRUE e indica se dagli elementi di ogni colonna della matrice si sottrae il valore medio della corrispondente colonna e *scale*, che di default è posto anch'esso a TRUE e indica se bisogna dividere gli elementi centrati di ogni colonna della matrice per la deviazione standard della rispettiva colonna.
 
-Andiamo quindi a scalare la nostra tabella:
+Mostriamo i la nostra tabella:
 ```{r}
 tabellaScalata <- scale(tabella)
 tabellaScalata
 ```
 
-Una volta effettuato lo scalamento è possibile passare alla sezione riguardante la distanza e la similarità fra due regioni.
+
 
 ##Distanza e similarità
 
@@ -1515,7 +1517,7 @@ Per usare questa metrica in R basta settare *"euclidean"* come valore dell'attri
 Per i dati a nostra disposizione abbiamo che:
 
 ```{r}
-dist(tabellaScalata, method="euclidean", diag=FALSE, upper=FALSE)
+dist(tabella, method="euclidean", diag=FALSE, upper=FALSE)
 ```
 
 ###Metrica di Manhattan
@@ -1529,7 +1531,7 @@ Calcoleremo queste altre metriche utilizzate solo su una parte delle regioni, gi
 Per utilizzare questa metrica, bisogna dare *"manhattan"* come valore all'attributo *method* della funzione *dist()*.
 
 ```{r}
-x <- tabellaScalata[1:5, 1:5]
+x <- tabella[1:5, 1:5]
 x
 ```
 
@@ -1749,7 +1751,724 @@ Abbiamo 5 diversi metodi fra cui scegliere:
 
 #### Metodo del legame singolo
 
+In questo metodo la distanza fra due gruppi $G_1$ e $G_2$ contenenti rispettivamente $n_1$ e $n_2$ individui è definita come la minima fra tutte le distanze che si possono calcolare tra ogni individuo di $G_1$ e ogni individuo di $G_2$. Vengono poi agglomerate i gruppi con distanza minore come descritto precedentemente.
+Il metodo del legame singolo ha come vantaggio quello di consentire di individuare gruppi di qualsiasi forma
+Attraverso R adesso procediamo all'analisi dei cluster attraverso questo metodo:
+
 ```{r}
-d <- 
+d <- dist(tabella, method = "euclidean", diag = TRUE, upper = FALSE)
+hls <- hclust(d, method = "single")
+str(hls)
 ```
 
+Procediamo adesso alla stampa del dendrogramma:
+
+```{r}
+plot(hls, hang = -1, xlab = "Metodo gerarchico agglomerativo", sub="del legame singolo")
+axis(side = 4, at= round(c(0, hls$height), 2))
+```
+
+La funzione *axis(side = 4, at= round(c(0, hls$height), 2))* ci permette di costruire l'asse delle altezze alla destra del grafico, arrotondando alla seconda cifra decimale.
+
+Per scegliere una buona partizione del dendrogramma, consideriamo un grafico detto **screenplot**, sul quale asse delle ordinate vengono posti i numeri di gruppi ottenibili con il meotodo gerarchico e sull'asse ascisse vengono le distanze a cui avvengono le successive aggregazioni fra gruppi. 
+Al fine di fornire misure quantitative degli incrementi riscontrati tra le distanze a cui avvengono le successive agglomerazioni, consideriamo la seguente quantità:
+$$\delta_k = d_{k-1} - d_k \qquad (k=2,...,n)$$
+dove $d_k$ rappresenta il livello di distanza a cui è stata effettuata l'agglomerazione in k gruppi e n è il numero iniziale di individui.
+Quando $\delta_k$ risulta sufficientemente elevato allora i gruppi sono dissimili fra loro ed è possibile tagliare il dendrogramma all'altezza corrispondente alla partizione in k gruppi.
+È possibile utilizzare lo screenplot solo per i metodi gerarchici del legame singolo, medio e completo in quanto con i metodi del centroide e della mediana, le successive agglomerazioni potrebbero verificarsi ad un livello di distanza minore o uguale rispetto alle precedenti. Questa procedura però non fornisce sempre la suddivisione in cluster più adeguata, infatti è sempre preferibile utilizzare le misure di non omogeneità statistiche.
+
+```{r}
+plot(c(0, hls$height), seq(20, 1), type = "b", main = "Screenplot", xlab = "Distanza di aggregazione", ylab = "Numero di cluster", col = "red")
+```
+
+```{r}
+hls$height
+```
+
+In questo caso il max lo abbiamo fra:
+
+$$\delta_2 = h_1 - h_2 = 24.909719 - 14.428444 = 10.48127 $$
+Quindi il valore di k per il quale $\delta_k$ è massimo si ha con $k=2$. Applichiamo la suddivisione al dendrogramma utilizzando la funzione *rect.hclust()*:
+```{r}
+plot(hls, hang = -1, xlab = "Metodo gerarchico agglomerativo", sub="del legame singolo")
+axis(side = 4, at= round(c(0, hls$height), 2))
+rect.hclust(hls, k=2)
+```
+
+Per ottenere la suddivisione in cluster oltre che graficamente, è possibile utilizzare la funzione *cutree()*.
+
+```{r}
+cutree(hls, k=2)
+```
+
+Calcoliamo adesso la misura di non omogeneità statistica totale
+
+```{r}
+n <- nrow(tabella)
+trHI <- (n-1) * sum(apply(tabella, 2, var))
+trHI
+```
+
+La misura di non omogeneità statistica totale è pari a 7097.801. Procediamo adesso al calcolo delle misure di non omogeneità statistiche e lo facciamo per la suddivisione in 2,3,4 cluster.
+
+```{r}
+d <- dist(tabella, method="euclidean", diag = TRUE, upper=TRUE)
+d2<-d^2
+tree <- hclust(d2, method = "single")
+taglio <-cutree(tree, k=2, h=NULL)
+num <- table(taglio)
+tagliolist <- list(taglio)
+
+agvar <- aggregate(tabella, tagliolist, var)[,-1]
+
+trH1<-(num[[1]]-1) * sum(agvar[1,])
+if(is.na(trH1))
+  trH1 <- 0
+
+trH2<-(num[[2]]-1) * sum(agvar[2,])
+if(is.na(trH2))
+  trH2 <- 0
+
+trS <- trH1 + trH2
+
+trB <- trHI-trH1-trH2
+trB
+trB/trHI
+```
+
+Con la suddivisione in due cluster otteniamo una misura di non omogeneità tra cluster pari a 2681.522. Questa suddivisione ricordiamo, ci è stata suggerita anche dallo scatterplot. Il rapporto fra trB/trHI è pari a 0.3793997 un valore decisamente basso che ci porta all'aumentare il numero di cluster.
+
+```{r}
+d <- dist(tabella, method="euclidean", diag = TRUE, upper=TRUE)
+d2<-d^2
+tree <- hclust(d2, method = "single")
+taglio <-cutree(tree, k=3, h=NULL)
+num <- table(taglio)
+tagliolist <- list(taglio)
+
+agvar <- aggregate(tabella, tagliolist, var)[,-1]
+
+trH1<-(num[[1]]-1) * sum(agvar[1,])
+if(is.na(trH1))
+  trH1 <- 0
+
+trH2<-(num[[2]]-1) * sum(agvar[2,])
+if(is.na(trH2))
+  trH2 <- 0
+
+trH3<-(num[[3]]-1) * sum(agvar[3,])
+if(is.na(trH3))
+  trH3 <- 0
+
+trS <- trH1 + trH2 + trH3 
+
+trB <- trHI-trH1-trH2-trH3
+trB/trHI
+```
+
+Con la suddivisione in tre cluster il rapporto fra trB/trHI è pari a 0.4232935 un valore che, seppur più alto di quello a due cluster risulta comunque essere basso.
+
+```{r}
+d <- dist(tabella, method="euclidean", diag = TRUE, upper=TRUE)
+d2<-d^2
+tree <- hclust(d2, method = "single")
+taglio <-cutree(tree, k=4, h=NULL)
+num <- table(taglio)
+tagliolist <- list(taglio)
+
+agvar <- aggregate(tabella, tagliolist, var)[,-1]
+
+trH1<-(num[[1]]-1) * sum(agvar[1,])
+if(is.na(trH1))
+  trH1 <- 0
+
+trH2<-(num[[2]]-1) * sum(agvar[2,])
+if(is.na(trH2))
+  trH2 <- 0
+
+trH3<-(num[[3]]-1) * sum(agvar[3,])
+if(is.na(trH3))
+  trH3 <- 0
+
+trH4<-(num[[4]]-1) * sum(agvar[4,])
+if(is.na(trH4))
+  trH4 <- 0
+
+trS <- trH1 + trH2 + trH3 + trH4
+
+trB <- trHI-trH1-trH2-trH3-trH4
+trB/trHI
+```
+
+La suddivisione in quattro cluster, suggeritaci durante l'analisi con i metodi non gerarchici, ci ha portato al risultato migliore fra le tre suddivisioni con un rapporto fra trB/trHI pari a 0.7699938, che ricade nel range di valori accettabili.
+
+### Metodo del legame completo
+
+In questo metodo la distanza tra i gruppi $G_1$ e $G_2$ è definita come la massima tra tutte le $n_1n_2$ distanze che si possono calcolare tra ogni individuo di $G_1$ e ogni individuo di $G_2$.
+A livello 0, viene considerato inizialmente un insieme di *n* cluster, uno per ogni individuo.
+Nel passo successivo, si cerca il coefficiente di distanza minima all'interno della matrice delle distanze D e si raggruppano nello stesso cluster i due individui ad esso associati.
+A livello 1 si modifica la matrice delle distanze valutando le distanze dal cluster appena creato con gli altri mediante la seguente relazione:
+
+$$d_{(ij),k} = max(d_{ik}, d_{jk})$$
+Ad ogni passo successivo vengono ripetute le stesse azioni, funo ad ottenere un unico cluster formato da tutti gli individui.
+
+```{r}
+d <- dist(tabella, method = "euclidean", diag = TRUE, upper = FALSE)
+hlc <- hclust(d, method = "complete")
+str(hlc)
+```
+
+Procediamo adesso alla stampa del dendrogramma:
+
+```{r}
+plot(hlc, hang = -1, xlab = "Metodo gerarchico agglomerativo", sub="del legame completo")
+axis(side = 4, at= round(c(0, hlc$height), 2))
+```
+
+Come fatto in precedenza, procediamo alla stampa dello screenplot:
+```{r}
+plot(c(0, hlc$height), seq(20, 1), type = "b", main = "Screenplot", xlab = "Distanza di aggregazione", ylab = "Numero di cluster", col = "red")
+```
+
+```{r}
+hlc$height
+```
+
+Anche in questo caso il max lo abbiamo fra:
+
+$$\delta_2 = h_1 - h_2 = 70.274764 - 43.088240 = 27.186524 $$
+Quindi il valore di k per il quale $\delta_k$ è massimo si ha con $k=2$. Applichiamo la suddivisione al dendrogramma utilizzando la funzione *rect.hclust()*:
+```{r}
+plot(hlc, hang = -1, xlab = "Metodo gerarchico agglomerativo", sub="del legame completo")
+axis(side = 4, at= round(c(0, hlc$height), 2))
+rect.hclust(hlc, k=2)
+```
+
+Per ottenere la suddivisione in cluster oltre che graficamente, è possibile utilizzare la funzione *cutree()*.
+
+```{r}
+cutree(hlc, k=2)
+```
+
+Procediamo adesso all'analisi utilizzando le misure di non omogeneità statistiche, in quanto, anche in precedenza sono risultate essere più precise rispetto allo screenplot.
+Faremo l'analisi per la suddivisione in 2,3 e 4 cluster.
+
+Siccome la misura di non omogeneità statistica totale è uguale a quella calcolata in precedenza evitiamo di ricalcolarla.
+
+Procediamo al calcolo delle misure di omogeneità statistiche per le varie suddivisioni:
+
+```{r}
+d <- dist(tabella, method="euclidean", diag = TRUE, upper=TRUE)
+d2<-d^2
+tree <- hclust(d2, method = "complete")
+taglio <-cutree(tree, k=2, h=NULL)
+num <- table(taglio)
+tagliolist <- list(taglio)
+
+agvar <- aggregate(tabella, tagliolist, var)[,-1]
+
+trH1<-(num[[1]]-1) * sum(agvar[1,])
+if(is.na(trH1))
+  trH1 <- 0
+
+trH2<-(num[[2]]-1) * sum(agvar[2,])
+if(is.na(trH2))
+  trH2 <- 0
+
+trS <- trH1 + trH2 
+
+trB <- trHI-trH1-trH2
+trB/trHI
+```
+
+Con la suddivisione in due cluster, suggeritaci dallo scatterplot, il rapporto tra $\frac{trB}{trT}$ non è risultato essere abbastanza alto.
+
+```{r}
+d <- dist(tabella, method="euclidean", diag = TRUE, upper=TRUE)
+d2<-d^2
+tree <- hclust(d2, method = "complete")
+taglio <-cutree(tree, k=3, h=NULL)
+num <- table(taglio)
+tagliolist <- list(taglio)
+
+agvar <- aggregate(tabella, tagliolist, var)[,-1]
+
+trH1<-(num[[1]]-1) * sum(agvar[1,])
+if(is.na(trH1))
+  trH1 <- 0
+
+trH2<-(num[[2]]-1) * sum(agvar[2,])
+if(is.na(trH2))
+  trH2 <- 0
+
+trH3<-(num[[3]]-1) * sum(agvar[3,])
+if(is.na(trH3))
+  trH3 <- 0
+
+trS <- trH1 + trH2 + trH3 
+
+trB <- trHI-trH1-trH2-trH3
+trB/trHI
+```
+
+Con la suddivisione in tre cluster invece il rapporto tra $\frac{trB}{trT}$ ha raggiunto un risultato di sufficienza ed è possibile tenerlo in considerazione.
+
+```{r}
+d <- dist(tabella, method="euclidean", diag = TRUE, upper=TRUE)
+d2<-d^2
+tree <- hclust(d2, method = "complete")
+taglio <-cutree(tree, k=4, h=NULL)
+num <- table(taglio)
+tagliolist <- list(taglio)
+
+agvar <- aggregate(tabella, tagliolist, var)[,-1]
+
+trH1<-(num[[1]]-1) * sum(agvar[1,])
+if(is.na(trH1))
+  trH1 <- 0
+
+trH2<-(num[[2]]-1) * sum(agvar[2,])
+if(is.na(trH2))
+  trH2 <- 0
+
+trH3<-(num[[3]]-1) * sum(agvar[3,])
+if(is.na(trH3))
+  trH3 <- 0
+
+trH4<-(num[[4]]-1) * sum(agvar[4,])
+if(is.na(trH4))
+  trH4 <- 0
+
+trS <- trH1 + trH2 + trH3 + trH4
+
+trB <- trHI-trH1-trH2-trH3-trH4
+trB/trHI
+```
+
+Con quest'ultima suddivisione, suggeritaci dal metodo k-means fatto in precedenza, il rapporto fra $\frac{trB}{trT}$ raggiunge il risultato più alto fra tutti quelli visti con i metodi gerarchici e risulta essere un ottimo risultato dato il numero di cluster scelti. Da notare che il valore è pressochè identico a quello trovato con il metodo k-means. 
+
+La relativa suddivisione in cluster è la seguente:
+
+```{r}
+cutree(hlc, k=4, h=NULL)
+```
+
+$C_1$ *= {Campania, Lazio, Toscana}*
+$C_2$ *= {Emilia Romagna, Umbria, Valle d'Aosta, Veneto, Lombardia, Trentino-alto Adige, Friuli-venezia Giulia, Liguria, Marche, Piemonte, Abruzzo}*
+$C_3$ *= {Molise}*
+$C_4$ *= {Sicilia, Sardegna, Basilicata, Puglia, Calabria}*
+
+### Metodo del legame medio
+
+In questo metodo la distanza tra i gruppi $G_1$ e $G_2$ è definita come la media aritmetica delle distanze fra tutte le coppie che compongono gli insiemi.
+All'inizio del metodo, a livello 0 abbiato tanti cluster quanti sono gli individui. Successivamente controlliamo la matrice delle distanze D e raggruppiamo nello stesso cluster gli individui associati alla distanza minima. 
+A livello 1 di modifica la matrice delle distanze valutando le distanze del cluster appena creato e tutti gli altri rimanenti, mediante la seguente relazione:
+
+$$d_{(i,j),k} = \frac{1}{2}(d_{i,k}+d_{j,k}) \qquad (k=1,2,...,n;k\neq i,j)$$
+Viene quindi costruita una nuova matrice delle distanze. Ad ogni passo successivo, dopo aver individuato i due cluster da raggruppare, la distanza fra il nuovo cluster $G_{uv}$ e un altro cluster $G_z$ è definita nella seguente maniera:
+
+$$d_{(uv),z} = \frac{N_u}{N_u+N_v}d_{uz} + \frac{N_v}{N_u+N_v}d_{vz}$$
+
+dove $N_u$, $N_v$ e $N_z$ sono rispettivamente il numero di individui del cluster $G_u$, $G_v$ e $G_z$.
+La procedura si ripete fino a quando non si ottiene un unico cluster con tutti gli individui.
+
+```{r}
+d <- dist(tabella, method = "euclidean", diag = TRUE, upper = FALSE)
+hlm <- hclust(d, method = "average")
+str(hlm)
+```
+
+Procediamo adesso alla stampa del dendrogramma:
+
+```{r}
+plot(hlm, hang = -1, xlab = "Metodo gerarchico agglomerativo", sub="del legame medio")
+axis(side = 4, at= round(c(0, hlm$height), 2))
+```
+
+Come fatto in precedenza, procediamo alla stampa dello screenplot:
+```{r}
+plot(c(0, hlm$height), seq(20, 1), type = "b", main = "Screenplot", xlab = "Distanza di aggregazione", ylab = "Numero di cluster", col = "red")
+```
+
+```{r}
+hlm$height
+```
+
+Anche in questo caso il max lo abbiamo fra:
+
+$$\delta_2 = h_1 - h_2 = 53.603492 - 28.947554 = 24.65594 $$
+
+Quindi il valore di k per il quale $\delta_k$ è massimo si ha con $k=2$. Applichiamo la suddivisione al dendrogramma utilizzando la funzione *rect.hclust()*:
+```{r}
+plot(hlm, hang = -1, xlab = "Metodo gerarchico agglomerativo", sub="del legame medio")
+axis(side = 4, at= round(c(0, hlm$height), 2))
+rect.hclust(hlm, k=2)
+```
+
+Per ottenere la suddivisione in cluster oltre che graficamente, è possibile utilizzare la funzione *cutree()*.
+
+```{r}
+cutree(hlm, k=2)
+```
+
+Procediamo adesso all'analisi utilizzando le misure di non omogeneità statistiche, in quanto, anche in precedenza sono risultate essere più precise rispetto allo screenplot.
+Faremo l'analisi per la suddivisione in 2,3 e 4 cluster.
+
+Siccome la misura di non omogeneità statistica totale è uguale a quella calcolata in precedenza evitiamo di ricalcolarla.
+
+Procediamo al calcolo delle misure di omogeneità statistiche per le varie suddivisioni:
+
+```{r}
+d <- dist(tabella, method="euclidean", diag = TRUE, upper=TRUE)
+d2<-d^2
+tree <- hclust(d2, method = "average")
+taglio <-cutree(tree, k=2, h=NULL)
+num <- table(taglio)
+tagliolist <- list(taglio)
+
+agvar <- aggregate(tabella, tagliolist, var)[,-1]
+
+trH1<-(num[[1]]-1) * sum(agvar[1,])
+if(is.na(trH1))
+  trH1 <- 0
+
+trH2<-(num[[2]]-1) * sum(agvar[2,])
+if(is.na(trH2))
+  trH2 <- 0
+
+trS <- trH1 + trH2 
+
+trB <- trHI-trH1-trH2
+trB/trHI
+```
+
+Con la suddivisione in due cluster, suggeritaci dallo scatterplot, il rapporto tra $\frac{trB}{trT}$ è risultato essere estremamente basso.
+
+```{r}
+d <- dist(tabella, method="euclidean", diag = TRUE, upper=TRUE)
+d2<-d^2
+tree <- hclust(d2, method = "average")
+taglio <-cutree(tree, k=3, h=NULL)
+num <- table(taglio)
+tagliolist <- list(taglio)
+
+agvar <- aggregate(tabella, tagliolist, var)[,-1]
+
+trH1<-(num[[1]]-1) * sum(agvar[1,])
+if(is.na(trH1))
+  trH1 <- 0
+
+trH2<-(num[[2]]-1) * sum(agvar[2,])
+if(is.na(trH2))
+  trH2 <- 0
+
+trH3<-(num[[3]]-1) * sum(agvar[3,])
+if(is.na(trH3))
+  trH3 <- 0
+
+trS <- trH1 + trH2 + trH3 
+
+trB <- trHI-trH1-trH2-trH3
+trB/trHI
+```
+
+Con la suddivisione in tre cluster invece il rapporto tra $\frac{trB}{trT}$ ha raggiunto un risultato di sufficienza ed è possibile tenerlo in considerazione.
+
+```{r}
+d <- dist(tabella, method="euclidean", diag = TRUE, upper=TRUE)
+d2<-d^2
+tree <- hclust(d2, method = "average")
+taglio <-cutree(tree, k=4, h=NULL)
+num <- table(taglio)
+tagliolist <- list(taglio)
+
+agvar <- aggregate(tabella, tagliolist, var)[,-1]
+
+trH1<-(num[[1]]-1) * sum(agvar[1,])
+if(is.na(trH1))
+  trH1 <- 0
+
+trH2<-(num[[2]]-1) * sum(agvar[2,])
+if(is.na(trH2))
+  trH2 <- 0
+
+trH3<-(num[[3]]-1) * sum(agvar[3,])
+if(is.na(trH3))
+  trH3 <- 0
+
+trH4<-(num[[4]]-1) * sum(agvar[4,])
+if(is.na(trH4))
+  trH4 <- 0
+
+trS <- trH1 + trH2 + trH3 + trH4
+
+trB <- trHI-trH1-trH2-trH3-trH4
+trB/trHI
+```
+
+Con quest'ultima suddivisione, suggeritaci dal metodo k-means fatto in precedenza, il rapporto fra $\frac{trB}{trT}$ raggiunge il risultato più alto fra i precedenti ed è in linea con quello ottenuto con il metodo del legame completo e risulta essere un ottimo risultato dato il numero di cluster scelti. Da notare che il valore è pressochè identico a quello trovato con il metodo k-means. 
+
+La relativa suddivisione in cluster è la seguente:
+
+```{r}
+cutree(hlm, k=4, h=NULL)
+```
+
+$C_1$ *= {Campania}*
+$C_2$ *= {Emilia Romagna, Umbria, Valle d'Aosta, Veneto, Lombardia, Trentino-alto Adige, Friuli-venezia Giulia, Liguria, Marche, Piemonte, Abruzzo, Lazio, Toscana}*
+$C_3$ *= {Molise}*
+$C_4$ *= {Sicilia, Sardegna, Basilicata, Puglia, Calabria}*
+
+### Metodo del centroide
+
+In questo metodo la distanza tra il gruppo $G_1$ e il gruppo $G_2$ è definita come la distanza tra i centroidi, ovvero le medie campionarie calcolate sugli individui dei gruppi.
+A differenza dei metodi precedenti qui viene considerata la matrice contenente i quadrati delle singole distanze euclidee.
+
+```{r}
+d <- dist(tabella, method = "euclidean", diag = TRUE, upper = FALSE)
+d2 <- d^2
+hlcentroid <- hclust(d2, method = "centroid")
+str(hlcentroid)
+```
+
+Procediamo adesso alla stampa del dendrogramma:
+
+```{r}
+plot(hlcentroid, hang = -1, xlab = "Metodo gerarchico agglomerativo", sub="del centroide")
+axis(side = 4, at= round(c(0, hlcentroid$height), 2))
+```
+
+Procediamo adesso all'analisi utilizzando le misure di non omogeneità statistiche.
+Faremo l'analisi per la suddivisione in 2,3 e 4 cluster.
+
+Siccome la misura di non omogeneità statistica totale è uguale a quella calcolata in precedenza evitiamo di ricalcolarla.
+
+Procediamo al calcolo delle misure di omogeneità statistiche per le varie suddivisioni:
+
+```{r}
+d <- dist(tabella, method="euclidean", diag = TRUE, upper=TRUE)
+d2<-d^2
+tree <- hclust(d2, method = "centroid")
+taglio <-cutree(tree, k=2, h=NULL)
+num <- table(taglio)
+tagliolist <- list(taglio)
+
+agvar <- aggregate(tabella, tagliolist, var)[,-1]
+
+trH1<-(num[[1]]-1) * sum(agvar[1,])
+if(is.na(trH1))
+  trH1 <- 0
+
+trH2<-(num[[2]]-1) * sum(agvar[2,])
+if(is.na(trH2))
+  trH2 <- 0
+
+trS <- trH1 + trH2 
+
+trB <- trHI-trH1-trH2
+trB/trHI
+```
+
+Con la suddivisione in due cluster, suggeritaci dallo scatterplot, il rapporto tra $\frac{trB}{trT}$ è risultato essere estremamente basso.
+
+```{r}
+d <- dist(tabella, method="euclidean", diag = TRUE, upper=TRUE)
+d2<-d^2
+tree <- hclust(d2, method = "centroid")
+taglio <-cutree(tree, k=3, h=NULL)
+num <- table(taglio)
+tagliolist <- list(taglio)
+
+agvar <- aggregate(tabella, tagliolist, var)[,-1]
+
+trH1<-(num[[1]]-1) * sum(agvar[1,])
+if(is.na(trH1))
+  trH1 <- 0
+
+trH2<-(num[[2]]-1) * sum(agvar[2,])
+if(is.na(trH2))
+  trH2 <- 0
+
+trH3<-(num[[3]]-1) * sum(agvar[3,])
+if(is.na(trH3))
+  trH3 <- 0
+
+trS <- trH1 + trH2 + trH3 
+
+trB <- trHI-trH1-trH2-trH3
+trB/trHI
+```
+
+Con la suddivisione in tre cluster invece il rapporto tra $\frac{trB}{trT}$ ha raggiunto un risultato di sufficienza ed è possibile tenerlo in considerazione.
+
+```{r}
+d <- dist(tabella, method="euclidean", diag = TRUE, upper=TRUE)
+d2<-d^2
+tree <- hclust(d2, method = "centroid")
+taglio <-cutree(tree, k=4, h=NULL)
+num <- table(taglio)
+tagliolist <- list(taglio)
+
+agvar <- aggregate(tabella, tagliolist, var)[,-1]
+
+trH1<-(num[[1]]-1) * sum(agvar[1,])
+if(is.na(trH1))
+  trH1 <- 0
+
+trH2<-(num[[2]]-1) * sum(agvar[2,])
+if(is.na(trH2))
+  trH2 <- 0
+
+trH3<-(num[[3]]-1) * sum(agvar[3,])
+if(is.na(trH3))
+  trH3 <- 0
+
+trH4<-(num[[4]]-1) * sum(agvar[4,])
+if(is.na(trH4))
+  trH4 <- 0
+
+trS <- trH1 + trH2 + trH3 + trH4
+
+trB <- trHI-trH1-trH2-trH3-trH4
+trB/trHI
+```
+
+Con quest'ultima suddivisione, suggeritaci dal metodo k-means fatto in precedenza, il rapporto fra $\frac{trB}{trT}$ raggiunge il risultato più alto fra i precedenti ed è poco inferiore a quello ottenuto con i due metodi precedenti e risulta essere un ottimo risultato dato il numero di cluster scelti.
+
+La relativa suddivisione in cluster è la seguente:
+
+```{r}
+cutree(hlm, k=4, h=NULL)
+```
+
+$C_1$ *= {Emilia Romagna, Umbria, Valle d'Aosta, Veneto, Lombardia, Trentino-alto Adige, Friuli-venezia Giulia, Liguria, Marche, Piemonte, Abruzzo, Lazio, Toscana}*
+$C_2$ *= {Molise}*
+$C_3$ *= {Campania}*
+$C_4$ *= {Sicilia, Sardegna, Basilicata, Puglia, Calabria}*
+
+### Metodo della mediana
+
+Questo metodo è simile a quello del centroide e differisce per il fatto che la procedura è indipendente dalla numerosità dei cluster. Infatti, quando due gruppi si aggregano il nuovo centroide è calcolato come la semisomma dei due centroidi precedenti.
+Anche il metodo della mediana, come quello del legame singolo può dare vita alla formazione di una catena fra gli individui.
+
+```{r}
+d <- dist(tabella, method = "euclidean", diag = TRUE, upper = FALSE)
+d2 <- d^2
+hlmedian <- hclust(d2, method = "median")
+str(hlmedian)
+```
+
+Procediamo adesso alla stampa del dendrogramma:
+
+```{r}
+plot(hlmedian, hang = -1, xlab = "Metodo gerarchico agglomerativo", sub="della mediana")
+axis(side = 4, at= round(c(0, hlmedian$height), 2))
+```
+
+Procediamo adesso all'analisi utilizzando le misure di non omogeneità statistiche.
+Faremo l'analisi per la suddivisione in 2,3 e 4 cluster.
+
+Siccome la misura di non omogeneità statistica totale è uguale a quella calcolata in precedenza evitiamo di ricalcolarla.
+
+Procediamo al calcolo delle misure di omogeneità statistiche per le varie suddivisioni:
+
+```{r}
+d <- dist(tabella, method="euclidean", diag = TRUE, upper=TRUE)
+d2<-d^2
+tree <- hclust(d2, method = "median")
+taglio <-cutree(tree, k=2, h=NULL)
+num <- table(taglio)
+tagliolist <- list(taglio)
+
+agvar <- aggregate(tabella, tagliolist, var)[,-1]
+
+trH1<-(num[[1]]-1) * sum(agvar[1,])
+if(is.na(trH1))
+  trH1 <- 0
+
+trH2<-(num[[2]]-1) * sum(agvar[2,])
+if(is.na(trH2))
+  trH2 <- 0
+
+trS <- trH1 + trH2 
+
+trB <- trHI-trH1-trH2
+trB/trHI
+```
+
+Con la suddivisione in due cluster, suggeritaci dallo scatterplot, il rapporto tra $\frac{trB}{trT}$ è risultato essere estremamente basso.
+
+```{r}
+d <- dist(tabella, method="euclidean", diag = TRUE, upper=TRUE)
+d2<-d^2
+tree <- hclust(d2, method = "median")
+taglio <-cutree(tree, k=3, h=NULL)
+num <- table(taglio)
+tagliolist <- list(taglio)
+
+agvar <- aggregate(tabella, tagliolist, var)[,-1]
+
+trH1<-(num[[1]]-1) * sum(agvar[1,])
+if(is.na(trH1))
+  trH1 <- 0
+
+trH2<-(num[[2]]-1) * sum(agvar[2,])
+if(is.na(trH2))
+  trH2 <- 0
+
+trH3<-(num[[3]]-1) * sum(agvar[3,])
+if(is.na(trH3))
+  trH3 <- 0
+
+trS <- trH1 + trH2 + trH3 
+
+trB <- trHI-trH1-trH2-trH3
+trB/trHI
+```
+
+Con la suddivisione in tre cluster invece il rapporto tra $\frac{trB}{trT}$ ha raggiunto un risultato di sufficienza ed è possibile tenerlo in considerazione.
+
+```{r}
+d <- dist(tabella, method="euclidean", diag = TRUE, upper=TRUE)
+d2<-d^2
+tree <- hclust(d2, method = "median")
+taglio <-cutree(tree, k=4, h=NULL)
+num <- table(taglio)
+tagliolist <- list(taglio)
+
+agvar <- aggregate(tabella, tagliolist, var)[,-1]
+
+trH1<-(num[[1]]-1) * sum(agvar[1,])
+if(is.na(trH1))
+  trH1 <- 0
+
+trH2<-(num[[2]]-1) * sum(agvar[2,])
+if(is.na(trH2))
+  trH2 <- 0
+
+trH3<-(num[[3]]-1) * sum(agvar[3,])
+if(is.na(trH3))
+  trH3 <- 0
+
+trH4<-(num[[4]]-1) * sum(agvar[4,])
+if(is.na(trH4))
+  trH4 <- 0
+
+trS <- trH1 + trH2 + trH3 + trH4
+
+trB <- trHI-trH1-trH2-trH3-trH4
+trB/trHI
+```
+
+Con quest'ultima suddivisione, suggeritaci dal metodo k-means fatto in precedenza, il rapporto fra $\frac{trB}{trT}$ raggiunge il risultato più alto fra i precedenti ed è poco inferiore a quello ottenuto con i due metodi precedenti e risulta essere un ottimo risultato dato il numero di cluster scelti.
+
+La relativa suddivisione in cluster è la seguente:
+
+```{r}
+cutree(hlm, k=4, h=NULL)
+```
+
+$C_1$ *= {Emilia Romagna, Umbria, Valle d'Aosta, Veneto, Lombardia, Trentino-alto Adige, Friuli-venezia Giulia, Liguria, Marche, Piemonte, Abruzzo, Lazio, Toscana}*
+$C_2$ *= {Molise}*
+$C_3$ *= {Campania}*
+$C_4$ *= {Sicilia, Sardegna, Basilicata, Puglia, Calabria}*
