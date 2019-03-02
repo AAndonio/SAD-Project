@@ -1,0 +1,146 @@
+---
+title: "SAD - Seconda parte"
+author: "Antonio Vivone"
+date: "01 marzo 2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Distribuzione normale
+
+La **funzione di distribuzione normale**, detta anche di Gauss o gaussiana, è molto importante nella statistica in quanto rappresenta una distribuzione limite alla quale tendono
+varie altre funzioni di distribuzioni utilizzando opportune ipotesi.
+
+Una variabile aleatoria X di densità di probabilità
+$$f_X(x) = \frac{1}{\sigma \sqrt{2\pi}}exp \Big\{ -\frac{(x-\mu)^2}{2\sigma^2}\Big\}, \qquad x \in \mathbb{R} \qquad (\mu \in \mathbb{R}, \sigma>0)$$
+si dice avere distribuzione normale di paramentri $\mu$ e $\sigma$.
+
+La densità normale:
+* risulta essere simmetrica rispetto all'asse $x=\mu$ in quanto per ogni $x \in \mathbb{R}$ risulta che $f_X(\mu-x) = f_X(\mu+x)$;
+* presenta il massimo $(\sigma\sqrt{2 \pi})^{-1}$ nel punto di ascissa $x=\mu$;
+* presenta due flessi nei punti di ascisse $\mu - \sigma$ e $\mu + \sigma$.
+
+Viene utilizzata la notazione $X \sim N(\mu, \sigma)$ per indicare che la variabile X ha distribuzione normale dei parametri \mu e \sigma ed è chiamata *variabile normale*.
+
+In R utilizziamo la funzione:
+
+```{r eval=FALSE}
+dnorm(x, mean = mu, sd = sigma)
+```
+per calcolare la densità normale.
+
+Quello che facciamo adesso è mostrare quello che accade quando i valori $\mu$ e $\sigma$ vengono modificati.
+Procediamo quindi facendo variare $\mu$ e mantenendo $\sigma$ fissato.
+
+```{r}
+x <- seq(from = -7.5, to = 7.55, by = 0.1)
+
+curve(dnorm(x, mean= 0, sd = 1), from = -6, to= 6, xlab = "x", ylab="f(x)", main = "mu = -2, -1, 0, 1, 2; sigma = 1", col="blue", lty=2)
+curve(dnorm(x, mean= -1, sd = 1), from = -6, to= 6, xlab = "x", ylab="f(x)",add = TRUE, col="green")
+curve(dnorm(x, mean= -2, sd = 1), from = -6, to= 6, xlab = "x", ylab="f(x)",add = TRUE, col="red")
+curve(dnorm(x, mean= 1, sd = 1), from = -6, to= 6, xlab = "x", ylab="f(x)",add = TRUE, col="purple")
+curve(dnorm(x, mean= 2, sd = 1), from = -6, to= 6, xlab = "x", ylab="f(x)",add = TRUE, col="orange")
+```
+
+La curva di colore blu tratteggiata rappresenta la curva con $\mu=0$. Facendo variare *mean*, la curva si sposta sull'asse delle ascisse mantenendo inalterato il suo valore.
+
+Vediamo cosa succede modificando il valore *sd*.
+
+```{r}
+curve(dnorm(x, mean= 0, sd = 0.5), from = -6, to= 6, xlab = "x", ylab="f(x)", main = "mu = 0; sigma = 0.5, 1, 1.5", col="blue", lty=2)
+curve(dnorm(x, mean= 0, sd = 1), from = -6, to= 6, xlab = "x", ylab="f(x)",add = TRUE, col="green")
+curve(dnorm(x, mean= 0, sd = 1.5), from = -6, to= 6, xlab = "x", ylab="f(x)",add = TRUE, col="red")
+```
+
+Facendo variare il parametro $\sigma$ viene influenzata la larghezza della funzione: se infatti il parametro $\sigma$ cresce allora l'ordinata massima decresce e la curva diventa sempre più piatta; se invece $\sigma$ decresce allora l'ordinata massima cresce. Sono inversamente proporzionali in pratica.  
+Notasi che l'area al di sotto continuerà sempre ad avere valore unitario.
+
+### Funzione di distribuzione
+
+La funzione di distribuzione di una variabile aleatoria $X \sim N(\mu, \sigma)$ è uguale a:
+
+$$F_X(x) = P(X\leq x) = \int_{-\infty}^x f_X(y)dy = \Phi \big( \frac{x - \mu}{\sigma}\big) \qquad x \in \mathbb{R} $$
+
+dove
+
+$$\Phi(z) = \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{z} exp\big\{-\frac{y^2}{2}dy\big\}, \qquad z \in \mathbb{R}$$
+
+è la funzione di distribuzione di una variabile aleatoria $Z\sim N(0,1)$ detta *normale standard*. Per questo, se $X \sim N(\mu,\sigma)$ si ha che:
+
+$$P(a<X<b) = F_X(b) - F_X(a) = \phi \big( \frac{b-\mu}{\sigma}\big) - \phi \big( \frac{a-\mu}{\sigma}\big)$$
+In R calcoliamo la funzione di distribuzione di una variabile $X \sim N(\mu,\sigma)$ tramite la funzione:
+```{r eval=FALSE}
+pnorm(x, mean=mu, sd=sigma, lower.tail=TRUE)
+```
+
+Come fatto in precedenza con la densità, procediamo al confronto fra le funzioni di distribuzioni ottenute facendo variare il parametro $\sigma$.
+
+```{r}
+curve(pnorm(x, mean = 0, sd = 0.5), from=-4, to=4, xlab = "x", ylab = expression(P(X<=x)), main="mu=0; sigma=0.5, 1, 1.5", lty=2)
+text(-0.4, 0.8, "sigma=0.5")
+curve(pnorm(x, mean=0, sd=1), add = TRUE, col="blue")
+arrows(-1,0.1,0.3,0.2,code = 1,length = 0.10)
+text(0.8, 0.2, "sigma=1")
+curve(pnorm(x, mean=0, sd=1.5), add = TRUE, lty=3)
+text(-2.2,0.2,"sigma=1.5")
+```
+
+### Regola del 3-$\sigma$
+
+Per una qualsiasi variabile aleatoria normale $X \sim N(\mu, \sigma)$ risulta che:
+
+$$P(\mu -3\sigma < X < \mu + 3\sigma) = P(-3 < \frac{X-\mu}{\sigma}< 3) = P(-3<Z<3) = 0.9973002$$
+
+Quello che la regola vuol dire è che la probabilità che una variabile aleatoria $X \sim N(\mu, \sigma)$ assuma valori in un intervallo avente come centro $\mu$ e semiampiezza $3\sigma$ è mlto vicino all'unità, ovvero ad 1. Questa proprietà delle variabili aleatorie normali è detta **regola del 3$\sigma$**. 
+Utilizzando la funzione *pnorm()* possiamo mostrare quanto detto:
+```{r}
+pnorm(3,mean = 0, sd = 1) - pnorm(-3, mean = 0, sd = 1)
+```
+
+### Quantili
+
+È possibile anche calcolare i quantili (percentili) della distribuzione normale attraverso la funzione:
+```{r eval=FALSE}
+qnorm(z, mean = mu, sd = sigma, lower.tail = TRUE)
+```
+La funzione restituisce il percentile $z \cdot 100-esimo$, ovvero il più piccolo numero *x* assunto dalla variabile aleatoria normale X tale che $P(X\leq x) \geq z$.
+
+Considerando ad esempio una variabile normale standard $Z \sim N(0, 1)$, è possibile ottenere i quartili nella seguente maniera:
+
+```{r}
+z<-c(0,0.25,0.5,0.75,1)
+qnorm(z,mean=0, sd=1)
+```
+
+Fatto interessanta da notare è la simmetria fra $Q_1$ e $Q_3$ dovuto alla simmetria intorno all'origine della densità normale standard.
+
+### Approssimare la distribuzione binomiale con la distribuzione normale
+
+Siccome il calcolo delle probabilità binomiali risulta aumentare di complessità al crescere di *n*, sono state ricercate formule in grado di approssimare tale distribuzione con quella normale. Vediamo i due metodi proposti:
+
+#### Teorema di De Moivre-Laplace
+
+Sia $X_1, X_2,...$ una successione di variabili aleatorie indipendenti distribuite alla Bernoulli con parametro p ($0<p<1$), e sia $Y_n = X_1 + X_2+...+X_n$. Allora per ogni $x \in \mathbb{R}$ risulta che:
+
+$$\lim\limits_{n \to \infty} P\bigg(\frac{Y_n-np}{\sqrt{np(1-p)}} \leq x\bigg) = \frac{1}{\sqrt2\pi}\int_{-\infty}^{x}e^{-y^2/2}dy$$
+ovvero
+
+$$\frac{Y_n - np}{\sqrt{np(1-p)}} \to Z$$
+converge in distribuzione alla variabile aleatoria Z normale standard.
+
+Se le variabili $X_1 + X_2+...$ sono variabili aleatorie di Bernoulli di parametro $p$, allora $Y_n = X_1 + X_2+...+X_n$ è una variabile aleatoria binomiale di valore medio $np$ e varianza $np(1-p)$. Quello che il teorema fa è mostrare che sottraendo a $Y_n$ la sua media $np$ e dividendo la differenza per la deviazione standard $\sqrt{np(1-p)}$, si ottiene una variabile aleatoria standardizzata la cui funzione di distribuzione è per $n$ grandi una normale standard approssimata.
+
+### Simulare una variabile in R
+
+È possibile simulare in R una variabile aleatoria normale generando una sequenza di numeri pseudocasuali mediante la funzione:
+
+```{r eval=FALSE}
+rnorm(N, mean = mu, sd = sigma)
+```
+
+
+
+
