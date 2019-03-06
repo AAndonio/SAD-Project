@@ -132,6 +132,11 @@ $$\frac{Y_n - np}{\sqrt{np(1-p)}} \to Z$$
 converge in distribuzione alla variabile aleatoria Z normale standard.
 
 Se le variabili $X_1 + X_2+...$ sono variabili aleatorie di Bernoulli di parametro $p$, allora $Y_n = X_1 + X_2+...+X_n$ è una variabile aleatoria binomiale di valore medio $np$ e varianza $np(1-p)$. Quello che il teorema fa è mostrare che sottraendo a $Y_n$ la sua media $np$ e dividendo la differenza per la deviazione standard $\sqrt{np(1-p)}$, si ottiene una variabile aleatoria standardizzata la cui funzione di distribuzione è per $n$ grandi una normale standard approssimata.
+L'approssimazione della binomiale alla normale è la seguente:
+
+$$Y_n \simeq np + \sqrt{np(1-p)}Z$$
+
+al variare di n con p fissato. 
 
 ### Simulare una variabile in R
 
