@@ -136,7 +136,34 @@ L'approssimazione della binomiale alla normale è la seguente:
 
 $$Y_n \simeq np + \sqrt{np(1-p)}Z$$
 
-al variare di n con p fissato. 
+al variare di n con p fissato. La variabile aleatoria con densità normale ottenuta ha valore medio $np$ e varianza $np(1-p)$.
+
+È possibile valutare l'approssimazione della binomiale ottenuta confrontandola con la densità normale di valore $np$ e varianza$np(1-p)$ per $n=25,50,75,100$ e $p=0.2$.
+
+```{r}
+par(mfrow=c(2,2))
+p<-0.2
+q<-1-p
+x<-0:25
+n<-25
+curve(dnorm(x, n*p, sqrt(n*p*q)), from=n*p-3*sqrt(n*p*q), to=n*p+3*sqrt(n*p*q), xlab="x", ylab="P(X=x)", main="Binomiale, n=25, p=0.2")
+lines(x, dbinom(x,n,0.2), type="h")
+x<-0:50
+n<-50
+curve(dnorm(x, n*p, sqrt(n*p*q)), from=n*p-3*sqrt(n*p*q), to=n*p+3*sqrt(n*p*q), xlab="x", ylab="P(X=x)", main="Binomiale, n=50, p=0.2")
+lines(x, dbinom(x,n,0.2), type="h")
+
+x<-0:75
+n<-75
+curve(dnorm(x, n*p, sqrt(n*p*q)), from=n*p-3*sqrt(n*p*q), to=n*p+3*sqrt(n*p*q), xlab="x", ylab="P(X=x)", main="Binomiale, n=75, p=0.2")
+lines(x, dbinom(x,n,0.2), type="h")
+
+x<-0:100
+n<-100
+curve(dnorm(x, n*p, sqrt(n*p*q)), from=n*p-3*sqrt(n*p*q), to=n*p+3*sqrt(n*p*q), xlab="x", ylab="P(X=x)", main="Binomiale, n=100, p=0.2")
+lines(x, dbinom(x,n,0.2), type="h")
+```
+
 
 ### Simulare una variabile in R
 
