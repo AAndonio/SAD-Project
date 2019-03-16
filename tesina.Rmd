@@ -351,8 +351,22 @@ Queste proprietà sono:
 * asintoticamente corretto
 * consistente.
 
-Vediamo le proprietà più nel dettaglio.
+Uno simatore è **corretto** se il suo valore medio è uguale al corrispondente parametro non nodo della popolazione. È possibile avere più stimatori corretti per stimare un parametro. Per scegliere quale utilizzare, si vede quale risulta essere più efficiente confrontando la varianza degli stimatori e scegliendo quello con varianza più piccola. Altro metodo è quello della ricerca dello stimatore con **errore quadratico uniformemente minimo** per la classe degli stimatori corretti. 
 
-#### Correttezza
+Come visto prima, sia dal metodo dei momenti che da quello della massima verosomiglianza sono stati ricavati gli stessi stimatori per i parametri $\mu$ e $\sigma^2$. Per $\mu$ lo stimatore ricavato è la media campionaria, che risulta essere **corretto con varianza minima** e **consistente**, mentre per $\sigma^2$ abbiamo $\frac{n-1}{n} S^2$ che è **asintoticmanete corretto** e **consistente**.
+\underline{C}_n$ e $\bar{C}_n
+## Stima intervallare
 
-Uno simatore è corretto se il suo valore medio è uguale al corrispondente parametro non nodo della popolazione.
+Spesso si preferisce sostituire alla stima puntale di un parametro non noto un intervallo di valori, chiamato **intervallo di confidenza**, entro il quale sia compreso il valore del parametro non noto con un certo **grado di fiducia** o **coefficiente di confidenza**. Supponiamo di avere un campione casuale con una densità di probabilità o funzione di probabilità uguale a $f(x;\vartheta)$ dove $\vartheta$ rappresenta il parametro non noto della popolazione. Per definire questo intervallo, ci occorre denotare due statistiche, $\underline{C}_n$ e $\bar{C}_n$ che soddisfino la seguente condizione $\underline{C}_n<\bar{C}_n$. 
+Fissato un coefficiente di confidenza $1-\alpha$ ($0<\alpha<1$), se è possibile scegliere le statistiche $\underline{C}_n$ e $\bar{C}_n$ in modo tale che
+
+$$P(\underline{C}_n < \vartheta <\bar{C}_n) = 1 - \alpha$$
+ allora si dice che $(\underline{C}_n,\bar{C}_n)$ è un **intervallo di confidenza** di grado $1-\alpha$ per $\vartheta$. Le statistiche $\underline{C}_n$ e $\bar{C}_n$ sono dette rispettivamente *limite inferiore* e *limite superiore*.
+La stima puntale detta in precedenza deve ricadere in questo intervallo.
+
+Vediamo adesso i metodi per la costruzione di questo intervallo di confidenza.
+
+### Metodo pivotale
+
+Il **metodo pivotale** è uno dei metodi a disposizione per la costruzione degli intervalli di confidenza. Esso consiste nel determinare una variabile aleatoria $\gamma(X_1, X_2, ..., X_n;\vartheta)$ che dipende dal campione casuale e dal parametro non noto $\vartheta$ la cui **funzione di distribuzione non contiene il parametro da stimare**
+
