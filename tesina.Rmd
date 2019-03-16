@@ -16,14 +16,14 @@ varie altre funzioni di distribuzioni utilizzando opportune ipotesi.
 
 Una variabile aleatoria X di densità di probabilità
 $$f_X(x) = \frac{1}{\sigma \sqrt{2\pi}}exp \Big\{ -\frac{(x-\mu)^2}{2\sigma^2}\Big\}, \qquad x \in \mathbb{R} \qquad (\mu \in \mathbb{R}, \sigma>0)$$
-si dice avere distribuzione normale di paramentri $\mu$ e $\sigma$.
+si dice avere distribuzione normale di parametri $\mu$ e $\sigma$.
 
 La densità normale:
 * risulta essere simmetrica rispetto all'asse $x=\mu$ in quanto per ogni $x \in \mathbb{R}$ risulta che $f_X(\mu-x) = f_X(\mu+x)$;
 * presenta il massimo $(\sigma\sqrt{2 \pi})^{-1}$ nel punto di ascissa $x=\mu$;
 * presenta due flessi nei punti di ascisse $\mu - \sigma$ e $\mu + \sigma$.
 
-Viene utilizzata la notazione $X \sim N(\mu, \sigma)$ per indicare che la variabile X ha distribuzione normale dei parametri \mu e \sigma ed è chiamata *variabile normale*.
+Viene utilizzata la notazione $X \sim N(\mu, \sigma)$ per indicare che la variabile X ha distribuzione normale dei parametri $\mu$ e $\sigma$ ed è chiamata *variabile normale*.
 
 In R utilizziamo la funzione:
 
@@ -164,6 +164,20 @@ curve(dnorm(x, n*p, sqrt(n*p*q)), from=n*p-3*sqrt(n*p*q), to=n*p+3*sqrt(n*p*q), 
 lines(x, dbinom(x,n,0.2), type="h")
 ```
 
+Come è possibile vedere, l'approssimazione migliora quando p tende a $\frac{1}{2}$ e diventa eccellente quando p=$\frac{1}{2}$
+
+#### Teorema centrale di convergenza
+
+Il **teorema centrale di convergenza** fornisce un'approssimazione alla distribuzione della somma di variabili aleatorie indipendenti, evidenziando allo stesso tempo l'importanza della distribuzione normale.
+
+Sia $X_1,X_2,...$ una successione di variabili aleatorie, definite nello stesso spazio di probabilità, indipendenti e identicamente distribuite con valore medio $\mu$ finito e varianza $\sigma^2$ finita e positiva. Posto per ogni intero n positivo $Y_n = X_1 + X_2 + ... + X_n$, per ogni $x\in \mathbb{R}$ risulta:
+
+$$\lim\limits_{n \to \infty} P\bigg(\frac{Y_n-n\mu}{\sigma\sqrt{n}} \leq x\bigg) = \frac{1}{\sqrt2\pi}\int_{-\infty}^{x}e^{-y^2/2} \ dy = \Phi(x)$$
+ovvero
+
+$$\frac{Y_n-E(Y_n)}{\sqrt{Var(Y_n)}} = \frac{Y_n-n\mu}{\sigma\sqrt{n}} \to Z $$
+
+Quello che il teorema mostra è che sottraendo a $Y_n$ la sua media e dividendo il tutto per la sua deviazione standard, ovvero $\sigma \sqrt{n}$ si ottiene una variabile aleatoria standardizzata la cui funzione di distribuzione per **n sufficientemente grandi** è approssimativamente una normale standard con valore $n\mu$ e varianza $n\sigma^2$. Quindi la bontà dell'approssimazione dipende dal tipo di distribuzione delle variabili $X_1, X_2, ..., X_n$ e dalle dimensioni di n. Spesso l'approssimazione risulta soddisfacente già con $n\geq 30$.
 
 ### Simulare una variabile in R
 
@@ -173,6 +187,172 @@ lines(x, dbinom(x,n,0.2), type="h")
 rnorm(N, mean = mu, sd = sigma)
 ```
 
+Confrontiamo quindi la densità normale teorica con la densità simulata. Vediamo la densità normale con $\mu = 2$ e $\sigma = 1$ con la densità simulata con $N=500, 5000, 50000$
 
+```{r}
+par ( mfrow = c (2 ,2) )
+curve(dnorm(x,mean=2,sd =1),from=-2, to=6 , xlab="x", ylab="f(x)",
+ylim = c (0 ,0.5) , main = " Densità normale con mu =2 , sigma =1 " )
 
+sim1<-rnorm(500,mean=2,sd =1)
+hist ( sim1 , freq =F , xlim = c ( -2 ,6) , ylim = c (0 ,0.5) , breaks =100 , xlab = " x " ,
+ylab = " Istogramma " , main = " Densità simulata con N=500 " )
 
+sim2 <- rnorm (5000 , mean =2 , sd =1)
+hist ( sim2 , freq =F , xlim = c ( -2 ,6) , ylim = c (0 ,0.5) , breaks =100 , xlab = " x " ,
+ylab = " Istogramma " , main = " Densità simulata con N=5000 " )
+
+sim3 <- rnorm (50000 , mean =2 , sd =1)
+hist ( sim3 , freq =F , xlim = c ( -2 ,6) , ylim = c (0 ,0.5) , breaks =100 , xlab = " x " ,
+ylab = "Istogramma" , main = " Densità simulata con N=50000 " )
+```
+
+All'aumentare della numerosità, l'istogramma della densità simultata si avvicina sempre di più alla curva teorica. 
+
+### Analisi di un campione normale
+
+Procediamo adesso a generare un campione facente parte di una popolazione normale in modo tale da effettuare diverse analisi:
+
+```{r }
+campione <- rnorm(10000, mean = 2, sd = 1)
+```
+
+Riportiamo di seguito la media campionaria, la varianza campionaria e la deviazione standard campionaria del campione: 
+
+```{r echo=FALSE}
+mean(campione)
+```
+
+```{r echo=FALSE}
+var(campione)
+```
+
+```{r echo=FALSE}
+sd(campione)
+```
+
+Calcoliamo i quantili del campione e generiamo il boxplot in modo da capire come sono distribuiti i valori:
+
+```{r}
+quantile(campione)
+```
+
+```{r}
+boxplot(campione, horizontal = T, main="Boxplot del campione normale", col="red")
+```
+
+Dal boxplot capiamo che il campione risulta simmetrico e centrato intorno al valore 2, come stabilito. Effettuiamo un'ultima analisi mostrando la densità tramite istogramma:
+
+```{r}
+hist ( campione , freq =F , xlim = c (-2,6) , ylim = c (0 ,0.5) , breaks =100 , xlab = " x " ,ylab = "Istogramma" , main = " Densità simulata con N=10000 " )
+```
+
+La forma della densità del campione è decisamente simile a quella della normale teorica, grazie soprattutto alla scelta del campione molto grande. 
+
+Passiamo adesso alla stima dei parametri.
+
+### Stima puntuale
+
+#### Campioni casuali e stimatori
+
+Uno dei problemi della inferenza statistica è quello di ottenere informazioni su parametri non noti di una popolazioni di cui si conosce però la forma della funzione di distribuzione.
+
+Per ottenere informazioni sui parametri non noti è possibile fare uso dell'inferenza statistica e considerare un campione estratto dalla popolazione. Su questo campione poi utilizziamo alcune variabili aleatorie, ovvero funzioni misurabili del campione casuale, dette **statistiche** e **stimatori**. La definizione di stimatore è la seguente:
+
+Uno stimatore **$\hat\theta = t(X_1, X_2,...,X_n)$** è una funzione misurabile e osservabile del campione casuale $(X_1, X_2,...,X_n)$ i cui valori vengono utilizzati per stimare un parametro non noto $\vartheta$ della popolazione. I valori $\hat\vartheta$ assunti da tale stimatore sono detti stime del parametro non noto $\vartheta$.
+
+Stimatori tipici sono *media campionaria* e *varianza campionaria*.
+
+*Proposizione:*
+Sia $X_1,X_2,...,X_n$ un campione casuale estratto da una popolazione descritta da una variabile aleatoria ossevabile X caratterizzata da valore medio $E(X)=\mu$ finito e varianza $Var(X) = \sigma^2$ finita. Risulta:
+
+$$E(\bar{X}) = \mu, \qquad  Var(\bar{X}) = \frac{\sigma^2}{n}$$
+Per la proprietà di linearità del valore medio e l'identica distribuzione delle variabili aleatorie che costituiscono il campione della proposizione sopra descritta, si ha:
+
+$$E(\bar{X}) = E\Big[\frac{1}{n} \sum_{i=1}^n X_i\Big] = \frac{1}{n} \sum_{i=1}^n E(X_i) = \mu $$
+
+e per la varianza:
+
+$$Var(\bar{X}) = Var\Big[\frac{1}{n} \sum_{i=1}^n X_i\Big] = \frac{1}{n^22} \sum_{i=1}^n Var(X_i) = \frac{\sigma^2}{n}$$
+
+Questa proposizione ci dice che al crescere dell'ampiezza del campione, la media campionaria fornisce una stima sempre più accurata del valore medio della popolazione. Dal teorema centrale di convergenza sappiamo che per n sufficientemente grandi, la funzione di distribuzione della media campionaria $\bar{X}$ è approssimativamente normale con valore medio $\mu$ e varianza $\sigma^2 / n$.
+
+#### Metodo per la ricerca di stimatori
+
+Esistono due metodi maggiormente utilizzati per la ricerca di stimatori: il **metodo dei momenti** e il **metodo della massima verosomiglianza**.
+
+##### Metodo dei momenti
+
+Prima di parlare del metodo dei momenti è necessario introdurre i **momenti campionari**.
+
+Si definisce **momento campionario r-esimo** relativo ai valori osservati (x_1, x_2,..., x_n) del campione casuale il valore
+
+$$M_r(x_1, x_2,..., x_n) = \frac{1}{n} \sum_{i=1}^n x_i^r \qquad (r=1,2,...)$$
+
+Il momento campionario r-esimo risulta essere quindi la media aritmetica delle potenze r-esime delle *n* osservazioni effettuate sulla popolazione. In particolare, se $r=1$ otteniamo la media campionaria $\bar{X}$.
+
+Se esistono *k* parametri da stimare, il **metodo dei momenti** consiste nell'uguagliare i primi *k* momenti della popolazione in esame con quelli del campione casuale. Se i *k* momenti esistono e sono finiti il metodo consiste nel risolvere il sistema di equazioni:
+
+$$E(X^r) = M_r(x_1, x_2,..., x_n) \qquad (r=1,2,...,k)$$
+
+Le incognite sono i k parametri non noti $\vartheta_1, \vartheta_2,...,\vartheta_k$.
+Per poter utilizzare questo metodo, il sistema deve ammettere un'unica soluzione. Le stime dipendono dal campione osservato e quindi, al variare del campione, cambiano anche queste ultime.
+Gli stimatori prendono il nome di *stimatori del metodo dei momenti*.
+
+Procediamo quindi ad utilizzare il metodo alla nostra analisi della popolazione normale. Siamo quindi interessati a fornire degli stimatori dei parametri $\mu$ e $\sigma^2$.
+Siccome $E(X) = \mu$ e $E(X^2) = \sigma^2 + \mu^2$ si ha un sistema di due equazioni, in quanto due sono i parametri da stimare.
+Si ha che:
+
+$$\hat\mu = \frac{x_1+x_2+...+x_n}{n}; \qquad \hat\sigma^2 + \hat\mu^2 = \frac{(x_1 + x_2 +...+ x_n)^2}{n}$$
+
+dalla seconda equazione ricaviamo: 
+
+$$\hat\sigma^2 = \frac{(x_1 + x_2 +...+ x_n)^2}{n} - \frac{(x_1 + x_2 +...+ x_n)^2}{n^2} = \frac{1}{n} \Big[ \sum_{i=1}^n x_i^2 - \bar{x} \sum_{i=1}^nx_i \Big] = \frac{1}{n} \sum_{i=1}^n(x_i - \bar{x})^2 $$
+
+Il metodo dei momenti ci fornisce quindi come stimatore del valore medio $/mu$ la media campionaria $\bar{X}$ e come stimatore della varianza $\sigma^2$ la variabile aleatoria $\frac{(n-1)}{n}S^2$.
+
+Per quanto riguarda il nostro campione quindi abbiamo che:
+
+```{r}
+stimaMeanMomenti <- mean(campione)
+stimaMeanMomenti
+```
+
+```{r}
+stimaVarMomenti <- (length(campione)-1) * var(campione)/length(campione)
+stimaVarMomenti
+```
+
+#### Metodo della massima verosomiglianza
+
+Il **metodo della massima verosomiglianza** è il metodo più importante fra i due ed è anche preferito a quello dei momenti. Prima di illustrare il metodo va introdotta la **funzione di verosomiglianza**.
+
+Sia $X_1, X_2, ..., X_n$ un campione casuale estratto dalla popolazione.
+La **funzione di verosomiglianza** $L(\vartheta_1, \vartheta_2, ..., \vartheta_k) = L(\vartheta_1, \vartheta_2, ..., \vartheta_k; x_1, x_2,..., x_n)$ del campione osservato è la funzione di densità di probabilità congiunta del campione casuale $X_1, X_2,..., X_n$ ovvero:
+
+$$L(\vartheta_1, \vartheta_2, ..., \vartheta_k) = L(\vartheta_1, \vartheta_2, ..., \vartheta_k; x_1, x_2,..., x_n) = f(x_1:\vartheta_1, \vartheta_2, ..., \vartheta_k)f(x_2:\vartheta_1, \vartheta_2, ..., \vartheta_k)\quad...\quad f(x_n:\vartheta_1, \vartheta_2, ..., \vartheta_k) $$
+
+Il metodo consiste quindi nel massimizzare la funzione di verosomiglianza rispetto ai parametri $\vartheta_1, \vartheta_2, ..., \vartheta_k$ cercando di determinare da quale funzione di densità di probabilità congiunta è **più verosimile** che provenga il campione osservato. Si cercando quindi i valori $\vartheta_1, \vartheta_2, ..., \vartheta_k$ che massimizzino la funzione di verosomiglianza e, una volta trovati, vengono indicati nella seguente maniera $\hat\vartheta_1, \hat\vartheta_2, ..., \hat\vartheta_k$ e costituiscono le **stime di massima verosomiglianza**. Siccome queste stime dipendono dal campione, facendo variare il campione osservato si ottengono gli stimatori di massima verosomiglianza $\bar\Theta_1, \bar\Theta_2, ..., \bar\Theta_k$ dei parametri non noti $\vartheta_1, \vartheta_2, ..., \vartheta_k$ della popolazione, detti **stimatori di massima verosomiglianza**.
+
+Per quanto riguarda la popolazione normale da noi presa in esame abbiamo:
+
+$$\hat\mu = \bar{x}, \qquad \hat\sigma^2 = \frac{1}{n} \sum_{i=1}^n (x_i - \bar{x})^2$$
+Quindi lo stimatore di massima verosomiglianza di $\mu$ risulta essere la media campionaria di $\bar{X}$, mentre lo stimatore di $\sigma^2$ risulta essere pari a $\frac{(n-1)}{n}S^2$.
+Gli stimatori ottenuti coincidono con quelli ottenuti con il metodo dei momenti, quindi eviteremo di ripetere i calcoli.
+
+### Proprietà degli stimatori
+
+Data la presenza di diversi stimatori in grado di stimare un parametro non noto di una popolazione occorre definire alcune proprietà che li caratterizzano.
+Queste proprietà sono:
+
+* corretto,
+* più efficiente di un altro,
+* corretto e con varianza uniformamente minima,
+* asintoticamente corretto
+* consistente.
+
+Vediamo le proprietà più nel dettaglio.
+
+#### Correttezza
+
+Uno simatore è corretto se il suo valore medio è uguale al corrispondente parametro non nodo della popolazione.
