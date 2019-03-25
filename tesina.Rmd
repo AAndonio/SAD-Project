@@ -638,6 +638,18 @@ I quantili:
 quantile(campione2)
 ```
 
-Adesso che abbiamo due campioni casuali indipendenti di ampiezza $n_1$ e $n_2$ estratti da due popolazioni normali, vogliamo analizzare i seguenti problemi:
+Adesso che abbiamo due campioni casuali indipendenti $X_1, X_2,..., X_{n_1}$ e $Y_1, Y_2,..., Y_{n_2}$ di ampiezza $n_1$ e $n_2$ estratti da due popolazioni normali $N(mu_1,\sigma_1^2)$ e $N(mu_2,\sigma_2^2)$, vogliamo analizzare i seguenti problemi:
 
 1. Determinare un intervallo di confidenza di grado $1-\alpha$ per $\mu_1 - \mu_2$ quando entrambe le varianze $\sigma_1^2$ e $\sigma_2^2$ sono note;
+
+Denotiamo con $\bar{X_{n_1}}$ e $\bar{X_{n_2}}$ le medie campionarie delle due popolazioni normali. Per ipotesi i campioni risultano essere **indipendenti** e la statistica $\bar X_{n_1}$ e $\bar Y_{n_2}$ risulta essere distribuita normalmente con valore medio $\mu_1 - \mu_2$ e varianza $\sigma_1^2/n_1 + \sigma_2^2/n_2$.
+
+Per determinare un intervallo di confidenza di grado $1-\alpha$ con le varianze note consideriamo la seguente variabile aleatoria di pivot:
+
+$$Z_n = \frac{\overline X_{n_1} - \overline Y_{n_2} - (\mu_1 - \mu_2)}{\sqrt{\frac{\sigma_1^2}{n_1}+\frac{\sigma_2^2}{n_2}}}$$
+
+la variabile appena descritta dipende dal campione casuale e dal parametro non noto $\mu_1 - \mu_2$ ed è caratterizzata da una *densità normale standard*.
+
+L'intervallo ricavato per una stima dell'intervallo di confidenza $1-\alpha$ per la differenza $\mu_1-\mu2$ è:
+
+$$\overline{X}_{n1} - \overline{Y}_{n2} - z_{\alpha/2}\sqrt{\frac{\sigma_1^2}{n_1}+\frac{\sigma_2^2}{n_2}} < \mu_1 - \mu_2 <\overline{X}_{n1} - \overline{Y}_{n2} + z_{\alpha/2}\sqrt{\frac{\sigma_1^2}{n_1}+\frac{\sigma_2^2}{n_2}}$$
