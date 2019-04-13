@@ -214,7 +214,7 @@ All'aumentare della numerosità, l'istogramma della densità simultata si avvici
 Procediamo adesso a generare un campione facente parte di una popolazione normale in modo tale da effettuare diverse analisi:
 
 ```{r }
-campione <- rnorm(10000, mean = 2, sd = 1)
+campione <- rnorm(10000, mean = 110, sd = 1)
 ```
 
 Riportiamo di seguito la media campionaria, la varianza campionaria e la deviazione standard campionaria del campione: 
@@ -615,7 +615,7 @@ Diverse problematiche richiedono di confrontare i valori medi di due popolazioni
 Introduciamo un nuovo campione per il confronto
 
 ```{r}
-campione2 <- rnorm(11000, mean = 50, sd = 1)
+campione2 <- rnorm(11000, mean = 100, sd = 1.5)
 ```
 
 Riportiamo di seguito la media campionaria, la varianza campionaria e la deviazione standard campionaria del campione: 
@@ -653,3 +653,74 @@ la variabile appena descritta dipende dal campione casuale e dal parametro non n
 L'intervallo ricavato per una stima dell'intervallo di confidenza $1-\alpha$ per la differenza $\mu_1-\mu2$ è:
 
 $$\overline{X}_{n1} - \overline{Y}_{n2} - z_{\alpha/2}\sqrt{\frac{\sigma_1^2}{n_1}+\frac{\sigma_2^2}{n_2}} < \mu_1 - \mu_2 <\overline{X}_{n1} - \overline{Y}_{n2} + z_{\alpha/2}\sqrt{\frac{\sigma_1^2}{n_1}+\frac{\sigma_2^2}{n_2}}$$
+
+Poniamo il grado di fiducia pari a ottenendo quindi $\alpha=0.05$ e stimiamo $\mu_1-\mu_2$ per i due campioni sotto analisi.
+
+```{r}
+alpha <- 1 - 0.95
+
+ncamp1 <- length(campione)
+ncamp2 <- length(campione2)
+
+meancamp1 <- mean(campione)
+meancamp2 <- mean(campione2)
+
+sigmacamp1 <- 1
+sigmacamp2 <- 2.25
+
+#limite inferiore
+
+meancamp1-meancamp2 -qnorm (1- alpha/2,mean=0, sd=1)*sqrt(sigmacamp1 ^2/ncamp1+sigmacamp2 ^2/ncamp2)
+
+```
+
+```{r}
+#limite superiore
+meancamp1-meancamp2 + qnorm (1- alpha/2,mean=0, sd=1)*sqrt(sigmacamp1 ^2/ncamp1+sigmacamp2 ^2/ncamp2)
+```
+
+2. Determinare un intervallo di confidenza di grado $1-\alpha$ per $\mu_1-\mu_2$ per campioni numerosi con entrambe le varianze $\sigma_1^2$ e $\sigma_2^2$ non note.
+
+Durante l'analisi abbiamo visto che le varianze campionarie $S_{n_1}^2$ e $S_{n_1}^2$ risultano essere stimatori di $\sigma_1^2$ e $\sigma_2^2$ quando le ampiezze tendono ad essere grandi. È quindi possibile considerare la variabile aleatoria
+
+$$\frac{\overline X_{n_1} - \overline Y_{n_2} - (\mu_1 - \mu_2)}{\sqrt{\frac{S_{n_1}^2}{n_1}+\frac{S_{n_2}^2}{n_2}}}$$
+
+applicando il metodo pivotale in forma apporssimata abbiamo che
+
+$$\overline{X}_{n1} - \overline{Y}_{n2} - z_{\alpha/2}\sqrt{\frac{S_{n_1}^2}{n_1}+\frac{S_{n_2}^2}{n_2}} < \mu_1 - \mu_2 <\overline{X}_{n1} - \overline{Y}_{n2} + z_{\alpha/2}\sqrt{\frac{S_{n_1}^2}{n_1}+\frac{S_{n_2}^2}{n_2}}$$
+
+Come prima, poniamo il grado di fiducia pari a $0.95$ e da questo ne risulta che $\alpha=0.05$. Procediamo quindi alla stima di $\mu_1 - \mu_2$:
+
+```{r}
+alpha <- 1 - 0.95
+
+ncamp1 <- length(campione)
+ncamp2 <- length(campione2)
+
+meancamp1 <- mean(campione)
+meancamp2 <- mean(campione2)
+
+sigmacamp1 <- sd(campione)
+sigmacamp2 <- sd(campione2)
+
+#limite inferiore
+meancamp1-meancamp2 -qnorm (1- alpha/2,mean=0, sd=1)*sqrt(sigmacamp1 ^2/ncamp1+sigmacamp2 ^2/ncamp2)
+```
+
+```{r}
+#limite superiore
+meancamp1-meancamp2 + qnorm (1- alpha/2,mean=0, sd=1)*sqrt(sigmacamp1 ^2/ncamp1+sigmacamp2 ^2/ncamp2)
+```
+
+## Verifica delle ipotesi in R
+
+La verifica delle ipotesi è, insieme alla stima dei parametri, una delle aree più importanti dell'inferenza statistica. Essa viene utilizzata in molti ambiti reali, soprattutto quando vi sono da fare indagini di mercato o indagini sperimentali e industriali. Introduciamo quindi il concetto di ipotesi statistica.
+Una **ipotesi statistica** è un'affermazione o una congettura su un parametro non noto $\vartheta$. Se l'ipotesi statistica specifica completamente $f(x:\vartheta)$ è detta **ipotesi semplice**, altrimenti è chiamata **ipotesi composta**.
+
+L'ipotesi soggetta a verifica viene denotata con $H_0$ e viene chiamata **ipotesi nulla**.
+Il procedimento o regola attraverso il quale si decide, sulla base dei dati del campione, se *accettare* o *rifiutare* $H_0$ è chiamato **test di ipotesi**.
+La costruzione del test di ipotesi prevede la formulazione di una ipotesi in contrapposizione all'ipotesi nulla. Questa ipotesi prende il nome di **ipotesi alternativa** e viene indicata con $H_1$.
+
+Quindi, abbiamo l'ipotesi nulla se $\vartheta \in \Theta_0$ e l'ipotesi alternativa se $\vartheta \in \Theta_1$, dove $\Theta_0$ e $\Theta_1$ sono due sottoinsiemi disgiunti dello spazio $\Theta$ dei parametri.
+
+Il problema si riduce quindi a determinare un test che ci permetta di suddividere l'insieme dei possibili campioni in due sottoinsiemi detti **regione di accettazione** $A$ dell'ipotesi nulla ed una **regione di rifiuto** $R$ dell'ipotesi nulla. 
