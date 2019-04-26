@@ -245,7 +245,8 @@ In questo primo *barplot* sull'asse delle ascisse sono state inserite le venti r
 
 ```{r}
 barplot(tabella[,1], col=1:20, ylim = c(0, 50), las=2, 
-        main = "Cittadini non comunitari residenti per motivi di lavoro")
+        main = "Cittadini non comunitari 
+        residenti per motivi di lavoro")
 ```
 
 Come visto in precedenza con l'analisi delle frequenze relative, anche qui notiamo che:
@@ -260,7 +261,8 @@ Passiamo adesso all'analisi della modalità "famiglia"
 
 ```{r}
 barplot(tabella[,2], col=1:20, ylim = c(0,60), las=2, 
-        main = "Cittadini non comunitari residenti per motivi di famiglia")
+        main = "Cittadini non comunitari 
+        residenti per motivi di famiglia")
 ```
 
 Possiamo anche qui vedere che, per quanto riguarda i motivi di famiglia:
@@ -274,7 +276,8 @@ Per quanto riguarda lo studio invece:
 
 ```{r}
 barplot(tabella[,3], col=1:20, ylim = c(0,6), las=2, 
-        main = "Cittadini non comunitari residenti per motivi di studio")
+        main = "Cittadini non comunitari 
+        residenti per motivi di studio")
 ```
 
 Quello che si nota è che in generale i cittadini non comunitari non vengono in Italia per studiare in quanto i tassi
@@ -286,7 +289,8 @@ La situazione di asilo politico è la seguente:
 
 ```{r}
 barplot(tabella[,4], col=1:20, ylim = c(0,70), las=2, 
-        main = "Cittadini non comunitari residenti per asilo")
+        main = "Cittadini non comunitari 
+        residenti per asilo")
 ```
 
 
@@ -302,7 +306,8 @@ Per quanto riguarda le motivazioni non specificate:
 
 ```{r}
 barplot(tabella[,5], col=1:20, ylim = c(0,10), las=2, 
-        main = "Cittadini non comunitari residenti per altri motivi")
+        main = "Cittadini non comunitari 
+        residenti per altri motivi")
 ```
 È possibile notare che i dati raccolti per motivi non ben specificati sono decisamente bassi.
 Si differenzia solo la situazione del Lazio, che presente un tasso decisamente elevato rispetto alle altre.
@@ -393,14 +398,17 @@ Useremo la funzione *points()* per aggiungere altri punti al grafico già esiste
 ci permette di indicare il numero di colonne da utilizzare.
 
 ```{r}
-plot(lavoro, pch="*", ylim = c(0, 90), col="blue", ylab="Tasso", xlab="Indici regioni")
+plot(lavoro, pch="*", ylim = c(0, 90), col="blue", 
+     ylab="Tasso", xlab="Indici regioni")
 points(famiglia, pch="+", col="red")
 points(studio, pch="x", col="green")
 points(asilo, pch="o", col="magenta")
 points(altro, pch="-", col="black")
 
-legend(1, 90, c("lavoro", "famiglia", "studio", "asilo", "altro"), pch=c("*","+", "x", "o", "-"),
-        col = c("blue", "red", "green", "magenta", "black"), ncol = 3)
+legend(1, 90, c("lavoro", "famiglia", "studio", "asilo", "altro"), 
+      pch=c("*","+", "x", "o", "-"),
+      col = c("blue", "red", "green", "magenta", "black"), 
+      ncol = 3)
 
 ```
 
@@ -415,7 +423,9 @@ Questo comando prevede diverse opzioni interessanti:
 * *freq*, che può valere FALSE indicando così di utilizzare la frequenza relativa, oppure può essere impostato a TRUE per utilizzare la frequenza assoluta. Di default è impostato a TRUE se e solo se le classi sono equidistanti.
 
 ```{r}
-h <- hist(famiglia, freq = TRUE, col = 1:5, main="Istogramma per motivi di famiglia", ylab="Frequenza assoluta classi", xlab = "Classi")
+h <- hist(famiglia, freq = TRUE, col = 1:5, 
+          main="Istogramma per motivi di famiglia", 
+          ylab="Frequenza assoluta classi", xlab = "Classi")
 ```
 
 Utilizzando il comando *str()* R è in grado di fornirci informazioni aggiuntive sulla creazione dell'istogramma, come la suddivisione in classi utilizzata.
@@ -444,7 +454,10 @@ fr
 Utilizziamo adesso il vettore delle classi definito precedentemente durante il calcolo delle frequenze per definire un nuovo istogramma.
 
 ```{r}
-h <- hist(famiglia, freq = TRUE, col = 1:5, main="Istogramma per motivi di famiglia", ylab="Frequenza assoluta classi", xlab = "Classi", breaks = classi)
+h <- hist(famiglia, freq = TRUE, col = 1:5, 
+          main="Istogramma per motivi di famiglia", 
+          ylab="Frequenza assoluta classi", xlab = "Classi", 
+          breaks = classi)
 ```
 
 ### Boxplot
@@ -474,7 +487,8 @@ I valori dei dati che sono al di sopra del baffo superior o al di sotto del baff
 Per la creazione di boxplot, R fornisce la funzione *boxplot()* . Il grafico può essere creato sia con orientamento verticale che orizzontale utilizzando il parametro *horizontal* che  di default è impostato a FALSE, indicante orientamento verticale. 
 
 ```{r}
-boxplot(lavoro, col = "orange", main="Boxplot tasso cittadini non comunitari residenti per motivi di lavoro")
+boxplot(lavoro, col = "orange", main="Boxplot tasso cittadini 
+        non comunitari residenti per motivi di lavoro")
 ```
 
 Come descritto precedentemente, gli estremi della scatola nel grafico sono rappresentati da $Q_{3}$ = 32.08 e da $Q_{1}$ = 23.57 mentre la linea orizzontale, la mediana, è in corrispondenza di $Q_{2}$ = 28.25 . Il baffo inferiore è pari a 10.90 ovvero al primo numero maggiore o uguale a $Q_{1}$ - 1.5 $*$ ($Q_{3}$ - $Q_{1}$), 23.7 - 1.5 $*$ (32.08 - 23.57) = 10.93. Il baffo superiore invece è 41.60 ovvero al primo valore del campione minore o uguale di $Q_{3}$ + 1.5 $*$ ($Q_{3}$ - $Q_{1}$), ossia 32.08 + 1.5 $*$ (32.08 - 23.57) = 44.845. Tutti i valori ricadono fra il minimo e il massimo quindi non abbiamo anomalie. Per quanto riguarda la simmetria abbiamo che $Q_{3}$ - $Q_{2}$, 32.08 - 28.25 = 3.5, e $Q_{2}$ - $Q_{1}$, 28.25 - 23.57 = 4.68. I valori sono diversi ma molto vicini. 
@@ -491,7 +505,8 @@ summary(famiglia)
 
 
 ```{r}
-boxplot(famiglia, col = "red", main="Boxplot tasso cittadini non comunitari residenti per motivi di famiglia")
+boxplot(famiglia, col = "red", main="Boxplot tasso cittadini 
+        non comunitari residenti per motivi di famiglia")
 ```
 
 In questo boxplot la mediana è spostata più verso l'alto, fattore che ci dice che la distribuzione non è simmetrica.
@@ -505,7 +520,8 @@ summary(studio)
 ```
 
 ```{r}
-boxplot(studio, col = "green", main="Boxplot tasso cittadini non comunitari residenti per motivi di studio")
+boxplot(studio, col = "green", main="Boxplot tasso cittadini 
+        non comunitari residenti per motivi di studio")
 ```
 
 
@@ -518,7 +534,8 @@ summary(asilo)
 ```
 
 ```{r}
-boxplot(asilo, col = "yellow",main="Boxplot tasso cittadini non comunitari residenti per motivi di asilo")
+boxplot(asilo, col = "yellow",main="Boxplot tasso cittadini 
+        non comunitari residenti per motivi di asilo")
 ```
 In questo boxplot è presente un valore anomale e, riferendoci alla tabella, scopriamo che è il Molise con 67.1. I baffo superiore è molto più grande di quello inferiore, dicendoci che la disperisione dei dati è maggiore. Anche la mediana non risulta essere al centro ma tende verso il basso incidendo sulla simmetria.
 
@@ -531,7 +548,8 @@ summary(altro)
 ```
 
 ```{r}
-boxplot(altro, col = "purple", main="Boxplot tasso cittadini non comunitari residenti per altri motivi")
+boxplot(altro, col = "purple", main="Boxplot tasso cittadini 
+        non comunitari residenti per altri motivi")
 ```
 
 Anche in quest'ultimo boxplot è presente un valore anomale che esce al di fuori dell'intervallo. In questo caso, la regione è il Lazio con 9.79. La mediana risulta essere più in basso rispetto al centro.
@@ -539,7 +557,9 @@ Anche in quest'ultimo boxplot è presente un valore anomale che esce al di fuori
 Possiamo anche confrontare i diversi boxplot mettendoli tutti insieme in un unico grafico.
 
 ```{r}
-boxplot(lavoro, famiglia, studio, asilo, altro, col = c("orange","red","green","yellow", "purple"), names = c("lavoro", "famiglia", "studio", "asilo", "altro"))
+boxplot(lavoro, famiglia, studio, asilo, altro, 
+        col = c("orange","red","green","yellow", "purple"), 
+        names = c("lavoro", "famiglia", "studio", "asilo", "altro"))
 ```
 
 ###Scatterplot
@@ -561,7 +581,9 @@ Alcune invece, come il plot che mette in relazione lavoro e famiglia, non sembra
 È possibile anche stampare uno solo grafico alla volta utilizzando la funzione *plot()* dandole in input singoli vettori del data frame.
 
 ```{r}
-plot(motivi$lavoro, motivi$famiglia, xlab="Lavoro", ylab="Famiglia", main="Motivi di lavoro in relazione ai motivi di famiglia")
+plot(motivi$lavoro, motivi$famiglia, xlab="Lavoro", 
+     ylab="Famiglia", 
+     main="Motivi di lavoro in relazione ai motivi di famiglia")
 ```
 
 
@@ -596,7 +618,8 @@ I gradini sono tanti quanto i valori assunti dalla variabile e, siccome in quest
 Prendendo il vettore studio però ed eliminando la parte decimale è possibile visualizzare un esempio di questo grafico.
 
 ```{r}
-plot(ecdf(round(studio, digits = 0)), main="Funzione di distribuzione empirica discreta", col="red")
+plot(ecdf(round(studio, digits = 0)), 
+     main="Funzione di distribuzione empirica discreta", col="red")
 ```
 
 La funzione *round()* serve ad arrotondare un numero alla cifra specificata con il parametro *digits*.
@@ -621,7 +644,9 @@ Il vettore Fi contiene le frequenze relative cumulate dei tassi delle varie regi
 
 ```{r}
 Ffamiglia <- c(0, Ffamiglia)
-plot(classi_empiriche, Ffamiglia, type = "b", axes = FALSE, main = "Funzione di distribuzione empirica continua", ylab ="Funzione", xlab = "Classi", col = "red")
+plot(classi_empiriche, Ffamiglia, type = "b", 
+     axes = FALSE, main = "Funzione di distribuzione empirica continua", 
+     ylab ="Funzione", xlab = "Classi", col = "red")
 axis(1, classi_empiriche)
 axis(2, format(Ffamiglia, digits=2))
 box()
@@ -634,7 +659,9 @@ Utilizzando la stessa suddivisione in classi, creiamo il grafico per i vettori a
 ```{r}
 Flavoro <- cumsum(table(cut(lavoro, breaks=classi_empiriche, right =FALSE)))/length(lavoro)
 Flavoro <- c(0, Flavoro)
-plot(classi_empiriche, Flavoro, type = "b", axes = FALSE, main = "Funzione di distribuzione empirica continua", ylab ="Funzione", xlab = "Classi", col = "red")
+plot(classi_empiriche, Flavoro, type = "b", 
+     axes = FALSE, main = "Funzione di distribuzione empirica continua", 
+     ylab ="Funzione", xlab = "Classi", col = "red")
 axis(1, classi_empiriche)
 axis(2, format(Flavoro, digits=2))
 box()
@@ -643,7 +670,9 @@ box()
 ```{r}
 Fasilo <- cumsum(table(cut(asilo, breaks=classi_empiriche, right =FALSE)))/length(asilo)
 Fasilo <- c(0, Fasilo)
-plot(classi_empiriche, Fasilo, type = "b", axes = FALSE, main = "Funzione di distribuzione empirica continua", ylab ="Funzione", xlab = "Classi", col = "red")
+plot(classi_empiriche, Fasilo, type = "b", 
+     axes = FALSE, main = "Funzione di distribuzione empirica continua", 
+     ylab ="Funzione", xlab = "Classi", col = "red")
 axis(1, classi_empiriche)
 axis(2, format(Fasilo, digits=2))
 box()
@@ -655,7 +684,9 @@ Siccome i vettori studio e altro risultano contenere valori decisamente piccoli,
 classi_empiriche1 <- c(0,2,4,6,8,10)
 Fstudio <- cumsum(table(cut(studio, breaks=classi_empiriche1, right =FALSE)))/length(studio)
 Fstudio <- c(0, Fstudio)
-plot(classi_empiriche1, Fstudio, type = "b", axes = FALSE, main = "Funzione di distribuzione empirica continua", ylab ="Funzione", xlab = "Classi", col = "red")
+plot(classi_empiriche1, Fstudio, type = "b", 
+     axes = FALSE, main = "Funzione di distribuzione empirica continua", 
+     ylab ="Funzione", xlab = "Classi", col = "red")
 axis(1, classi_empiriche1)
 axis(2, format(Fstudio, digits=2))
 box()
@@ -664,7 +695,9 @@ box()
 ```{r}
 Faltro <- cumsum(table(cut(altro, breaks=classi_empiriche1, right =FALSE)))/length(altro)
 Faltro <- c(0, Faltro)
-plot(classi_empiriche1, Faltro, type = "b", axes = FALSE, main = "Funzione di distribuzione empirica continua", ylab ="Funzione", xlab = "Classi", col = "red")
+plot(classi_empiriche1, Faltro, type = "b", 
+     axes = FALSE, main = "Funzione di distribuzione empirica continua", 
+     ylab ="Funzione", xlab = "Classi", col = "red")
 axis(1, classi_empiriche1)
 axis(2, format(Faltro, digits=2))
 box()
@@ -801,15 +834,20 @@ Come si evince dalla definzione, la mediana di una distribuzione di frequenza è
 
 ```{r}
 par(mfrow = c(2,2))
-plot(classi_empiriche, Flavoro, type="b", main="Funzione di distribuzione empirica discreta di lavoro", col="red")
+plot(classi_empiriche, Flavoro, type="b", 
+     main="Funzione di distribuzione empirica discreta di lavoro", col="red")
 abline(h=0.5, lty=2, col="blue")
-plot(classi_empiriche, Ffamiglia, type="b", main="Funzione di distribuzione empirica discreta di famiglia", col="red")
+plot(classi_empiriche, Ffamiglia, type="b", 
+     main="Funzione di distribuzione empirica discreta di famiglia", col="red")
 abline(h=0.5, lty=2, col="blue")
-plot(classi_empiriche, Fasilo, type="b", main="Funzione di distribuzione empirica discreta di asilo", col="red")
+plot(classi_empiriche, Fasilo, type="b", 
+     main="Funzione di distribuzione empirica discreta di asilo", col="red")
 abline(h=0.5, lty=2, col="blue")
-plot(classi_empiriche1, Fstudio, type="b", main="Funzione di distribuzione empirica discreta di studio", col="red")
+plot(classi_empiriche1, Fstudio, type="b", 
+     main="Funzione di distribuzione empirica discreta di studio", col="red")
 abline(h=0.5, lty=2, col="blue")
-plot(classi_empiriche1, Faltro, type="b", main="Funzione di distribuzione empirica discreta di altro", col="red")
+plot(classi_empiriche1, Faltro, type="b", 
+     main="Funzione di distribuzione empirica discreta di altro", col="red")
 abline(h=0.5, lty=2, col="blue")
 ```
 
@@ -868,7 +906,8 @@ Abbiamo detto che R è in grado di utilizzare diversi algoritmi per il calcolo d
 tipiquartili <- function(x){
   y<-numeric(0)
   for(i in 1:9){
-    y<-rbind(y, c(quantile(x, 0, type=i), quantile(x, 0.25, type=i), quantile(x, 0.5, type=i), quantile(x, 0.75, type=i), quantile(x, 1, type=i)))
+    y<-rbind(y, c(quantile(x, 0, type=i), quantile(x, 0.25, type=i), 
+                  quantile(x, 0.5, type=i), quantile(x, 0.75, type=i), quantile(x, 1, type=i)))
   }
   rownames(y) <- paste("type", 1:9)
   y
@@ -1082,7 +1121,8 @@ Nei vettori *lavoro*, *asilo* e *altro* la curtosi è positiva indicando quindi 
 La statistica descrittiva bivariata è la branca della statistica che si occupa di definire i metodi grafici e statistici per descrivere le relazioni fra due variabili. Le relazioni fra variabili quantitative possono essere rappresentate graficamente mediante scatterplot in cui, ogni coppia di osservazioni viene rappresentata con un punto o un cerchio sul piano euclideo. Quello che si fa è scegliere una variabile da porre sull'asse delle ascisse, che prende il nome di *variabili indipendente*, e una da porre sull'asse delle ordinate chiamata *variabile dipendente* e si disegnano i punti in corrispondenza delle coppie. Creando questo grafico vogliamo capire se le coppie di punti presentano una certa regolarità e se esiste una relazione fra le variabili.
 
 ```{r}
-plot(famiglia, asilo, main="Asilo in funzione di famiglia", xlab="Famiglia", ylab = "Asilo")
+plot(famiglia, asilo, main="Asilo in funzione di famiglia", 
+     xlab="Famiglia", ylab = "Asilo")
 abline(v=median(famiglia), lty=1, col="magenta")
 abline(v=mean(famiglia), lty=2, col="blue")
 abline(h=median(asilo), lty=1, col="magenta")
@@ -1139,7 +1179,8 @@ Misurando la correlazione fra le due variabili che stiamo considerando otteniamo
 È possibile aggiungere allo scatterplot precedente la retta interpolante stimata.
 
 ```{r}
-plot(famiglia, asilo, main = "Retta di regressione", xlab="Famiglia", ylab="Asilo", col="red")
+plot(famiglia, asilo, main = "Retta di regressione", 
+     xlab="Famiglia", ylab="Asilo", col="red")
 abline(lm(asilo~famiglia), col="blue")
 ```
 
@@ -1243,7 +1284,8 @@ Il coefficiente di variazione è impossibile da ottenere in quanto abbiamo detto
 * Tracciando dei segmenti che congiungono i valori stimati e i valori osservati utilizzando la funzione *segments()*
 
 ```{r}
-plot(famiglia, asilo, main = "Retta di regressione", xlab="Famiglia", ylab="Asilo", col="red")
+plot(famiglia, asilo, main = "Retta di regressione",
+     xlab="Famiglia", ylab="Asilo", col="red")
 abline(lm(asilo~famiglia), col="blue")
 stime <- fitted(lm(asilo~famiglia))
 segments(famiglia, stime, famiglia, asilo, col="magenta")
@@ -1253,7 +1295,8 @@ segments(famiglia, stime, famiglia, asilo, col="magenta")
 Il **diagramma dei residui** è un grafico in cui i valori dei residui sono posti sull'asse delle ordinate e quelli della variabile indipendente sull'asse delle ascisse.
 ```{r}
 residui <- resid(lm(asilo~famiglia))
-plot(famiglia, residui, main = "Diagramma dei residui", xlab="Famiglia", ylab="Residui", pch=9, col="red" )
+plot(famiglia, residui, main = "Diagramma dei residui", 
+     xlab="Famiglia", ylab="Residui", pch=9, col="red")
 abline(h=0, col="blue", lty=2)
 ```
 
@@ -1274,7 +1317,10 @@ residuistandard
 È possibile rappresentare questi residui standardizzati mediante un grafico:
 
 ```{r}
-plot(stime, residuistandard, main = "Residui standard rispetto ai valori stimati", xlab="Valori stimati", ylab="Residui standard", pch=5, col="red")
+plot(stime, residuistandard, 
+     main = "Residui standard rispetto ai valori stimati", 
+     xlab="Valori stimati", ylab="Residui standard",
+     pch=5, col="red")
 abline(h=0, col="blue", lty=2)
 ```
 
@@ -1379,7 +1425,10 @@ residuimultstandard
 
 Realizziamo quindi un grafico in cui i residui standardizzati vengono disegnati in funzione dei valori stimati
 ```{r}
-plot(stimemult,residuimultstandard, main="Residui standard rispetto ai valori stimati", ylab="Residui standard", xlab="Valori Stimati", pch=5, col="red")
+plot(stimemult,residuimultstandard, 
+     main="Residui standard rispetto ai valori stimati", 
+     ylab="Residui standard", xlab="Valori Stimati",
+     pch=5, col="red")
 abline(h=0, col="blue", lty=2)
 ```
 
@@ -1459,7 +1508,8 @@ Com'è possibile notare, il coefficiente di determinazione ottenuto col modello 
 Andiamo adesso ad aggiungere la curva appena descritta allo scatterplot: 
 
 ```{r}
-plot(lavoro, asilo, main="Scatterplot con curva", xlab="Lavoro", ylab="Asilo", col = "red")
+plot(lavoro, asilo, main="Scatterplot con curva", 
+     xlab="Lavoro", ylab="Asilo", col = "red")
 curve(alphapol+betapol*x+gammapol*x^2, add = TRUE)
 ```
 
@@ -1764,7 +1814,8 @@ str(hls)
 Procediamo adesso alla stampa del dendrogramma:
 
 ```{r}
-plot(hls, hang = -1, xlab = "Metodo gerarchico agglomerativo", sub="del legame singolo")
+plot(hls, hang = -1, xlab = "Metodo gerarchico agglomerativo", 
+     sub="del legame singolo")
 axis(side = 4, at= round(c(0, hls$height), 2))
 ```
 
@@ -1778,7 +1829,8 @@ Quando $\delta_k$ risulta sufficientemente elevato allora i gruppi sono dissimil
 È possibile utilizzare lo screenplot solo per i metodi gerarchici del legame singolo, medio e completo in quanto con i metodi del centroide e della mediana, le successive agglomerazioni potrebbero verificarsi ad un livello di distanza minore o uguale rispetto alle precedenti. Questa procedura però non fornisce sempre la suddivisione in cluster più adeguata, infatti è sempre preferibile utilizzare le misure di non omogeneità statistiche.
 
 ```{r}
-plot(c(0, hls$height), seq(20, 1), type = "b", main = "Screenplot", xlab = "Distanza di aggregazione", ylab = "Numero di cluster", col = "red")
+plot(c(0, hls$height), seq(20, 1), type = "b", main = "Screenplot", 
+     xlab = "Distanza di aggregazione", ylab = "Numero di cluster", col = "red")
 ```
 
 ```{r}
@@ -1790,7 +1842,8 @@ In questo caso il max lo abbiamo fra:
 $$\delta_2 = h_1 - h_2 = 24.909719 - 14.428444 = 10.48127 $$
 Quindi il valore di k per il quale $\delta_k$ è massimo si ha con $k=2$. Applichiamo la suddivisione al dendrogramma utilizzando la funzione *rect.hclust()*:
 ```{r}
-plot(hls, hang = -1, xlab = "Metodo gerarchico agglomerativo", sub="del legame singolo")
+plot(hls, hang = -1, xlab = "Metodo gerarchico agglomerativo", 
+     sub="del legame singolo")
 axis(side = 4, at= round(c(0, hls$height), 2))
 rect.hclust(hls, k=2)
 ```
@@ -1913,7 +1966,8 @@ $$d_{(ij),k} = max(d_{ik}, d_{jk})$$
 Ad ogni passo successivo vengono ripetute le stesse azioni, funo ad ottenere un unico cluster formato da tutti gli individui.
 
 ```{r}
-d <- dist(tabella, method = "euclidean", diag = TRUE, upper = FALSE)
+d <- dist(tabella, method = "euclidean", 
+          diag = TRUE, upper = FALSE)
 hlc <- hclust(d, method = "complete")
 str(hlc)
 ```
@@ -1921,13 +1975,16 @@ str(hlc)
 Procediamo adesso alla stampa del dendrogramma:
 
 ```{r}
-plot(hlc, hang = -1, xlab = "Metodo gerarchico agglomerativo", sub="del legame completo")
+plot(hlc, hang = -1, xlab = "Metodo gerarchico agglomerativo", 
+     sub="del legame completo")
 axis(side = 4, at= round(c(0, hlc$height), 2))
 ```
 
 Come fatto in precedenza, procediamo alla stampa dello screenplot:
 ```{r}
-plot(c(0, hlc$height), seq(20, 1), type = "b", main = "Screenplot", xlab = "Distanza di aggregazione", ylab = "Numero di cluster", col = "red")
+plot(c(0, hlc$height), seq(20, 1), type = "b",
+     main = "Screenplot", xlab = "Distanza di aggregazione", 
+     ylab = "Numero di cluster", col = "red")
 ```
 
 ```{r}
@@ -1939,7 +1996,8 @@ Anche in questo caso il max lo abbiamo fra:
 $$\delta_2 = h_1 - h_2 = 70.274764 - 43.088240 = 27.186524 $$
 Quindi il valore di k per il quale $\delta_k$ è massimo si ha con $k=2$. Applichiamo la suddivisione al dendrogramma utilizzando la funzione *rect.hclust()*:
 ```{r}
-plot(hlc, hang = -1, xlab = "Metodo gerarchico agglomerativo", sub="del legame completo")
+plot(hlc, hang = -1, xlab = "Metodo gerarchico agglomerativo", 
+     sub="del legame completo")
 axis(side = 4, at= round(c(0, hlc$height), 2))
 rect.hclust(hlc, k=2)
 ```
@@ -1958,7 +2016,8 @@ Siccome la misura di non omogeneità statistica totale è uguale a quella calcol
 Procediamo al calcolo delle misure di omogeneità statistiche per le varie suddivisioni:
 
 ```{r}
-d <- dist(tabella, method="euclidean", diag = TRUE, upper=TRUE)
+d <- dist(tabella, method="euclidean", 
+          diag = TRUE, upper=TRUE)
 d2<-d^2
 tree <- hclust(d2, method = "complete")
 taglio <-cutree(tree, k=2, h=NULL)
@@ -1984,7 +2043,8 @@ trB/trHI
 Con la suddivisione in due cluster, suggeritaci dallo scatterplot, il rapporto tra $\frac{trB}{trT}$ non è risultato essere abbastanza alto.
 
 ```{r}
-d <- dist(tabella, method="euclidean", diag = TRUE, upper=TRUE)
+d <- dist(tabella, method="euclidean", 
+          diag = TRUE, upper=TRUE)
 d2<-d^2
 tree <- hclust(d2, method = "complete")
 taglio <-cutree(tree, k=3, h=NULL)
@@ -2014,7 +2074,8 @@ trB/trHI
 Con la suddivisione in tre cluster invece il rapporto tra $\frac{trB}{trT}$ ha raggiunto un risultato di sufficienza ed è possibile tenerlo in considerazione.
 
 ```{r}
-d <- dist(tabella, method="euclidean", diag = TRUE, upper=TRUE)
+d <- dist(tabella, method="euclidean", 
+          diag = TRUE, upper=TRUE)
 d2<-d^2
 tree <- hclust(d2, method = "complete")
 taglio <-cutree(tree, k=4, h=NULL)
@@ -2073,7 +2134,8 @@ dove $N_u$, $N_v$ e $N_z$ sono rispettivamente il numero di individui del cluste
 La procedura si ripete fino a quando non si ottiene un unico cluster con tutti gli individui.
 
 ```{r}
-d <- dist(tabella, method = "euclidean", diag = TRUE, upper = FALSE)
+d <- dist(tabella, method = "euclidean", 
+          diag = TRUE, upper = FALSE)
 hlm <- hclust(d, method = "average")
 str(hlm)
 ```
@@ -2081,13 +2143,16 @@ str(hlm)
 Procediamo adesso alla stampa del dendrogramma:
 
 ```{r}
-plot(hlm, hang = -1, xlab = "Metodo gerarchico agglomerativo", sub="del legame medio")
+plot(hlm, hang = -1, xlab = "Metodo gerarchico agglomerativo", 
+     sub="del legame medio")
 axis(side = 4, at= round(c(0, hlm$height), 2))
 ```
 
 Come fatto in precedenza, procediamo alla stampa dello screenplot:
 ```{r}
-plot(c(0, hlm$height), seq(20, 1), type = "b", main = "Screenplot", xlab = "Distanza di aggregazione", ylab = "Numero di cluster", col = "red")
+plot(c(0, hlm$height), seq(20, 1), type = "b", 
+     main = "Screenplot", xlab = "Distanza di aggregazione", 
+     ylab = "Numero di cluster", col = "red")
 ```
 
 ```{r}
@@ -2100,7 +2165,8 @@ $$\delta_2 = h_1 - h_2 = 53.603492 - 28.947554 = 24.65594 $$
 
 Quindi il valore di k per il quale $\delta_k$ è massimo si ha con $k=2$. Applichiamo la suddivisione al dendrogramma utilizzando la funzione *rect.hclust()*:
 ```{r}
-plot(hlm, hang = -1, xlab = "Metodo gerarchico agglomerativo", sub="del legame medio")
+plot(hlm, hang = -1, xlab = "Metodo gerarchico agglomerativo", 
+     sub="del legame medio")
 axis(side = 4, at= round(c(0, hlm$height), 2))
 rect.hclust(hlm, k=2)
 ```
@@ -2119,7 +2185,8 @@ Siccome la misura di non omogeneità statistica totale è uguale a quella calcol
 Procediamo al calcolo delle misure di omogeneità statistiche per le varie suddivisioni:
 
 ```{r}
-d <- dist(tabella, method="euclidean", diag = TRUE, upper=TRUE)
+d <- dist(tabella, method="euclidean", 
+          diag = TRUE, upper=TRUE)
 d2<-d^2
 tree <- hclust(d2, method = "average")
 taglio <-cutree(tree, k=2, h=NULL)
@@ -2145,7 +2212,8 @@ trB/trHI
 Con la suddivisione in due cluster, suggeritaci dallo scatterplot, il rapporto tra $\frac{trB}{trT}$ è risultato essere estremamente basso.
 
 ```{r}
-d <- dist(tabella, method="euclidean", diag = TRUE, upper=TRUE)
+d <- dist(tabella, method="euclidean", 
+          diag = TRUE, upper=TRUE)
 d2<-d^2
 tree <- hclust(d2, method = "average")
 taglio <-cutree(tree, k=3, h=NULL)
@@ -2175,7 +2243,8 @@ trB/trHI
 Con la suddivisione in tre cluster invece il rapporto tra $\frac{trB}{trT}$ ha raggiunto un risultato di sufficienza ed è possibile tenerlo in considerazione.
 
 ```{r}
-d <- dist(tabella, method="euclidean", diag = TRUE, upper=TRUE)
+d <- dist(tabella, method="euclidean",
+          diag = TRUE, upper=TRUE)
 d2<-d^2
 tree <- hclust(d2, method = "average")
 taglio <-cutree(tree, k=4, h=NULL)
@@ -2225,7 +2294,8 @@ In questo metodo la distanza tra il gruppo $G_1$ e il gruppo $G_2$ è definita c
 A differenza dei metodi precedenti qui viene considerata la matrice contenente i quadrati delle singole distanze euclidee.
 
 ```{r}
-d <- dist(tabella, method = "euclidean", diag = TRUE, upper = FALSE)
+d <- dist(tabella, method = "euclidean", 
+          diag = TRUE, upper = FALSE)
 d2 <- d^2
 hlcentroid <- hclust(d2, method = "centroid")
 str(hlcentroid)
@@ -2234,7 +2304,8 @@ str(hlcentroid)
 Procediamo adesso alla stampa del dendrogramma:
 
 ```{r}
-plot(hlcentroid, hang = -1, xlab = "Metodo gerarchico agglomerativo", sub="del centroide")
+plot(hlcentroid, hang = -1, xlab = "Metodo gerarchico agglomerativo", 
+     sub="del centroide")
 axis(side = 4, at= round(c(0, hlcentroid$height), 2))
 ```
 
@@ -2246,7 +2317,8 @@ Siccome la misura di non omogeneità statistica totale è uguale a quella calcol
 Procediamo al calcolo delle misure di omogeneità statistiche per le varie suddivisioni:
 
 ```{r}
-d <- dist(tabella, method="euclidean", diag = TRUE, upper=TRUE)
+d <- dist(tabella, method="euclidean", 
+          diag = TRUE, upper=TRUE)
 d2<-d^2
 tree <- hclust(d2, method = "centroid")
 taglio <-cutree(tree, k=2, h=NULL)
@@ -2272,7 +2344,8 @@ trB/trHI
 Con la suddivisione in due cluster, suggeritaci dallo scatterplot, il rapporto tra $\frac{trB}{trT}$ è risultato essere estremamente basso.
 
 ```{r}
-d <- dist(tabella, method="euclidean", diag = TRUE, upper=TRUE)
+d <- dist(tabella, method="euclidean", 
+          diag = TRUE, upper=TRUE)
 d2<-d^2
 tree <- hclust(d2, method = "centroid")
 taglio <-cutree(tree, k=3, h=NULL)
@@ -2302,7 +2375,8 @@ trB/trHI
 Con la suddivisione in tre cluster invece il rapporto tra $\frac{trB}{trT}$ ha raggiunto un risultato di sufficienza ed è possibile tenerlo in considerazione.
 
 ```{r}
-d <- dist(tabella, method="euclidean", diag = TRUE, upper=TRUE)
+d <- dist(tabella, method="euclidean", 
+          diag = TRUE, upper=TRUE)
 d2<-d^2
 tree <- hclust(d2, method = "centroid")
 taglio <-cutree(tree, k=4, h=NULL)
@@ -2352,7 +2426,8 @@ Questo metodo è simile a quello del centroide e differisce per il fatto che la 
 Anche il metodo della mediana, come quello del legame singolo può dare vita alla formazione di una catena fra gli individui.
 
 ```{r}
-d <- dist(tabella, method = "euclidean", diag = TRUE, upper = FALSE)
+d <- dist(tabella, method = "euclidean", 
+          diag = TRUE, upper = FALSE)
 d2 <- d^2
 hlmedian <- hclust(d2, method = "median")
 str(hlmedian)
@@ -2361,7 +2436,8 @@ str(hlmedian)
 Procediamo adesso alla stampa del dendrogramma:
 
 ```{r}
-plot(hlmedian, hang = -1, xlab = "Metodo gerarchico agglomerativo", sub="della mediana")
+plot(hlmedian, hang = -1, xlab = "Metodo gerarchico agglomerativo", 
+     sub="della mediana")
 axis(side = 4, at= round(c(0, hlmedian$height), 2))
 ```
 
@@ -2373,7 +2449,8 @@ Siccome la misura di non omogeneità statistica totale è uguale a quella calcol
 Procediamo al calcolo delle misure di omogeneità statistiche per le varie suddivisioni:
 
 ```{r}
-d <- dist(tabella, method="euclidean", diag = TRUE, upper=TRUE)
+d <- dist(tabella, method="euclidean", 
+          diag = TRUE, upper=TRUE)
 d2<-d^2
 tree <- hclust(d2, method = "median")
 taglio <-cutree(tree, k=2, h=NULL)
@@ -2399,7 +2476,8 @@ trB/trHI
 Con la suddivisione in due cluster, suggeritaci dallo scatterplot, il rapporto tra $\frac{trB}{trT}$ è risultato essere estremamente basso.
 
 ```{r}
-d <- dist(tabella, method="euclidean", diag = TRUE, upper=TRUE)
+d <- dist(tabella, method="euclidean", 
+          diag = TRUE, upper=TRUE)
 d2<-d^2
 tree <- hclust(d2, method = "median")
 taglio <-cutree(tree, k=3, h=NULL)
@@ -2429,7 +2507,8 @@ trB/trHI
 Con la suddivisione in tre cluster invece il rapporto tra $\frac{trB}{trT}$ ha raggiunto un risultato di sufficienza ed è possibile tenerlo in considerazione.
 
 ```{r}
-d <- dist(tabella, method="euclidean", diag = TRUE, upper=TRUE)
+d <- dist(tabella, method="euclidean", 
+          diag = TRUE, upper=TRUE)
 d2<-d^2
 tree <- hclust(d2, method = "median")
 taglio <-cutree(tree, k=4, h=NULL)
