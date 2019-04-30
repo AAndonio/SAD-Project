@@ -1,0 +1,3 @@
+"0","plot(motivi$lavoro, motivi$famiglia, xlab=""Lavoro"", "
+"0","     ylab=""Famiglia"", "
+"0","     main=""Motivi di lavoro in relazione ai motivi di famiglia"")"

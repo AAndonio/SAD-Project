@@ -1,0 +1,7 @@
+"0","Flavoro <- cumsum(table"
+"0","                  (cut"
+"0","                    (lavoro, breaks=classi_empiriche, right =FALSE)))/length(lavoro)"
+"0","Flavoro <- c(0, Flavoro)"
+"0","plot(classi_empiriche, Flavoro, type = ""b"", "
+"0","     axes = FALSE, main = ""Funzione di distribuzione empirica continua"", "
+"0","     ylab =""Funzione"", xlab = ""Classi"", col = ""red"")"

@@ -1,0 +1,3 @@
+"0","boxplot(lavoro, famiglia, studio, asilo, altro, "
+"0","        col = c(""orange"",""red"",""green"",""yellow"", ""purple""), "
+"0","        names = c(""lavoro"", ""famiglia"", ""studio"", ""asilo"", ""altro""))"

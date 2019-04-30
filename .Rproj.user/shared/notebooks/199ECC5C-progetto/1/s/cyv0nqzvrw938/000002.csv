@@ -1,0 +1,7 @@
+"0","Fasilo <- cumsum(table"
+"0","                 (cut"
+"0","                   (asilo, breaks=classi_empiriche, right =FALSE)))/length(asilo)"
+"0","Fasilo <- c(0, Fasilo)"
+"0","plot(classi_empiriche, Fasilo, type = ""b"", "
+"0","     axes = FALSE, main = ""Funzione di distribuzione empirica continua"", "
+"0","     ylab =""Funzione"", xlab = ""Classi"", col = ""red"")"

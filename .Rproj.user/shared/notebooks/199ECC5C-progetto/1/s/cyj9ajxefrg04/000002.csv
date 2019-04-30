@@ -1,0 +1,3 @@
+"0","residui <- resid(lm(asilo~famiglia))"
+"0","plot(famiglia, residui, main = ""Diagramma dei residui"", "
+"0","     xlab=""Famiglia"", ylab=""Residui"", pch=9, col=""red"")"

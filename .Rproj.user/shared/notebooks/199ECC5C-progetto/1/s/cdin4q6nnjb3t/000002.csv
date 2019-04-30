@@ -1,0 +1,2 @@
+"0","plot(lavoro, pch=""*"", ylim = c(0, 90), col=""blue"", "
+"0","     ylab=""Tasso"", xlab=""Indici regioni"")"

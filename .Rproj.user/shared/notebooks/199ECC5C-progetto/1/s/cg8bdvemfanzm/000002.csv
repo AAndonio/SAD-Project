@@ -1,0 +1,2 @@
+"0","plot(lavoro, asilo, main=""Scatterplot con curva"", "
+"0","     xlab=""Lavoro"", ylab=""Asilo"", col = ""red"")"

@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1556287533611.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1723882266",
+    "id" : "1CBAFFEF",
+    "lastKnownWriteTime" : 1556382916,
+    "last_content_update" : 1556382916033,
+    "path" : "~/GitHub/SAD-Project/tesina.Rmd",
+    "project_path" : "tesina.Rmd",
+    "properties" : {
+        "cursorPosition" : "292,72",
+        "scrollLine" : "280"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

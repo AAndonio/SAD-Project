@@ -1,0 +1,7 @@
+"0","Faltro <- cumsum(table"
+"0","                 (cut"
+"0","                   (altro, breaks=classi_empiriche1, right =FALSE)))/length(altro)"
+"0","Faltro <- c(0, Faltro)"
+"0","plot(classi_empiriche1, Faltro, type = ""b"", "
+"0","     axes = FALSE, main = ""Funzione di distribuzione empirica continua"", "
+"0","     ylab =""Funzione"", xlab = ""Classi"", col = ""red"")"

@@ -1,0 +1,5 @@
+"0","moda <- function(v){"
+"0","  y<-table(v)"
+"0","  z<-which(y==max(y))"
+"0","  return(c(z))"
+"0","}"

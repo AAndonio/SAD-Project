@@ -1,0 +1,2 @@
+"0","plot(famiglia, asilo, main = ""Retta di regressione"", "
+"0","     xlab=""Famiglia"", ylab=""Asilo"", col=""red"")"

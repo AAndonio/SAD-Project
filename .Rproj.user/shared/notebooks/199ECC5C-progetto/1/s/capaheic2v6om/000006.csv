@@ -1,0 +1,2 @@
+"0","text(pareto-0.01, asilo_freqRelCum+0.03,"
+"0","     paste(format(asilo_freqRelCum *100, digits=2), ""%""))"

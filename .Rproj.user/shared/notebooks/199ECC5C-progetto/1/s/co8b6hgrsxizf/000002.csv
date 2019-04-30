@@ -1,0 +1,2 @@
+"0","plot(ecdf(round(studio, digits = 0)), "
+"0","     main=""Funzione di distribuzione empirica discreta"", col=""red"")"

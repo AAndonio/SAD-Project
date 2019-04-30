@@ -1,0 +1,7 @@
+"0","n <- nrow(tabella)"
+"0","trHI <- (n-1) * sum(apply(tabella, 2, var))"
+"0","trHI"
+"1","[1]"
+"1"," 7067.801"
+"1","
+"

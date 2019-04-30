@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1556288594037.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3625573303",
+    "id" : "7E669CE7",
+    "lastKnownWriteTime" : 1556565376,
+    "last_content_update" : 1556565377014,
+    "path" : "~/GitHub/SAD-Project/Progetto/progetto.Rmd",
+    "project_path" : "Progetto/progetto.Rmd",
+    "properties" : {
+        "cursorPosition" : "2288,219",
+        "scrollLine" : "2262"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

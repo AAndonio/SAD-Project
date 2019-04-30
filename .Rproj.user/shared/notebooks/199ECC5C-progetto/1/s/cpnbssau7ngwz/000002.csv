@@ -1,0 +1,3 @@
+"0","cv <- function(x){"
+"0","  sd(x)/abs(mean(x))"
+"0","}"

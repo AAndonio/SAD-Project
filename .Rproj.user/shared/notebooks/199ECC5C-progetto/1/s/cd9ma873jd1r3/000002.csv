@@ -1,0 +1,3 @@
+"0","h <- hist(famiglia, freq = TRUE, col = 1:5, "
+"0","          main=""Istogramma per motivi di famiglia"", "
+"0","          ylab=""Frequenza assoluta classi"", xlab = ""Classi"")"

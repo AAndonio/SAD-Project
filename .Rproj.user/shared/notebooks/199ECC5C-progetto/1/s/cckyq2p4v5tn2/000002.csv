@@ -1,0 +1,1 @@
+"0","pie(italia[1,], density = 18, angle= 15+10*(1:5), col = 1:5)"

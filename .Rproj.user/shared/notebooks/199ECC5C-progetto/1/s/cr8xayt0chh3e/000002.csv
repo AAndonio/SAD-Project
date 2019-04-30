@@ -1,0 +1,4 @@
+"0","Ffamiglia <- c(0, Ffamiglia)"
+"0","plot(classi_empiriche, Ffamiglia, type = ""b"", "
+"0","     axes = FALSE, main = ""Funzione di distribuzione empirica continua"", "
+"0","     ylab =""Funzione"", xlab = ""Classi"", col = ""red"")"

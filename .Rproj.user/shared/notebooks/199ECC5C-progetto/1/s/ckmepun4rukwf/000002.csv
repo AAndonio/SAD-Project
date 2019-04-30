@@ -1,0 +1,3 @@
+"0","italia <- rbind(c(33.6, 42.6, 3.0, 17.1, 3.63))"
+"0","colnames(italia) <- c(""Lavoro"", ""Famiglia"", ""Studio"", ""Asilo"", ""Altro"") "
+"0","barplot(italia[1,], col = 1:5)"

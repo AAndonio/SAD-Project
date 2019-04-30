@@ -1,0 +1,2 @@
+"0","stime <- fitted(lm(asilo~famiglia))"
+"0","segments(famiglia, stime, famiglia, asilo, col=""magenta"")"

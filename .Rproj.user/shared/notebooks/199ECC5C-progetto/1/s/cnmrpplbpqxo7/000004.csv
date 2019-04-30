@@ -1,0 +1,1 @@
+"0","axis(side = 4, at= round(c(0, hlc$height), 2))"

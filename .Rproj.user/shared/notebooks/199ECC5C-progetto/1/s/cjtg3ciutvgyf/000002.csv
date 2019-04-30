@@ -1,0 +1,8 @@
+"0","classi_empiriche1 <- c(0,2,4,6,8,10)"
+"0","Fstudio <- cumsum(table"
+"0","                  (cut"
+"0","                    (studio, breaks=classi_empiriche1, right =FALSE)))/length(studio)"
+"0","Fstudio <- c(0, Fstudio)"
+"0","plot(classi_empiriche1, Fstudio, type = ""b"", "
+"0","     axes = FALSE, main = ""Funzione di distribuzione empirica continua"", "
+"0","     ylab =""Funzione"", xlab = ""Classi"", col = ""red"")"

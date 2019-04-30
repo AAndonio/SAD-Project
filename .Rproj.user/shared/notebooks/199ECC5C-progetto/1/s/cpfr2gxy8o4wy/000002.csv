@@ -1,0 +1,23 @@
+"0","linearmodel <- lm(asilo~famiglia)"
+"0","linearmodel"
+"1","
+Call:
+"
+"1",""
+"1","lm(formula = asilo ~ famiglia)"
+"1",""
+"1","
+
+"
+"1","Coefficients:
+"
+"1","(Intercept)  "
+"1","   famiglia  "
+"1","
+"
+"1","     76.016  "
+"1","     -1.269  "
+"1","
+"
+"1","
+"

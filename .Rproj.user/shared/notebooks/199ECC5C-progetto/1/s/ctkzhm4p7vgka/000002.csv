@@ -1,0 +1,4 @@
+"0","plot(stime, residuistandard, "
+"0","     main = ""Residui standard rispetto ai valori stimati"", "
+"0","     xlab=""Valori stimati"", ylab=""Residui standard"","
+"0","     pch=5, col=""red"")"

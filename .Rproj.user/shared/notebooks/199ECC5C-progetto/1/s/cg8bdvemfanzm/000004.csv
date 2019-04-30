@@ -1,0 +1,1 @@
+"0","curve(alphapol+betapol*x+gammapol*x^2, add = TRUE)"

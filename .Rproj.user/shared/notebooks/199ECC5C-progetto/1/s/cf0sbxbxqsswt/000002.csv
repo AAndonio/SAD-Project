@@ -1,0 +1,5 @@
+"0","summary(lm(asilo~lavoro+I(lavoro^2)))$r.square"
+"1","[1]"
+"1"," 0.7709843"
+"1","
+"

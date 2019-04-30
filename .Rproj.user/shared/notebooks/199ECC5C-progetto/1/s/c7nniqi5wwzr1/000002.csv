@@ -1,0 +1,3 @@
+"0","plot(c(0, hlc$height), seq(20, 1), type = ""b"","
+"0","     main = ""screeplot"", xlab = ""Distanza di aggregazione"", "
+"0","     ylab = ""Numero di cluster"", col = ""red"")"

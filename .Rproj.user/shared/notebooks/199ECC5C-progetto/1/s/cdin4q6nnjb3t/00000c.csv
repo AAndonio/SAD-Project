@@ -1,0 +1,6 @@
+"0",""
+"0","legend(1, 90, c(""lavoro"", ""famiglia"", ""studio"", ""asilo"", ""altro""), "
+"0","      pch=c(""*"",""+"", ""x"", ""o"", ""-""),"
+"0","      col = c(""blue"", ""red"", ""green"", ""magenta"", ""black""), "
+"0","      ncol = 3)"
+"0",""

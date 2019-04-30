@@ -1,0 +1,1 @@
+"0","plot(ecdf(famiglia), main = ""Funzione di distribuzione empirica discreta"")"
