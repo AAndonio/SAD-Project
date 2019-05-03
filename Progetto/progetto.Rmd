@@ -19,7 +19,7 @@ La tabella utilizzata è composta da 20 righe rappresentanti le regioni italiane
 Utilizzando metodi statistici, il progetto verterà sul raggiungere diversi obiettivi:
 
 * Individuare i legami fra le diverse modalità assunte.
-* Individuare valori *outlaw*, ovvero anomali perchè fuori dal range
+* Individuare valori *outlier*, ovvero anomali perchè fuori dal range
 * Definire cluster per raggruppare regioni ritenute simili
 
 Il linguaggio di programmazione utilizzato all'interno del progetto per eseguire l'analisi dei dati è R.
@@ -90,9 +90,9 @@ table(cut(lavoro, classi))
 
 Da questa suddivisione, possiamo notare due aspetti interessanti: 
 
-* In ben nove regioni almeno 1/3 dei cittadini non comunitari si trova lì per motivi di lavoro.
+* in ben nove regioni almeno 1/3 dei cittadini non comunitari si trova lì per motivi di lavoro.
 
-* Solo in una regione, per la precisione nel Molise, il tasso dei cittadini non comunitari che giustifica la propria presenza per questioni di lavoro è estremamente basso rispetto alle altre regioni ed è del 10.9%.
+* solo in una regione, per la precisione nel Molise, il tasso dei cittadini non comunitari che giustifica la propria presenza per questioni di lavoro è estremamente basso rispetto alle altre regioni ed è del 10.9%.
 
 Applichiamo la stessa funzione anche agli altri vettori rappresentanti le restanti modalità ed effettuiamo un'analisi.
 
@@ -123,7 +123,7 @@ table(cut(asilo, classi))
 
 Notiamo:
 
-* una sola regione il tasso dei cittadini non comunitari che si trovano lì per asilo è superiore al 50%. Questa regione è il Molise con una percentuale del 67.1%
+* in una sola regione il tasso dei cittadini non comunitari che si trovano lì per asilo è superiore al 50%. Questa regione è il Molise con una percentuale del 67.1%
 
 * in ben sei regioni, la presenza di cittadini non comunitari per asilo è inferiore al 15%, in particolare in Lombardia, Veneto, Emilia-Romagna, Toscana, Umbria e Lazio.
 
@@ -940,10 +940,12 @@ $$s^2 = \frac{1}{n-1} \sum_{i=1}^n (x_{i} - \bar{x})$$ con n=2,3,...
 
 dove $\bar{x}$ è la media campionaria. 
 
-Definiamo come **devianzione standard**, indicata con s, la radice quadrata della varianza campionaria
+Definiamo come **deviazione standard**, indicata con s, la radice quadrata della varianza campionaria
 $$s = \sqrt{\frac{1}{n-1} \sum_{i=1}^n (x_{i} - \bar{x})}$$ con n=2,3,...
 
-Questi due indici sono detti **indici di dispersione** in quanto più i dati risultanto discostarsi dalla media più essi risultano essere grandi.
+Questi due indici sono detti **indici di dispersione** in quanto più i dati risultano discostarsi dalla media più essi risultano essere grandi.
+
+La divisione per $n-1$ è un'inferenza statistica e serve per evitare di calcolare su un vettore di ampiezza 1. 
 
 In R è possibile calcolare la varianza campionaria di un vettore numerico utilizzando la funzione *var()*:
 
@@ -1587,6 +1589,7 @@ Per i dati a nostra disposizione abbiamo che:
 dist(tabella, method="euclidean", diag=FALSE, upper=FALSE)
 ```
 
+\newpage
 ### Metrica di Manhattan
 
 La metrica di Manhattan è così definita:
@@ -1650,7 +1653,7 @@ In R è disponibile la distanza di Jaccard solo per vettori binari, diversi da q
 ## Misure di similarità 
 In alternativa alla matrice delle distanze, è possibile utilizzare una matrice delle similarità.
 Una **misura di similarità** fornisce un valore numerico compreso tra 0 e 1 e permette di definire quantitativamente la somiglianza o differenza fra due individui.
-In generale, una funzione a valori reali $s_{ij} = s(X_i, X_j)$ è detta misura di similarità se e soltanto se essa sosddisfa le seguenti condizioni:
+In generale, una funzione a valori reali $s_{ij} = s(X_i, X_j)$ è detta misura di similarità se e soltanto se essa soddisfa le seguenti condizioni:
 
 1.  $s(X_i,X_i) = 1$;
 2.  $0\leq s(X_i,X_j) \leq 1$;
@@ -1699,7 +1702,7 @@ $$trT = trS + trB$$
 o, in maniera equivalente:
 
 $$1 = \frac{trS}{trT} + \frac{trB}{trT}$$
-e siccome abbiamo detto che *trT* è fissata allora i cluster dovrebbero essere individuati in modo da **minimizzare*** la misura di non omogeneità statistica all'interno dei cluster* e **massimizzare** *la misura di non omogeneità statistica fra cluster*.
+e siccome abbiamo detto che *trT* è fissata allora i cluster dovrebbero essere individuati in modo da **minimizzare** *la misura di non omogeneità statistica all'interno dei cluster* e **massimizzare** *la misura di non omogeneità statistica fra cluster*.
 
 ## Metodi di ottimizzazione
 Scelta la misura di distanza (o la similarità in alternativa) bisogna scegliere un algoritmo di raggruppamento delle unità osservate. 
@@ -1935,7 +1938,7 @@ trB
 trB/trHI
 ```
 
-Con la suddivisione in due cluster otteniamo una misura di non omogeneità tra cluster pari a 2681.522. Questa suddivisione ricordiamo, ci è stata suggerita anche dallo scatterplot. Il rapporto fra trB/trHI è pari a 0.3793997 un valore decisamente basso che ci porta all'aumentare il numero di cluster.
+Con la suddivisione in due cluster otteniamo una misura di non omogeneità tra cluster pari a 2681.522. Questa suddivisione ricordiamo, ci è stata suggerita anche dallo screeplot. Il rapporto fra trB/trHI è pari a 0.3793997 un valore decisamente basso che ci porta all'aumentare il numero di cluster.
 
 ```{r}
 d <- dist(tabella, method="euclidean", diag = TRUE, upper=TRUE)
@@ -2000,6 +2003,14 @@ trB/trHI
 ```
 
 La suddivisione in quattro cluster ci ha portato al risultato migliore fra le tre suddivisioni con un rapporto fra trB/trHI pari a 0.7699938, che ricade nel range di valori accettabili.
+
+```{r}
+plot(tree, hang = -1, xlab = "Metodo gerarchico agglomerativo", 
+     sub="del legame singolo")
+axis(side = 4, at= round(c(0, tree$height), 2))
+rect.hclust(tree, k=4)
+```
+
 
 ### Metodo del legame completo
 
@@ -2086,7 +2097,7 @@ trB <- trHI-trH1-trH2
 trB/trHI
 ```
 
-Con la suddivisione in due cluster, suggeritaci dallo scatterplot, il rapporto tra $\frac{trB}{trT}$ non è risultato essere abbastanza alto.
+Con la suddivisione in due cluster, suggeritaci dallo screeplot, il rapporto tra $\frac{trB}{trT}$ non è risultato essere abbastanza alto.
 
 ```{r}
 d <- dist(tabella, method="euclidean", 
@@ -2118,6 +2129,13 @@ trB/trHI
 ```
 
 Con la suddivisione in tre cluster, suggeritaci durante l'analisi con i metodi non gerarchici, invece il rapporto tra $\frac{trB}{trT}$ ha raggiunto un risultato di sufficienza ed è possibile tenerlo in considerazione.  Da notare che il valore è pressochè identico a quello trovato con il metodo k-means. 
+
+```{r}
+plot(hlc, hang = -1, xlab = "Metodo gerarchico agglomerativo", 
+     sub="del legame completo")
+axis(side = 4, at= round(c(0, hlc$height), 2))
+rect.hclust(hlc, k=3)
+```
 
 ```{r}
 d <- dist(tabella, method="euclidean", 
@@ -2164,6 +2182,14 @@ $C_1$ *= {Campania, Lazio, Toscana}*
 $C_2$ *= {Emilia Romagna, Umbria, Valle d'Aosta, Veneto, Lombardia, Trentino-alto Adige, Friuli-venezia Giulia, Liguria, Marche, Piemonte, Abruzzo}*
 $C_3$ *= {Molise}*
 $C_4$ *= {Sicilia, Sardegna, Basilicata, Puglia, Calabria}*
+
+```{r}
+plot(hlc, hang = -1, xlab = "Metodo gerarchico agglomerativo", 
+     sub="del legame completo")
+axis(side = 4, at= round(c(0, hlc$height), 2))
+rect.hclust(hlc, k=4)
+```
+
 
 ### Metodo del legame medio
 
@@ -2255,7 +2281,7 @@ trB <- trHI-trH1-trH2
 trB/trHI
 ```
 
-Con la suddivisione in due cluster, suggeritaci dallo scatterplot, il rapporto tra $\frac{trB}{trT}$ è risultato essere estremamente basso.
+Con la suddivisione in due cluster, suggeritaci dallo screeplot, il rapporto tra $\frac{trB}{trT}$ è risultato essere estremamente basso.
 
 ```{r}
 d <- dist(tabella, method="euclidean", 
@@ -2287,6 +2313,13 @@ trB/trHI
 ```
 
 Con la suddivisione in tre cluster, suggeritaci durante l'analisi con i metodi non gerarchici, invece il rapporto tra $\frac{trB}{trT}$ ha raggiunto un risultato di sufficienza ed è possibile tenerlo in considerazione. Da notare che il valore è pressochè identico a quello trovato con il metodo k-means. 
+
+```{r}
+plot(hlm, hang = -1, xlab = "Metodo gerarchico agglomerativo", 
+     sub="del legame medio")
+axis(side = 4, at= round(c(0, hlm$height), 2))
+rect.hclust(hlm, k=3)
+```
 
 ```{r}
 d <- dist(tabella, method="euclidean",
@@ -2333,6 +2366,13 @@ $C_1$ *= {Campania}*
 $C_2$ *= {Emilia Romagna, Umbria, Valle d'Aosta, Veneto, Lombardia, Trentino-alto Adige, Friuli-venezia Giulia, Liguria, Marche, Piemonte, Abruzzo, Lazio, Toscana}*
 $C_3$ *= {Molise}*
 $C_4$ *= {Sicilia, Sardegna, Basilicata, Puglia, Calabria}*
+
+```{r}
+plot(hlm, hang = -1, xlab = "Metodo gerarchico agglomerativo", 
+     sub="del legame medio")
+axis(side = 4, at= round(c(0, hlm$height), 2))
+rect.hclust(hlm, k=4)
+```
 
 ### Metodo del centroide
 
@@ -2421,6 +2461,13 @@ trB/trHI
 Con la suddivisione in tre cluster, suggeritaci durante l'analisi con i metodi non gerarchici, invece il rapporto tra $\frac{trB}{trT}$ ha raggiunto un risultato di sufficienza ed è possibile tenerlo in considerazione.
 
 ```{r}
+plot(hlcentroid, hang = -1, xlab = "Metodo gerarchico agglomerativo", 
+     sub="del centroide")
+axis(side = 4, at= round(c(0, hlcentroid$height), 2))
+rect.hclust(hlcentroid, k=3)
+```
+
+```{r}
 d <- dist(tabella, method="euclidean", 
           diag = TRUE, upper=TRUE)
 d2<-d^2
@@ -2465,6 +2512,13 @@ $C_1$ *= {Emilia Romagna, Umbria, Valle d'Aosta, Veneto, Lombardia, Trentino-alt
 $C_2$ *= {Molise}*
 $C_3$ *= {Campania}*
 $C_4$ *= {Sicilia, Sardegna, Basilicata, Puglia, Calabria}*
+
+```{r}
+plot(hlcentroid, hang = -1, xlab = "Metodo gerarchico agglomerativo", 
+     sub="del centroide")
+axis(side = 4, at= round(c(0, hlcentroid$height), 2))
+rect.hclust(hlcentroid, k=4)
+```
 
 ### Metodo della mediana
 
@@ -2551,6 +2605,13 @@ trB/trHI
 ```
 
 Con la suddivisione in tre cluster, suggeritaci durante l'analisi con i metodi non gerarchici, invece il rapporto tra $\frac{trB}{trT}$ ha raggiunto un risultato di sufficienza ed è possibile tenerlo in considerazione.
+```{r}
+plot(hlmedian, hang = -1, xlab = "Metodo gerarchico agglomerativo", 
+     sub="della mediana")
+axis(side = 4, at= round(c(0, hlmedian$height), 2))
+rect.hclust(hlmedian, k=3)
+```
+
 
 ```{r}
 d <- dist(tabella, method="euclidean", 
@@ -2597,3 +2658,10 @@ $C_1$ *= {Emilia Romagna, Umbria, Valle d'Aosta, Veneto, Lombardia, Trentino-alt
 $C_2$ *= {Molise}*
 $C_3$ *= {Campania}*
 $C_4$ *= {Sicilia, Sardegna, Basilicata, Puglia, Calabria}*
+
+```{r}
+plot(hlmedian, hang = -1, xlab = "Metodo gerarchico agglomerativo", 
+     sub="della mediana")
+axis(side = 4, at= round(c(0, hlmedian$height), 2))
+rect.hclust(hlmedian, k=4)
+```

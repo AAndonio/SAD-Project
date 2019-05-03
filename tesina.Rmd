@@ -2,7 +2,7 @@
 pdf_document: default
 author: "Antonio Vivone"
 output: pdf_document
-title: "Statistica e analisi dei dati A.A. 2018/19"
+title: "Statistica e analisi dei dati"
 subtitle: "Analisi di un campione di una distribuzione normale"
 fontsize: 12pt
 ---
@@ -266,7 +266,7 @@ quantile(campione)
 boxplot(campione, horizontal = T, main="Boxplot del campione normale", col="red")
 ```
 
-Dal boxplot capiamo che il campione risulta simmetrico e centrato intorno al valore 2, come stabilito. Effettuiamo un'ultima analisi mostrando la densità tramite istogramma:
+Dal boxplot capiamo che il campione risulta simmetrico e centrato intorno al valore 110, come stabilito. Effettuiamo un'ultima analisi mostrando la densità tramite istogramma:
 
 ```{r}
 hist (campione , freq =F , xlim = c (106,114) , ylim = c (0 ,0.5) , breaks =100 , 
