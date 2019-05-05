@@ -7,10 +7,6 @@ subtitle: "Analisi di un campione di una distribuzione normale"
 fontsize: 12pt
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
 ## Distribuzione normale
 
 La **funzione di distribuzione normale**, detta anche di Gauss o gaussiana, è molto importante nella statistica in quanto rappresenta una distribuzione limite alla quale tendono
@@ -108,7 +104,7 @@ Per una qualsiasi variabile aleatoria normale $X \sim N(\mu, \sigma)$ risulta ch
 
 $$P(\mu -3\sigma < X < \mu + 3\sigma) = P(-3 < \frac{X-\mu}{\sigma}< 3) = P(-3<Z<3) = 0.9973002$$
 
-Quello che la regola vuol dire è che la probabilità che una variabile aleatoria $X \sim N(\mu, \sigma)$ assuma valori in un intervallo avente come centro $\mu$ e semiampiezza $3\sigma$ è mlto vicino all'unità, ovvero ad 1. Questa proprietà delle variabili aleatorie normali è detta **regola del 3$\sigma$**. 
+Quello che la regola vuol dire è che la probabilità che una variabile aleatoria $X \sim N(\mu, \sigma)$ assuma valori in un intervallo avente come centro $\mu$ e semiampiezza $3\sigma$ è molto vicino all'unità, ovvero ad 1. Questa proprietà delle variabili aleatorie normali è detta **regola del 3$\sigma$**. 
 Utilizzando la funzione *pnorm()* possiamo mostrare quanto detto:
 ```{r}
 pnorm(3,mean = 0, sd = 1) - pnorm(-3, mean = 0, sd = 1)
@@ -155,38 +151,69 @@ al variare di n con p fissato. La variabile aleatoria con densità normale otten
 È possibile valutare l'approssimazione della binomiale ottenuta confrontandola con la densità normale di valore $np$ e varianza$np(1-p)$ per $n=25,50,75,100$ e $p=0.2$.
 
 ```{r}
-par(mfrow=c(2,2))
+par(mfrow =c(2,2))
 p<-0.2
 q<-1-p
 x<-0:25
 n<-25
-curve(dnorm(x, n*p, sqrt(n*p*q)), from=n*p-3*sqrt(n*p*q), 
-      to=n*p+3*sqrt(n*p*q), xlab="x", ylab="P(X=x)",
-      main="Binomiale, n=25, p=0.2")
-lines(x, dbinom(x,n,0.2), type="h")
+curve(dnorm(x,n*p,sqrt(n*p*q)),from=n*p-3*sqrt(n*p*q),
+      to=n*p+3*sqrt(n*p*q),xlab="x",ylab="P(X=x)",
+      main="Binomiale con n=25 e p=0.2")
+lines(x,dbinom (x,n ,0.2) ,type="h")
 x<-0:50
 n<-50
-curve(dnorm(x, n*p, sqrt(n*p*q)), from=n*p-3*sqrt(n*p*q), 
-      to=n*p+3*sqrt(n*p*q), xlab="x", ylab="P(X=x)",
-      main="Binomiale, n=50, p=0.2")
-lines(x, dbinom(x,n,0.2), type="h")
-
+curve(dnorm(x,n*p,sqrt(n*p*q)),from=n*p-3*sqrt(n*p*q),
+      to=n*p+3*sqrt(n*p*q),xlab="x",ylab="P(X=x)",
+      main="Binomiale con n=50 e p=0.2")
+lines(x,dbinom (x,n ,0.2) ,type="h")
 x<-0:75
 n<-75
-curve(dnorm(x, n*p, sqrt(n*p*q)), from=n*p-3*sqrt(n*p*q), 
-      to=n*p+3*sqrt(n*p*q), xlab="x", ylab="P(X=x)", 
-      main="Binomiale, n=75, p=0.2")
-lines(x, dbinom(x,n,0.2), type="h")
-
+curve(dnorm(x,n*p,sqrt(n*p*q)),from=n*p-3*sqrt(n*p*q),
+      to=n*p+3*sqrt(n*p*q),xlab="x",ylab="P(X=x)",
+      main="Binomiale con n=75 e p=0.2")
+lines(x,dbinom (x,n ,0.2) ,type="h")
 x<-0:100
 n<-100
-curve(dnorm(x, n*p, sqrt(n*p*q)), from=n*p-3*sqrt(n*p*q),
-      to=n*p+3*sqrt(n*p*q),xlab="x", ylab="P(X=x)", 
-      main="Binomiale, n=100, p=0.2")
-lines(x, dbinom(x,n,0.2), type="h")
+curve(dnorm (x,n*p,sqrt(n*p*q)),from=n*p-3*sqrt(n*p*q),
+      to=n*p+3*sqrt(n*p*q),xlab="x",ylab="P(X=x)",
+      main="Binomiale con n=100 e p=0.2")
+lines(x,dbinom (x,n ,0.2) ,type="h")
 ```
 
-Come è possibile vedere, l'approssimazione migliora quando p tende a $\frac{1}{2}$ e diventa eccellente quando p=$\frac{1}{2}$
+Notiamo che al **crescere di n, l'approssimazione migliora**.
+Vediamo adesso come si comporta l'approssimazione della binomiale alla normale fissando $n = 25$ e facendo variare $p=0.125, 0.25, 0.375, 0.5$
+
+```{r}
+par(mfrow =c(2,2))
+x<-0:25
+n<-25
+p<-0.125
+q<-1-p
+curve(dnorm(x,n*p,sqrt(n*p*q)),from=n*p-3*sqrt(n*p*q),
+      to=n*p+3*sqrt(n*p*q),xlab="x",ylab="P(X=x)",
+      main="Binomiale con n=25 e p=0.125 ")
+lines(x,dbinom (x,n ,0.125) ,type="h")
+p<-0.25
+q<-1-p
+curve(dnorm(x,n*p,sqrt(n*p*q)),from=n*p-3*sqrt(n*p*q),
+      to=n*p+3*sqrt(n*p*q),xlab="x",ylab="P(X=x)",
+      main="Binomiale con n=25 e p=0.25 ")
+lines(x,dbinom (x,n ,0.25) ,type="h")
+p<-0.375
+q<-1-p
+curve(dnorm(x,n*p,sqrt(n*p*q)),from=n*p-3*sqrt(n*p*q),
+      to=n*p+3*sqrt(n*p*q),xlab="x",ylab="P(X=x)",
+      main="Binomiale con n=25 e p=0.375 ")
+lines(x,dbinom (x,n ,0.375) ,type="h")
+p<-0.5
+q<-1-p
+curve(dnorm(x,n*p,sqrt(n*p*q)),from=n*p-3*sqrt(n*p*q),
+      to=n*p+3*sqrt(n*p*q),xlab="x",ylab="P(X=x)",
+      main="Binomiale con n=25 e p=0.5")
+lines(x,dbinom (x,n ,0.5) ,type="h")
+```
+
+Come è possibile vedere, l'approssimazione migliora quando p tende a $\frac{1}{2}$ e diventa eccellente quando $p=\frac{1}{2}$
 
 #### Teorema centrale di convergenza
 
@@ -239,7 +266,7 @@ All'aumentare della numerosità, l'istogramma della densità simultata si avvici
 Procediamo adesso a generare un campione facente parte di una popolazione normale in modo tale da effettuare diverse analisi:
 
 ```{r }
-campione <- rnorm(10000, mean = 110, sd = 1)
+campione <- rnorm(10000, mean = 110, sd = 2)
 ```
 
 Riportiamo di seguito la media campionaria, la varianza campionaria e la deviazione standard campionaria del campione: 
@@ -325,7 +352,7 @@ Le incognite sono i k parametri non noti $\vartheta_1, \vartheta_2,...,\vartheta
 Per poter utilizzare questo metodo, il sistema deve ammettere un'unica soluzione. Le stime dipendono dal campione osservato e quindi, al variare del campione, cambiano anche queste ultime.
 Gli stimatori prendono il nome di *stimatori del metodo dei momenti*.
 
-Procediamo quindi ad utilizzare il metodo alla nostra analisi della popolazione normale. Siamo quindi interessati a fornire degli stimatori dei parametri $\mu$ e $\sigma^2$.
+Procediamo quindi ad applicare il metodo alla nostra analisi della popolazione normale. Siamo quindi interessati a fornire degli stimatori dei parametri $\mu$ e $\sigma^2$.
 Siccome $E(X) = \mu$ e $E(X^2) = \sigma^2 + \mu^2$ si ha un sistema di due equazioni, in quanto due sono i parametri da stimare.
 Si ha che:
 
@@ -335,7 +362,7 @@ dalla seconda equazione ricaviamo:
 
 $$\hat\sigma^2 = \frac{(x_1 + x_2 +...+ x_n)^2}{n} - \frac{(x_1 + x_2 +...+ x_n)^2}{n^2} = \frac{1}{n} \Big[ \sum_{i=1}^n x_i^2 - \bar{x} \sum_{i=1}^nx_i \Big] = \frac{1}{n} \sum_{i=1}^n(x_i - \bar{x})^2 $$
 
-Il metodo dei momenti ci fornisce quindi come stimatore del valore medio $/mu$ la media campionaria $\bar{X}$ e come stimatore della varianza $\sigma^2$ la variabile aleatoria $\frac{(n-1)}{n}S^2$.
+Il metodo dei momenti ci fornisce quindi come stimatore del valore medio $\mu$ la media campionaria $\bar{X}$ e come stimatore della varianza $\sigma^2$ la variabile aleatoria $\frac{(n-1)}{n}S^2$.
 
 Per quanto riguarda il nostro campione quindi abbiamo che:
 
@@ -349,6 +376,8 @@ stimaVarMomenti <- (length(campione)-1) * var(campione)/length(campione)
 stimaVarMomenti
 ```
 
+\newpage
+
 #### Metodo della massima verosomiglianza
 
 Il **metodo della massima verosomiglianza** è il metodo più importante fra i due ed è anche preferito a quello dei momenti. Prima di illustrare il metodo va introdotta la **funzione di verosomiglianza**.
@@ -356,7 +385,9 @@ Il **metodo della massima verosomiglianza** è il metodo più importante fra i d
 Sia $X_1, X_2, ..., X_n$ un campione casuale estratto dalla popolazione.
 La **funzione di verosomiglianza** $L(\vartheta_1, \vartheta_2, ..., \vartheta_k) = L(\vartheta_1, \vartheta_2, ..., \vartheta_k; x_1, x_2,..., x_n)$ del campione osservato è la funzione di densità di probabilità congiunta del campione casuale $X_1, X_2,..., X_n$ ovvero:
 
-$$L(\vartheta_1, \vartheta_2, ..., \vartheta_k) = L(\vartheta_1, \vartheta_2, ..., \vartheta_k; x_1, x_2,..., x_n) = f(x_1:\vartheta_1, \vartheta_2, ..., \vartheta_k)f(x_2:\vartheta_1, \vartheta_2, ..., \vartheta_k)\quad...\quad f(x_n:\vartheta_1, \vartheta_2, ..., \vartheta_k) $$
+$$\begin{split}
+L(\vartheta_1, \vartheta_2, ..., \vartheta_k) = L(\vartheta_1, \vartheta_2, ..., \vartheta_k; x_1, x_2,..., x_n) =\\ f(x_1:\vartheta_1, \vartheta_2, ..., \vartheta_k)f(x_2:\vartheta_1, \vartheta_2, ..., \vartheta_k)\quad...\quad f(x_n:\vartheta_1, \vartheta_2, ..., \vartheta_k) 
+\end{split}$$
 
 Il metodo consiste quindi nel massimizzare la funzione di verosomiglianza rispetto ai parametri $\vartheta_1, \vartheta_2, ..., \vartheta_k$ cercando di determinare da quale funzione di densità di probabilità congiunta è **più verosimile** che provenga il campione osservato. Si cercando quindi i valori $\vartheta_1, \vartheta_2, ..., \vartheta_k$ che massimizzino la funzione di verosomiglianza e, una volta trovati, vengono indicati nella seguente maniera $\hat\vartheta_1, \hat\vartheta_2, ..., \hat\vartheta_k$ e costituiscono le **stime di massima verosomiglianza**. Siccome queste stime dipendono dal campione, facendo variare il campione osservato si ottengono gli stimatori di massima verosomiglianza $\bar\Theta_1, \bar\Theta_2, ..., \bar\Theta_k$ dei parametri non noti $\vartheta_1, \vartheta_2, ..., \vartheta_k$ della popolazione, detti **stimatori di massima verosomiglianza**.
 
@@ -380,7 +411,7 @@ Queste proprietà sono:
 Uno simatore è **corretto** se il suo valore medio è uguale al corrispondente parametro non nodo della popolazione. È possibile avere più stimatori corretti per stimare un parametro. Per scegliere quale utilizzare, si vede quale risulta essere più efficiente confrontando la varianza degli stimatori e scegliendo quello con varianza più piccola. Altro metodo è quello della ricerca dello stimatore con **errore quadratico uniformemente minimo** per la classe degli stimatori corretti. 
 
 Come visto prima, sia dal metodo dei momenti che da quello della massima verosomiglianza sono stati ricavati gli stessi stimatori per i parametri $\mu$ e $\sigma^2$. Per $\mu$ lo stimatore ricavato è la media campionaria, che risulta essere **corretto con varianza minima** e **consistente**, mentre per $\sigma^2$ abbiamo $\frac{n-1}{n} S^2$ che è **asintoticmanete corretto** e **consistente**.
-$\underline{C}_n$ e $\bar{C}_n$
+Uno stimatore $\hat\Theta$ del parametro $\Theta$ della popolazione è *asintoticamente corretto* se quando $n$ cresce, il valore medio risulta essere uguale a $\Theta$.
 
 ## Stima intervallare
 
@@ -430,6 +461,8 @@ si ha
 
 $$P(-z_{a/2} < Z_n < z_{a/2}) = 1 - \alpha$$
 
+\newpage
+
 Graficamente abbiamo:
 
 ```{r echo=FALSE}
@@ -455,20 +488,22 @@ box ()
 L'intervallo di confidenza con grado di fiducia $1-\alpha$ per il valore medio $\mu$ è pari a
 
 $$\bar{x}_n - z_{\alpha/2}\frac{\sigma}{\sqrt{n}} < \mu < \bar{x}_n + z_{\alpha/2}\frac{\sigma}{\sqrt{n}}$$
-Per quanto riguarda la nostra analisi, vogliamo ottenere un grado di fiducia pari a $0.95$ quindi poniamo $\alpha=0.05$ e supponiamo che la varianza
+Per quanto riguarda la nostra analisi, vogliamo ottenere un grado di fiducia elevato e quindi poniamo $\alpha=0.05$ e supponiamo che la deviazione standard sia $\sigma = 2$
 
 ```{r}
 alpha <- 1-0.95
 
+deviazioneStandard <- 2
+
 n<-length(campione)
 
 #limite inferiore
-mean(campione)-qnorm(1-alpha/2, mean=0, sd=1)*8/sqrt(n)
+mean(campione)-qnorm(1-alpha/2, mean=0, sd=1)*deviazioneStandard/sqrt(n)
 ```
 
 ```{r}
 #limite superiore
-mean(campione)+qnorm(1-alpha/2, mean=0, sd=1)*8/sqrt(n)
+mean(campione)+qnorm(1-alpha/2, mean=0, sd=1)*deviazioneStandard/sqrt(n)
 ```
 
 2. Determinare un intervallo di confidenza di grado $1-\alpha$ per il valore medio $\mu$ nel caso in cui la varianza della popolazione normale è non nota
@@ -508,7 +543,7 @@ Una stima dell'intervallo di confidenza $1-\alpha$ per il valore medio $\mu$ ris
 
 $$\bar{x_n}-t_{\alpha/2,n-1}\frac{s_n}{\sqrt{n}} < \mu < \bar{x_n}+t_{\alpha/2,n-1}\frac{s_n}{\sqrt{n}}$$
 
-Ponendo come nel caso precedente vogliamo ottenere un grado di fiducia pari a 95 quindi poniamo $\alpha = 0.05$ e andiamo a stimare l'intervallo di confidenza:
+Ponendo come nel caso precedente vogliamo ottenere un grado di fiducia elevato quindi poniamo $\alpha = 0.05$ e andiamo a stimare l'intervallo di confidenza:
 
 ```{r}
 alpha <- 1-0.95
@@ -562,12 +597,12 @@ Una stima dell'intervallo di confidenza $1-\alpha$ per $\sigma^2$ è:
 
 $$\frac{(n-1)s_n^2+ n(\overline{X}_n - \mu)^2}{\chi^2_{\alpha/2,n}} < \sigma^2 < \frac{(n-1)s_n^2+ n(\overline{X}_n - \mu)^2}{\chi^2_{1-\alpha/2,n}}$$
 
-Il grado di fiducia che vogliamo ottenere è pari a 95, quindi poniamo $\alpha=0.05$ e supponiamo che la media nota sia $\mu=2$, stimiamo adesso il parametro:
+Il grado di fiducia che vogliamo ottenere è pari a 95, quindi poniamo $\alpha=0.05$ e supponiamo che la media nota sia $\mu=110$, stimiamo adesso il parametro:
 
 ```{r}
 alpha <- 1-0.95
 n <-length(campione)
-mu <- 2
+mu <- 110
 
 #limite inferiore
 ((n-1)*var (campione)+n*(mean(campione)-mu)**2)/qchisq(1- alpha/2,df=n)
@@ -692,7 +727,7 @@ ncamp2 <- length(campione2)
 mc1 <- mean(campione)
 mc2 <- mean(campione2)
 
-sigmacamp1 <- 1
+sigmacamp1 <- 4
 sigmacamp2 <- 2.25
 
 #limite inferiore
@@ -739,6 +774,8 @@ mc1-mc2-qnorm(1-alpha/2,mean=0,sd=1)*sqrt(sigmacamp1^2/ncamp1+sigmacamp2^2/ncamp
 mc1-mc2+qnorm(1-alpha/2,mean=0,sd=1)*sqrt(sigmacamp1^2/ncamp1+sigmacamp2^2/ncamp2)
 ```
 
+\newpage
+
 ## Verifica delle ipotesi in R
 
 La verifica delle ipotesi è, insieme alla stima dei parametri, una delle aree più importanti dell'inferenza statistica. Essa viene utilizzata in molti ambiti reali, soprattutto quando vi sono da fare indagini di mercato o indagini sperimentali e industriali. Introduciamo quindi il concetto di ipotesi statistica.
@@ -753,14 +790,18 @@ Quindi, abbiamo l'ipotesi nulla se $\vartheta \in \Theta_0$ e l'ipotesi alternat
 Il problema si riduce quindi a determinare un test che ci permetta di suddividere l'insieme dei possibili campioni in due sottoinsiemi detti **regione di accettazione** $A$ dell'ipotesi nulla ed una **regione di rifiuto** $R$ dell'ipotesi nulla. In caso l'ipotesi nulla risulti essere falsa, l'ipotesi alternativa sarà vera e viceversa. Si dice che l'ipotesi $H_0$ va verificata in alternativa all'ipotesi $H_1$.
 
 È possibile incorrere in due tipi di errore: 
+
 - **rifiutare** *l'ipotesi nulla $H_0$ nel caso in cui essa risulti vera*: viene commesso un **errore di tipo I** e la probabilità di commettere questo errore è denotata con $\alpha$.
 
 - **accettare** *l'ipotesi nulla $H_0$ nel caso in cui essa risulti falsa*: viene commesso un **errore di tipo II** e la probablità di commettere questo errore è denotata con $\beta$.
 
-Per campioni casuali di fissata ampiezza, se si diminuisce la probabilità di commettere un errore del tipo I aumenta quella di commettere un errore di tipo II e viceversa. Quindi, siccome non è possibile minimizzare entrambe le probabilità, quello che si fa è **fissare la probabilità di comemttere un errore di tipo I** (si sceglie piccolo) e cercare un test $\psi$ che minimizzi la probabilità di commettere un errore di tipo II. Viene fissata l'errore di tipo I perchè solitamente, quando vengono formulate le ipotesi, commettere questo tipo di errore risulta essere più grave della tipologia II in quanto corrisponde a rifiutare il vero.
+Per campioni casuali di fissata ampiezza, se si diminuisce la probabilità di commettere un errore del tipo I aumenta quella di commettere un errore di tipo II e viceversa. Quindi, siccome non è possibile minimizzare entrambe le probabilità, quello che si fa è **fissare la probabilità di commettere un errore di tipo I** (si sceglie piccolo) e cercare un test $\psi$ che minimizzi la probabilità di commettere un errore di tipo II. Viene fissata l'errore di tipo I perchè solitamente, quando vengono formulate le ipotesi, commettere questo tipo di errore risulta essere più grave della tipologia II in quanto corrisponde a rifiutare il vero.
 Si sceglie $\alpha$ uguale a 0.05, 0.01 o 0.001 ed il test viene rispettivamente detto **statisticamente significativo**,**statisticamente molto significativo** e **statisticamente estremamente significativo**. Più piccolo è il valore di $\alpha$ tanto maggiore è la credibilità di un eventuale rifiuto dell'ipotesi nulla.
 
+\newpage
+
 I test statistici sono di due tipi: 
+
 - **unilaterali (o unidirezionali)**: 
 $$H_0: \vartheta \leq \vartheta_0 \qquad H_1:\vartheta > \vartheta_0$$
 oppure
@@ -792,7 +833,7 @@ ci aiuta moltissimo nella verifica delle ipotesi. Ricordiamo che questa variabil
 
 - accettiamo $H_0$ se $-z_{\alpha/2} < \frac{\overline{X_n} - \mu_0}{\sigma/\sqrt{n}} < z_{\alpha/2}$
 
-- rifiutiamo $H_0$ se $\frac{\overline{X_n} - \mu_0}{\sigma/\sqrt{n}}<-z_{\alpha/2}$ oppure se $z_{\alpha/2}<\frac{\overline{X_n} - \mu_0}{\sigma/\sqrt{n}}$
+- rifiutiamo $H_0$ se $\frac{\overline{X_n} - \mu_0}{\sigma/\sqrt{n}}<-z_{\alpha/2}$ oppure se $\frac{\overline{X_n} - \mu_0}{\sigma/\sqrt{n}}>z_{\alpha/2}$
 
 ```{r echo=FALSE}
 curve(dnorm(x,mean=0, sd=1) ,from=-3, to=3, axes=FALSE ,ylim=c(0 ,0.5) ,xlab="",ylab="",main="Densità normale standard")
@@ -853,7 +894,7 @@ Sia $H_0$ e $H_1$ sono ipotesi composte.
 
 - **rifiutiamo** $H_0$ se $\frac{\overline{x}_n - \mu_0}{\sigma/\sqrt{n}}>z_\alpha$
 
-```{r}
+```{r echo=FALSE}
 curve (dnorm (x,mean=0,sd=1) ,from=-3, to=3, axes=FALSE ,ylim=c(0 ,0.5)
 ,xlab="",
 ylab="",main="Densità normale standard")
@@ -882,7 +923,7 @@ Sia $H_0$ e $H_1$ sono ipotesi composte.
 
 - **rifiutiamo** $H_0$ se $\frac{\overline{x}_n - \mu_0}{\sigma/\sqrt{n}}<-z_\alpha$
 
-```{r}
+```{r echo=FALSE}
 curve (dnorm(x,mean=0,sd =1) ,from=-3, to=3, axes=FALSE ,ylim=c(0 ,0.5)
 ,xlab="",
 ylab="",main="Densità normale standard")
@@ -979,7 +1020,7 @@ Sia $H_0$ e $H_1$ sono ipotesi composte.
 
 - **rifiutiamo** $H_0$ se $\frac{\overline{x}_n - \mu_0}{s_n/\sqrt{n}}>t_{\alpha, n-1}$
 
-```{r}
+```{r echo=FALSE}
 curve (dt(x,df=5) ,from=-3, to=3, axes=FALSE ,ylim=c(0 ,0.5) ,xlab="",
 ylab="",main="Densità di Student con n-1 gradi di libertà")
 text (0,0.05, expression (1- alpha))
@@ -1007,7 +1048,7 @@ Sia $H_0$ e $H_1$ sono ipotesi composte.
 
 - **rifiutiamo** $H_0$ se $\frac{\overline{x}_n - \mu_0}{\sigma/\sqrt{n}}<-z_\alpha$
 
-```{r}
+```{r echo=FALSE}
 curve (dt(x,df=5) ,from=-3, to=3, axes=FALSE ,ylim=c(0 ,0.5) ,xlab="",
 ylab="",main="Densità di Student con n-1 gradi di libertà")
 text (0,0.05, expression (1- alpha))
@@ -1023,14 +1064,11 @@ text (-1.8 ,0.15,"Regione di \n rifiuto")
 box ()
 ```
 
-#### Verifica ipotesi sulla varianza $\sigma^2$ con valore medio $\mu$ noto
-
-#### Verifica ipotesi sulla varianza $\sigma^2$ con valore medio $\mu$ NON noto
-
 ### Criterio chi-quadrato
 
 Con il **criterio del chi-quadrato** è possibile verificare che un certo campione, descritto da una variabile aleatoria X, sia caratterizzato da una funzione di distribuzione $F_X(x)$ con *k* parametri non noti da stimare.
 Denotiamo con $H_0$ l'ipotesi **nulla**, soggetta a verifica, e con $H_1$ l'ipotesi **alternativa** e le definiamo come di seguito:
+
 - $H_0$: X ha una funzione di distribuzione $F_X(x)$ (avendo stimato *k* parametri non noti in base al campione)
 - $H_1$: X non ha una funzione di distribuzione $F_X(x)$
 
@@ -1044,19 +1082,19 @@ $$Q = \sum_{i=1}^{r}\Big(\frac{N_i - np_i }{\sqrt{np_i}}\Big)^2$$
 
 dove $N_i$ è la variabile aleatoria che descrive il numero degli elementi del campione casuale $X_1, X_2, ... , X_n$ che cadono nell'intervallo  $I_i$ con $i=1,2,...,r$.
 Se la variabile aleatoria X ha una funzione di distribuzione $F_X(x)$ con *k* parametri non noti, si può dimostrare che per *n* abbastanza grande la funzione di distribuzione della statistica *Q* è approssimabile con la funzione di distribuzione chi-quadrato con *r-k-1* gradi di libertà.
-Per garantire che ogni classe contenga in media almeno 5 elementi, riteniamo valida l'approssiamzione se
+Per garantire che ogni classe contenga in media almeno 5 elementi, riteniamo valida l'approssimazione se
 
 $$min(np_1, np_2,...,np_r) \geq 5$$
 Vediamo la definizione del test chi-quadrato bilaterale:
 
 per un campione sufficientemente numeroso di ampiezza n, il test chi-quadrato bilaterale di misura $\alpha$ è il seguente:
 
-- si rifiuti l'ipotesi $H_0$ se $X^2<X^{2}_{1-\alpha/2, r-k-1}$ oppure $X^2>X^{2}_{\alpha/2, r-k-1}$
-- si accetti l'ipotesi se $H_0$ se $X^{2}_{1-\alpha/2, r-k-1}<X^2<X^{2}_{\alpha/2, r-k-1}$
+- si rifiuti l'ipotesi $H_0$ se $\chi^2<\chi^{2}_{1-\alpha/2, r-k-1}$ oppure $\chi^2>\chi^{2}_{\alpha/2, r-k-1}$
+- si accetti l'ipotesi se $H_0$ se $\chi^{2}_{1-\alpha/2, r-k-1}<\chi^2<\chi^{2}_{\alpha/2, r-k-1}$
 
-dove $X^{2}_{1-\alpha/2, r-k-1}$ e $X^{2}_{\alpha/2, r-k-1}$ sono soluzioni delle equazioni:
+dove $\chi^{2}_{1-\alpha/2, r-k-1}$ e $\chi^{2}_{\alpha/2, r-k-1}$ sono soluzioni delle equazioni:
 
-$$P(Q < X^{2}_{1-\alpha/2, r-k-1}) = \frac{\alpha}{2}, \qquad P(Q<X^{2}_{\alpha/2, r-k-1}) = 1 - \frac{\alpha}{2}$$
+$$P(Q < \chi^{2}_{1-\alpha/2, r-k-1}) = \frac{\alpha}{2}, \qquad P(Q<\chi^{2}_{\alpha/2, r-k-1}) = 1 - \frac{\alpha}{2}$$
 Eseguiamolo per il nostro campione iniziando a determinare i sottoinsiemi
 
 ```{r}
@@ -1082,7 +1120,7 @@ nint[4] <- length(which((campione >= a[3]) & (campione < a[4])))
 nint[5] <- length(which(campione > a[4]))
 nint
 ```
-Calcoliamo $X^2$
+Calcoliamo $\chi^2$
 
 ```{r}
 chi2 <- sum(((nint-n*0.2) / sqrt(n*0.2))^2)
@@ -1090,7 +1128,7 @@ chi2
 ```
 
 La distribuzione normale ha due parametri non noti $(\mu,\sigma²)$ e quindi il $k=2$. La funzione Q è quindi approssimabile con la funzione di distribuzione chi-quadrato con $r-k-1 = 2$ gradi di libertà.
-Procediamo dunque nel calcolo di $X^{2}_{1-\alpha/2, r-k-1}$ e $X^{2}_{\alpha/2, r-k-1}$ con $\alpha=0.05$.
+Procediamo dunque nel calcolo di $\chi^{2}_{1-\alpha/2, r-k-1}$ e $\chi^{2}_{\alpha/2, r-k-1}$ con $\alpha=0.05$.
 
 ```{r}
 k <- 2
@@ -1102,4 +1140,4 @@ qchisq(alpha/2, df=r-k-1)
 qchisq(1-alpha/2, df=r-k-1)
 ```
 
-Siccome $X² = 0.422$ risulta essere compresa fra $X^{2}_{1-\alpha/2, r-k-1} = 7.377759$ e $X^{2}_{\alpha/2, r-k-1} = 0.05063562$, l'ipotesi $H_0$ di popolazione normale può essere accettata.
+Siccome $\chi^2$ risulta essere compresa fra $X^{2}_{1-\alpha/2, r-k-1} = 7.377759$ e $X^{2}_{\alpha/2, r-k-1} = 0.05063562$, l'ipotesi $H_0$ di popolazione normale può essere accettata.
